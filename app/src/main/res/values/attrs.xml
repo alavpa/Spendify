@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="KeyText">
+        <attr name="text" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="KeyImage">
+        <attr name="src" format="reference"/>
+    </declare-styleable>
+</resources>
