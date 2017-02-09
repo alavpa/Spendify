@@ -1,4 +1,4 @@
-package com.alavpa.templateapp;
+package com.alavpa.Spendify;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

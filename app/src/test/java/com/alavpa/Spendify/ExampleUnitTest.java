@@ -1,4 +1,4 @@
-package com.alavpa.templateapp;
+package com.alavpa.Spendify;
 
 import org.junit.Test;
 

@@ -1,7 +1,9 @@
-package com.alavpa.templateapp;
+package com.alavpa.Spendify.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.alavpa.Spendify.R;
 
 public class MainActivity extends AppCompatActivity {
 
