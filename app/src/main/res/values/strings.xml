@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Spendify</string>
+    <string name="income">Ingresos</string>
+    <string name="outcome">Gastos</string>
+    <string name="description">Descripción</string>
 </resources>

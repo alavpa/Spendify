@@ -65,7 +65,7 @@
             app:text="0"
             android:layout_height="match_parent" />
         <com.alavpa.spendify.ui.custom.KeyText
-            android:id="@+id/key_currency"
+            android:id="@+id/key_action"
             android:layout_height="match_parent"
             app:text="€"/>
     </TableRow>

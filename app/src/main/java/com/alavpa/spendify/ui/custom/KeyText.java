@@ -64,6 +64,14 @@ public class KeyText extends FrameLayout {
             a.recycle();
         }
 
+        setText(text);
+    }
+
+    public String getText(){
+        return tvKey.getText().toString();
+    }
+
+    public void setText(String text){
         tvKey.setText(text);
     }
 }

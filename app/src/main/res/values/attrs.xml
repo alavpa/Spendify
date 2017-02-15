@@ -6,4 +6,7 @@
     <declare-styleable name="KeyImage">
         <attr name="src" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="Keyboard">
+        <attr name="decimals" format="integer"/>
+    </declare-styleable>
 </resources>
