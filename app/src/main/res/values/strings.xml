@@ -3,4 +3,14 @@
     <string name="income">Ingresos</string>
     <string name="outcome">Gastos</string>
     <string name="description">Descripción</string>
+    <string name="repetir">Repetir</string>
+    <string name="cada">Cada</string>
+    <string name="gastar">Gastar</string>
+    <string name="ingresar">Ingresar</string>
+    <string-array name="periodos">
+        <item>día/s</item>
+        <item>semana/s</item>
+        <item>mes/es</item>
+        <item>año/s</item>
+    </string-array>
 </resources>

@@ -4,9 +4,8 @@ import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by alavpa on 14/02/17.
@@ -29,11 +28,14 @@ public class Period {
     int mode;
 
     private
-    List<Date> dates;
+    Date date;
+
+    private int times;
 
     public Period(){
         this.mode = NO_PERIOD;
-        dates = new ArrayList<>();
+        date = Calendar.getInstance().getTime();
+        times = 0;
     }
 
 }
