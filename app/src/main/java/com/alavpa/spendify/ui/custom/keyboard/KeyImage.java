@@ -1,4 +1,4 @@
-package com.alavpa.spendify.ui.custom;
+package com.alavpa.spendify.ui.custom.keyboard;
 
 import android.annotation.TargetApi;
 import android.content.Context;

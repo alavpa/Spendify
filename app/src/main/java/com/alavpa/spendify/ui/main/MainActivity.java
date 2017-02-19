@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.domain.di.base.DaggerBaseComponent;
 import com.alavpa.spendify.ui.base.BaseActivity;
-import com.alavpa.spendify.ui.custom.Keyboard;
+import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
 
 import javax.inject.Inject;
 
@@ -55,13 +55,18 @@ public class MainActivity extends BaseActivity implements MainView {
         tvAmount.setText(amount);
     }
 
+    @Override
+    public void goToDetails(String amount, boolean isIncome) {
+        navigator.openDetails(this,amount,isIncome);
+    }
+
     @OnClick(R.id.btn_income)
     public void onIncomeClick(View v){
-
+        presenter.goToDetails(tvAmount.getText().toString(),true);
     }
 
     @OnClick(R.id.btn_outcome)
     public void OnOutcomeClick(View v){
-
+        presenter.goToDetails(tvAmount.getText().toString(),false);
     }
 }

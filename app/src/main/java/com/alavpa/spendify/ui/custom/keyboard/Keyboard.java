@@ -1,4 +1,4 @@
-package com.alavpa.spendify.ui.custom;
+package com.alavpa.spendify.ui.custom.keyboard;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -67,6 +67,9 @@ public class Keyboard extends FrameLayout {
             a.recycle();
         }
 
+        decimalFormat.setMaximumFractionDigits(decimals);
+        decimalFormat.setMinimumFractionDigits(decimals);
+
         setDecimals(decimals);
 
     }
@@ -84,10 +87,6 @@ public class Keyboard extends FrameLayout {
     }
 
     public void setDecimals(int decimals) {
-
-        decimalFormat.setMaximumFractionDigits(decimals);
-        decimalFormat.setMinimumFractionDigits(decimals);
-
         this.decimals = decimals;
     }
 

@@ -5,7 +5,6 @@ import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by alavpa on 14/02/17.
@@ -25,17 +24,46 @@ public class Period {
 
     @PeriodMode
     private
-    int mode;
+    int period;
 
     private
-    Date date;
+    long date;
 
     private int times;
 
     public Period(){
-        this.mode = NO_PERIOD;
-        date = Calendar.getInstance().getTime();
+        this.period = NO_PERIOD;
+        date = Calendar.getInstance().getTimeInMillis();
         times = 0;
     }
 
+    public Period(long date, int times, int period){
+        this.period = period;
+        this.date = date;
+        this.times = times;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(int period) {
+        this.period = period;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
+
+    public int getTimes() {
+        return times;
+    }
+
+    public void setTimes(int times) {
+        this.times = times;
+    }
 }

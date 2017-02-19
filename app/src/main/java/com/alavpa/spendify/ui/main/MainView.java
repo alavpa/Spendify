@@ -8,4 +8,5 @@ import com.alavpa.spendify.ui.base.BaseView;
 
 public interface MainView extends BaseView {
     void setAmount(String amount);
+    void goToDetails(String amount, boolean isIncome);
 }

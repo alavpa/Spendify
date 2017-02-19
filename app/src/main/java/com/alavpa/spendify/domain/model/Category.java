@@ -13,11 +13,41 @@ public class Category {
     boolean income;
 
     private
-    String text;
+    String name;
 
     public Category(){
         this.id = 0;
         this.income = false;
-        this.text = "";
+        this.name = "";
+    }
+
+    public Category(String name, boolean income){
+        this.id = 0;
+        this.income = income;
+        this.name = name;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public boolean isIncome() {
+        return income;
+    }
+
+    public void setIncome(boolean income) {
+        this.income = income;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

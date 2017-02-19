@@ -16,4 +16,8 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void showValue(String value) {
         getView().setAmount(value);
     }
+
+    public void goToDetails(String amount, boolean isIncome) {
+        getView().goToDetails(amount,isIncome);
+    }
 }
