@@ -1,8 +1,5 @@
 package com.alavpa.spendify.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by alavpa on 9/02/17.
  */
@@ -22,7 +19,7 @@ public class Amount {
     String description;
 
     private
-    List<Category> categories;
+    Category category;
 
     private
     Period period;
@@ -32,7 +29,7 @@ public class Amount {
         this.income = false;
         this.description = "";
         this.amount = 0.0f;
-        categories = new ArrayList<>();
+        this.category = null;
         period = new Period();
     }
 
@@ -68,12 +65,12 @@ public class Amount {
         this.description = description;
     }
 
-    public List<Category> getCategories() {
-        return categories;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Period getPeriod() {

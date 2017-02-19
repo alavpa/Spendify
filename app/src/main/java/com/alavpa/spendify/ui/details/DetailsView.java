@@ -18,5 +18,7 @@ public interface DetailsView extends BaseView {
     int every();
     int period();
     Category selectedCategory();
-    long getAmountDate();
+    void showDate(String date);
+
+    void initDatePicker(long date);
 }

@@ -1,0 +1,19 @@
+package com.alavpa.spendify.domain.mapper;
+
+import com.alavpa.spendify.domain.model.Category;
+
+/**
+ * Created by alavpa on 19/02/17.
+ */
+
+public class CategoryMapper {
+
+    public static Category map(com.alavpa.spendify.data.db.model.Category source){
+        Category category = new Category();
+        category.setId(source.getId());
+        category.setName(source.getName());
+        category.setIncome(source.isIncome());
+
+        return category;
+    }
+}

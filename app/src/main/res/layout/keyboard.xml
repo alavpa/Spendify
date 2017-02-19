@@ -67,7 +67,7 @@
         <com.alavpa.spendify.ui.custom.keyboard.KeyText
             android:id="@+id/key_action"
             android:layout_height="match_parent"
-            app:text="€"/>
+            app:text="Del."/>
     </TableRow>
 
 

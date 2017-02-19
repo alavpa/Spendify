@@ -7,7 +7,8 @@
     <string name="every">Cada</string>
     <string name="to_outcome">Gastar</string>
     <string name="to_income">Ingresar</string>
-    <string name="send">mandar</string>
+    <string name="send">Guardar</string>
+    <string name="date_format">EEEE, dd \'de\' MMM \'de\' yyyy</string>
     <string-array name="periods">
         <item>día/s</item>
         <item>semana/s</item>

@@ -16,11 +16,12 @@ import android.widget.TextView;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.domain.di.base.DaggerBaseComponent;
 import com.alavpa.spendify.domain.model.Category;
+import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryAdapter;
+import com.alavpa.spendify.ui.custom.dialogs.DatePickerDialog;
 
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,6 +41,9 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Inject
     DetailsPresenter presenter;
+
+    @BindView(R.id.tv_date)
+    TextView tvDate;
 
     @BindView(R.id.chk_repeat)
     CheckBox chkRepeat;
@@ -69,7 +73,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     ArrayAdapter<String> months;
     ArrayAdapter<String> years;
 
-    long amountDate;
+    DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +90,12 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         presenter.attachView(this);
 
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.dispose();
     }
 
     public void initView(){
@@ -120,16 +130,16 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
-                    case 0:
+                    case Period.PER_DAY:
                         spTimes.setAdapter(days);
                         break;
-                    case 1:
+                    case Period.PER_WEEK:
                         spTimes.setAdapter(weeks);
                         break;
-                    case 2:
+                    case Period.PER_MONTH:
                         spTimes.setAdapter(months);
                         break;
-                    case 3:
+                    case Period.PER_YEAR:
                         spTimes.setAdapter(years);
                         break;
                 }
@@ -143,7 +153,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             }
         });
 
-        spPeriod.setSelection(0);
+        spPeriod.setSelection(Period.PER_DAY);
 
         presenter.showAmount();
 
@@ -161,7 +171,10 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             }
         });
 
-        amountDate = Calendar.getInstance().getTimeInMillis();
+        presenter.showDate();
+
+        presenter.initDatePicker();
+
     }
 
     @Override
@@ -201,12 +214,28 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     }
 
     @Override
-    public long getAmountDate() {
-        return amountDate;
+    public void showDate(String date) {
+        tvDate.setText(date);
     }
 
-    @OnClick
+    @Override
+    public void initDatePicker(long date) {
+        datePickerDialog = DatePickerDialog.getInstance(date, new DatePickerDialog.OnDatePickerSelected() {
+            @Override
+            public void onDateSet(long date) {
+                presenter.setDate(date);
+                presenter.showDate();
+            }
+        });
+    }
+
+    @OnClick(R.id.btn_apply)
     public void send(View view){
         presenter.send();
+    }
+
+    @OnClick(R.id.tv_date)
+    public void selectDate(View view){
+        datePickerDialog.show(getSupportFragmentManager(),"date_picker");
     }
 }
