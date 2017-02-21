@@ -9,7 +9,7 @@ import com.alavpa.spendify.data.db.DbUtils;
  * Created by alavpa on 19/02/17.
  */
 
-public class Category {
+public class CategoryDb {
 
     public static final String TABLE_NAME = "category";
 
@@ -24,8 +24,8 @@ public class Category {
             + COL_NAME + " TEXT NOT NULL"
             + ")";
 
-    public static Category MAPPER(Cursor cursor){
-        Category amount = new Category();
+    public static CategoryDb MAPPER(Cursor cursor){
+        CategoryDb amount = new CategoryDb();
         amount.setId(DbUtils.getLong(cursor,COL_ID));
         amount.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
         amount.setName(DbUtils.getString(cursor,COL_NAME));
@@ -68,7 +68,7 @@ public class Category {
             return this;
         }
 
-        public Builder description(String description){
+        public Builder name(String description){
             contentValues.put(COL_NAME,description);
             return this;
         }

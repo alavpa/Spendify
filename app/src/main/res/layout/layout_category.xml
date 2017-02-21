@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bkg_category"
+    android:background="@drawable/bkg_category1"
     android:padding="@dimen/padding"
     android:layout_margin="@dimen/margin_grid">
 

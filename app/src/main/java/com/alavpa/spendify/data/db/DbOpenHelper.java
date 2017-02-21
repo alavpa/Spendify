@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.alavpa.spendify.data.db.model.Amount;
-import com.alavpa.spendify.data.db.model.Category;
+import com.alavpa.spendify.data.db.model.AmountDb;
+import com.alavpa.spendify.data.db.model.CategoryDb;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,21 +28,21 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(Category.CREATE_TABLE);
-        db.execSQL(Amount.CREATE_TABLE);
+        db.execSQL(CategoryDb.CREATE_TABLE);
+        db.execSQL(AmountDb.CREATE_TABLE);
 
-        db.insert(Category.TABLE_NAME,null,new Category.Builder()
-                .description("Ocio")
+        db.insert(CategoryDb.TABLE_NAME,null,new CategoryDb.Builder()
+                .name("Ocio")
                 .income(false)
                 .build());
 
-        db.insert(Category.TABLE_NAME,null,new Category.Builder()
-                .description("Hogar")
+        db.insert(CategoryDb.TABLE_NAME,null,new CategoryDb.Builder()
+                .name("Hogar")
                 .income(false)
                 .build());
 
-        db.insert(Category.TABLE_NAME,null,new Category.Builder()
-                .description("Nomina")
+        db.insert(CategoryDb.TABLE_NAME,null,new CategoryDb.Builder()
+                .name("Nomina")
                 .income(true)
                 .build());
 

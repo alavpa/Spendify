@@ -9,6 +9,8 @@
     <string name="to_income">Ingresar</string>
     <string name="send">Guardar</string>
     <string name="date_format">EEEE, dd \'de\' MMM \'de\' yyyy</string>
+    <string name="add">Agregar</string>
+    <string name="add_category">Agregar categoria</string>
     <string-array name="periods">
         <item>día/s</item>
         <item>semana/s</item>

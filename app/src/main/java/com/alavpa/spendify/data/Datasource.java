@@ -1,6 +1,7 @@
 package com.alavpa.spendify.data;
 
-import com.alavpa.spendify.data.db.model.Category;
+import com.alavpa.spendify.data.db.model.AmountDb;
+import com.alavpa.spendify.data.db.model.CategoryDb;
 
 import java.util.List;
 
@@ -10,5 +11,11 @@ import java.util.List;
 
 public interface Datasource {
 
-    List<Category> getCategories(boolean income);
+    List<CategoryDb> getCategories(boolean income);
+
+    CategoryDb insertCategory(CategoryDb categoryDb);
+
+    AmountDb insertAmount(AmountDb amountDb);
+
+    double getSumByCategory(long categoryId);
 }

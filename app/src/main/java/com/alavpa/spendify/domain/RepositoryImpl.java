@@ -1,7 +1,11 @@
 package com.alavpa.spendify.domain;
 
 import com.alavpa.spendify.data.Datasource;
+import com.alavpa.spendify.data.db.model.AmountDb;
+import com.alavpa.spendify.data.db.model.CategoryDb;
+import com.alavpa.spendify.domain.mapper.AmountMapper;
 import com.alavpa.spendify.domain.mapper.CategoryMapper;
+import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 
 import java.util.List;
@@ -34,13 +38,53 @@ public class RepositoryImpl implements Repository {
                     @Override
                     public SingleSource<? extends List<Category>> apply(Boolean income) throws Exception {
                         return Observable.fromIterable(datasource.getCategories(income))
-                                .map(new Function<com.alavpa.spendify.data.db.model.Category, Category>() {
+                                .map(new Function<CategoryDb, Category>() {
                                     @Override
-                                    public Category apply(com.alavpa.spendify.data.db.model.Category category) throws Exception {
-                                        return CategoryMapper.map(category);
+                                    public Category apply(CategoryDb categoryDb) throws Exception {
+                                        return CategoryMapper.map(categoryDb);
                                     }
                                 })
                                 .toList();
+                    }
+                });
+    }
+
+    @Override
+    public Single<Category> insertCategory(Category category) {
+        return Single.just(category)
+                .map(new Function<Category, Category>() {
+                    @Override
+                    public Category apply(Category category) throws Exception {
+
+                        CategoryDb categoryData =
+                                datasource.insertCategory(CategoryMapper.map(category));
+
+                        return CategoryMapper.map(categoryData);
+                    }
+                });
+    }
+
+    @Override
+    public Single<Amount> insertAmount(Amount amount) {
+        return Single.just(amount)
+                .map(new Function<Amount, Amount>() {
+                    @Override
+                    public Amount apply(Amount amount) throws Exception {
+                        AmountDb amountData =
+                                datasource.insertAmount(AmountMapper.map(amount));
+
+                        return AmountMapper.map(amountData);
+                    }
+                });
+    }
+
+    @Override
+    public Single<Double> getSumByCategory(Category category) {
+        return Single.just(category.getId())
+                .map(new Function<Long, Double>() {
+                    @Override
+                    public Double apply(Long categoryId) throws Exception {
+                        return datasource.getSumByCategory(categoryId);
                     }
                 });
     }

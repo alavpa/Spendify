@@ -9,7 +9,7 @@ import com.alavpa.spendify.data.db.DbUtils;
  * Created by alavpa on 19/02/17.
  */
 
-public class Amount {
+public class AmountDb {
 
     public static final String TABLE_NAME = "amount";
 
@@ -34,24 +34,23 @@ public class Amount {
             + COL_DATE + " INTEGER NOT NULL"
             + ")";
 
-    public static Amount MAPPER(Cursor cursor){
-        Amount amount = new Amount();
-        amount.setId(DbUtils.getLong(cursor,COL_ID));
-        amount.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
-        amount.setAmount(DbUtils.getDouble(cursor,COL_AMOUNT));
-        amount.setDescription(DbUtils.getString(cursor,COL_DESC));
-        amount.setCategoryId(DbUtils.getLong(cursor,COL_CATID));
-        amount.setPeriod(DbUtils.getInt(cursor,COL_PERIOD));
-        amount.setTimes(DbUtils.getInt(cursor,COL_TIMES));
-        amount.setDate(DbUtils.getLong(cursor,COL_DATE));
-        return amount;
+    public static AmountDb MAPPER(Cursor cursor){
+        AmountDb amountDb = new AmountDb();
+        amountDb.setId(DbUtils.getLong(cursor,COL_ID));
+        amountDb.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
+        amountDb.setAmount(DbUtils.getDouble(cursor,COL_AMOUNT));
+        amountDb.setDescription(DbUtils.getString(cursor,COL_DESC));
+        amountDb.setPeriod(DbUtils.getInt(cursor,COL_PERIOD));
+        amountDb.setTimes(DbUtils.getInt(cursor,COL_TIMES));
+        amountDb.setDate(DbUtils.getLong(cursor,COL_DATE));
+        return amountDb;
     }
 
     private long id;
     private boolean income;
     private double amount;
     private String description;
-    private long categoryId;
+    private CategoryDb categoryDb;
     private int period;
     private int times;
     private long date;
@@ -89,12 +88,12 @@ public class Amount {
         this.description = description;
     }
 
-    public long getCategoryId() {
-        return categoryId;
+    public CategoryDb getCategoryDb() {
+        return categoryDb;
     }
 
-    public void setCategoryId(long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryDb(CategoryDb categoryDb) {
+        this.categoryDb = categoryDb;
     }
 
     public int getPeriod() {

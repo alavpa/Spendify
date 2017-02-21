@@ -19,25 +19,27 @@ import butterknife.ButterKnife;
  * Created by alavpa on 18/02/17.
  */
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCategoryViewHolder> {
 
     LayoutInflater inflater;
     List<Category> categories;
+    OnAddCategoryClick onAddCategoryClick;
     int selected = -1;
 
-    public CategoryAdapter(Context context, List<Category> categories){
+    public CategoryAdapter(Context context, List<Category> categories, OnAddCategoryClick onAddCategoryClick){
         inflater = LayoutInflater.from(context);
-        this.categories = categories;
+        this.onAddCategoryClick = onAddCategoryClick;
+        setCategories(context,categories);
     }
     @Override
-    public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = inflater.inflate(R.layout.layout_category,parent,false);
-        return new CategoryViewHolder(view);
+        return (viewType==0)?new CategoryViewHolder(view):new AddCategoryViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CategoryViewHolder holder, int position) {
+    public void onBindViewHolder(BaseCategoryViewHolder holder, int position) {
         Category category = categories.get(position);
         holder.bind(category);
     }
@@ -45,6 +47,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public int getItemCount() {
         return categories.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return (position==categories.size()-1)?1:0;
     }
 
     public int getSelected(){
@@ -64,12 +71,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         notifyDataSetChanged();
     }
 
-    public class CategoryViewHolder extends RecyclerView.ViewHolder{
+    public void setCategories(Context context, List<Category> categories){
+
+        this.categories = categories;
+        this.categories.add(new Category(context.getString(R.string.add),false));
+
+    }
+
+    public abstract class BaseCategoryViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.tv_name)
         TextView tvName;
 
-        public CategoryViewHolder(View itemView) {
+        public BaseCategoryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
@@ -77,6 +91,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         public void bind(Category category){
             tvName.setText(category.getName());
             itemView.setSelected(getAdapterPosition()==getSelected());
+            onClick();
+        }
+
+        public abstract void onClick();
+    }
+    public class CategoryViewHolder extends BaseCategoryViewHolder{
+
+        public CategoryViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        @Override
+        public void onClick() {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -88,5 +115,26 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 }
             });
         }
+    }
+
+    public class AddCategoryViewHolder extends BaseCategoryViewHolder{
+
+        public AddCategoryViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        @Override
+        public void onClick() {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onAddCategoryClick.onAddClick();
+                }
+            });
+        }
+    }
+
+    public interface OnAddCategoryClick{
+        void onAddClick();
     }
 }

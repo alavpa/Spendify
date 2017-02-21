@@ -20,6 +20,7 @@ import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryAdapter;
+import com.alavpa.spendify.ui.custom.dialogs.AddCategoryDialog;
 import com.alavpa.spendify.ui.custom.dialogs.DatePickerDialog;
 
 import java.util.List;
@@ -74,6 +75,8 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     ArrayAdapter<String> years;
 
     DatePickerDialog datePickerDialog;
+
+    AddCategoryDialog addCategoryDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -175,12 +178,31 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
         presenter.initDatePicker();
 
+        addCategoryDialog = AddCategoryDialog.getInstance(isIncome, new AddCategoryDialog.OnAddCategoryListener() {
+            @Override
+            public void onOk(Category category) {
+                presenter.addCategory(category);
+            }
+        });
+
     }
 
     @Override
     public void populateCategories(List<Category> categories) {
-        categoryAdapter = new CategoryAdapter(this,categories);
-        rvCategories.setAdapter(categoryAdapter);
+        if(categoryAdapter==null) {
+            categoryAdapter = new CategoryAdapter(this, categories, new CategoryAdapter.OnAddCategoryClick() {
+                @Override
+                public void onAddClick() {
+
+                    addCategoryDialog.show(getSupportFragmentManager(),"add_category");
+
+                }
+            });
+            rvCategories.setAdapter(categoryAdapter);
+        }else{
+            categoryAdapter.setCategories(this,categories);
+            categoryAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

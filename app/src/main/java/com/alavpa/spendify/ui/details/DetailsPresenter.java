@@ -7,6 +7,8 @@ import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.domain.usecases.GetCategories;
+import com.alavpa.spendify.domain.usecases.InsertAmount;
+import com.alavpa.spendify.domain.usecases.InsertCategory;
 import com.alavpa.spendify.ui.base.BasePresenter;
 
 import java.text.DecimalFormat;
@@ -33,15 +35,26 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     private
     GetCategories getCategories;
 
+    private
+    InsertAmount insertAmount;
+
+    private
+    InsertCategory insertCategory;
+
     @Inject
-    public DetailsPresenter(GetCategories getCategories){
-        super(getCategories);
+    public DetailsPresenter(GetCategories getCategories,
+                            InsertAmount insertAmount,
+                            InsertCategory insertCategory){
+        super(getCategories, insertAmount, insertCategory);
 
         this.amount = new Amount();
         this.decimalFormat = new DecimalFormat();
         this.decimalFormat.setMinimumFractionDigits(2);
         this.decimalFormat.setMaximumFractionDigits(2);
+
         this.getCategories = getCategories;
+        this.insertAmount = insertAmount;
+        this.insertCategory = insertCategory;
     }
 
     public void showCategories(){
@@ -90,6 +103,19 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
             period.setTimes(getView().every()+1);
             period.setPeriod(getView().period());
         }
+
+        insertAmount.setAmount(amount);
+        insertAmount.execute(new DisposableSingleObserver<Amount>() {
+            @Override
+            public void onSuccess(Amount amount) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
     }
 
     public void setDate(long date) {
@@ -108,5 +134,23 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
     public void initDatePicker() {
         getView().initDatePicker(amount.getPeriod().getDate());
+    }
+
+    public void addCategory(Category category) {
+
+        insertCategory.setCategory(category);
+
+        insertCategory.execute(new DisposableSingleObserver<Category>() {
+            @Override
+            public void onSuccess(Category category) {
+                showCategories();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+
     }
 }

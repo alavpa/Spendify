@@ -1,5 +1,6 @@
 package com.alavpa.spendify.domain.mapper;
 
+import com.alavpa.spendify.data.db.model.CategoryDb;
 import com.alavpa.spendify.domain.model.Category;
 
 /**
@@ -8,12 +9,21 @@ import com.alavpa.spendify.domain.model.Category;
 
 public class CategoryMapper {
 
-    public static Category map(com.alavpa.spendify.data.db.model.Category source){
+    public static Category map(CategoryDb source){
         Category category = new Category();
         category.setId(source.getId());
         category.setName(source.getName());
         category.setIncome(source.isIncome());
 
         return category;
+    }
+
+    public static CategoryDb map(Category source){
+        CategoryDb categoryDb = new CategoryDb();
+        categoryDb.setId(source.getId());
+        categoryDb.setName(source.getName());
+        categoryDb.setIncome(source.isIncome());
+
+        return categoryDb;
     }
 }
