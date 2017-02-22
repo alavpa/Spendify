@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.alavpa.spendify.R;
 
@@ -23,7 +24,17 @@ import butterknife.OnClick;
 public class Keyboard extends FrameLayout {
 
     private
-    String value = "0";
+    String integerPart = "";
+
+    private
+    String decimalPart = "";
+
+    private boolean writingIntegerPart;
+
+
+
+    private
+    double value;
     private
     DecimalFormat decimalFormat = new DecimalFormat();
     private OnPressKey onPressKey;
@@ -72,13 +83,28 @@ public class Keyboard extends FrameLayout {
 
         setDecimals(decimals);
 
+        writingIntegerPart = true;
+
     }
 
-    public String getValue() {
-        return decimalFormat.format(Double.parseDouble(value));
+    public String getFormattedValue(){
+        return decimalFormat.format(value);
     }
 
-    public void setValue(String value) {
+    public void setValue(String formattedValue) {
+        try {
+            if(formattedValue.isEmpty()) formattedValue = "0";
+            this.value = decimalFormat.parse(formattedValue).doubleValue();
+        }catch (Exception e){
+            Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
         this.value = value;
     }
 
@@ -103,55 +129,64 @@ public class Keyboard extends FrameLayout {
     public void onKeyClick(View v) {
 
         KeyText keyText = (KeyText)v;
-
         String text = keyText.getText();
 
-        if(value.contains(".")){
-            int size = value.length();
-            int pos = value.indexOf(".");
-            if(size-pos-1>=decimals){
-                return;
-            }
+        if(writingIntegerPart){
+            integerPart += text;
+        }else if(decimalPart.length()<decimals){
+            decimalPart += text;
         }
-        value += text;
 
+        setInternalValue();
         if(onPressKey!=null){
             onPressKey.onPress(getValue());
         }
     }
 
     @OnClick(R.id.key_dot)
-    public void onDotClick(View v){
+    public void onDotClick(View v) {
 
-        String separator = ((KeyText)v).getText();
-        if(decimals>0 && !value.contains(separator)){
-            value+=separator;
-            if(onPressKey!=null){
-                onPressKey.onPress(getValue());
-            }
+        if(decimals>0) {
+            writingIntegerPart = false;
         }
 
     }
 
     @OnClick(R.id.key_action)
-    public void onActionClick(View v){
-        if(!value.isEmpty()) {
-            value = value.substring(0, value.length() - 1);
+    public void onActionClick(View v) {
 
-            if(value.isEmpty()){
-                value = "0";
-            } else if(value.indexOf(".")==value.length()-1){
-                value = value.substring(0, value.length() - 1);
-            }
-
-            if(value.isEmpty()){
-                value = "0";
-            }
-
-            if(onPressKey!=null){
-                onPressKey.onPress(getValue());
+        if(!writingIntegerPart){
+            if(decimalPart.isEmpty()){
+                writingIntegerPart = true;
+            }else {
+                decimalPart = decimalPart.substring(0, decimalPart.length() - 1);
             }
         }
+
+        if(writingIntegerPart && !integerPart.isEmpty()){
+            integerPart = integerPart.substring(0,integerPart.length()-1);
+        }
+
+        setInternalValue();
+        if(onPressKey!=null){
+            onPressKey.onPress(getValue());
+        }
+    }
+
+    private void setInternalValue(){
+        String internalValue;
+        if(integerPart.isEmpty()){
+            internalValue = "0";
+        }else {
+            internalValue = integerPart;
+        }
+
+        if(!decimalPart.isEmpty()){
+             internalValue += decimalFormat.getDecimalFormatSymbols().getDecimalSeparator()
+                     +decimalPart;
+        }
+
+        setValue(internalValue);
     }
 
     public void setOnPressKey(OnPressKey onPressKey){
@@ -159,7 +194,6 @@ public class Keyboard extends FrameLayout {
     }
 
     public interface OnPressKey{
-        void onPress(String value);
+        void onPress(double value);
     }
-
 }

@@ -1,5 +1,6 @@
 package com.alavpa.spendify.ui.details;
 
+import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.ui.base.BaseView;
 
@@ -13,12 +14,20 @@ public interface DetailsView extends BaseView {
     void populateCategories(List<Category> categories);
 
     void setAmount(String amount);
-    String getDescription();
+
+    String description();
     boolean repeat();
     int every();
     int period();
-    Category selectedCategory();
-    void showDate(String date);
+    Category category();
 
-    void initDatePicker(long date);
+    void setDescription(String description);
+    void setDate(String date);
+    void selectCategory(Category category);
+    void setRepeat(boolean repeat);
+    void setTimes(int times);
+    void setPeriod(int period);
+    void showDatePickerDialog(long date);
+
+    void goToMain(Amount amount);
 }

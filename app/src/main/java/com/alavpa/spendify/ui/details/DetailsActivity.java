@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.domain.di.base.DaggerBaseComponent;
+import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.ui.base.BaseActivity;
@@ -31,14 +32,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
+
 /**
  * Created by alavpa on 14/02/17.
  */
 
 public class DetailsActivity extends BaseActivity implements DetailsView {
-
-    public static final String EXTRA_AMOUNT = "EXTRA_AMOUNT";
-    public static final String EXTRA_ISINCOME = "EXTRA_ISINCOME";
 
     @Inject
     DetailsPresenter presenter;
@@ -103,28 +103,25 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     public void initView(){
 
-        String amount = getIntent().getStringExtra(EXTRA_AMOUNT);
+        Amount amount = getIntent().getParcelableExtra(EXTRA_AMOUNT);
         presenter.setAmount(amount);
 
-        boolean isIncome = getIntent().getBooleanExtra(EXTRA_ISINCOME,false);
-        presenter.setIsIncome(isIncome);
-
-        days = new ArrayAdapter<String>(this,
+        days = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
                 getResources().getStringArray(R.array.days));
         days.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        weeks = new ArrayAdapter<String>(this,
+        weeks = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
                 getResources().getStringArray(R.array.weeks));
         weeks.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        months = new ArrayAdapter<String>(this,
+        months = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
                 getResources().getStringArray(R.array.months));
         months.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        years = new ArrayAdapter<String>(this,
+        years = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
                 getResources().getStringArray(R.array.years));
         years.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -147,7 +144,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                         break;
                 }
 
-                spTimes.setSelection(0);
+                presenter.setPeriod(position);
             }
 
             @Override
@@ -158,10 +155,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
         spPeriod.setSelection(Period.PER_DAY);
 
-        presenter.showAmount();
-
         rvCategories.setLayoutManager(new GridLayoutManager(this));
-        presenter.showCategories();
 
         chkRepeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -174,17 +168,14 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             }
         });
 
-        presenter.showDate();
-
-        presenter.initDatePicker();
-
-        addCategoryDialog = AddCategoryDialog.getInstance(isIncome, new AddCategoryDialog.OnAddCategoryListener() {
+        addCategoryDialog = AddCategoryDialog.getInstance(amount.isIncome(), new AddCategoryDialog.OnAddCategoryListener() {
             @Override
             public void onOk(Category category) {
                 presenter.addCategory(category);
             }
         });
 
+        presenter.initView();
     }
 
     @Override
@@ -211,7 +202,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     }
 
     @Override
-    public String getDescription() {
+    public String description() {
         return etDescription.getText().toString();
     }
 
@@ -231,24 +222,59 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     }
 
     @Override
-    public Category selectedCategory() {
-        return categoryAdapter.getSelectedCategory();
+    public Category category() {
+        return categoryAdapter.getSelected();
     }
 
     @Override
-    public void showDate(String date) {
+    public void setDescription(String description) {
+        etDescription.setText(description);
+    }
+
+    @Override
+    public void setDate(String date) {
         tvDate.setText(date);
     }
 
     @Override
-    public void initDatePicker(long date) {
-        datePickerDialog = DatePickerDialog.getInstance(date, new DatePickerDialog.OnDatePickerSelected() {
-            @Override
-            public void onDateSet(long date) {
-                presenter.setDate(date);
-                presenter.showDate();
-            }
-        });
+    public void selectCategory(Category category) {
+        categoryAdapter.setSelected(category);
+        categoryAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setRepeat(boolean repeat) {
+        chkRepeat.setChecked(repeat);
+    }
+
+    @Override
+    public void setTimes(int times) {
+        spTimes.setSelection(times);
+    }
+
+    @Override
+    public void setPeriod(int period) {
+        spPeriod.setSelection(period);
+    }
+
+    @Override
+    public void showDatePickerDialog(long date) {
+        if(datePickerDialog == null) {
+            datePickerDialog = DatePickerDialog.getInstance(date, new DatePickerDialog.OnDatePickerSelected() {
+                @Override
+                public void onDateSet(long date) {
+                    presenter.setDate(date);
+                    presenter.showDate();
+                }
+            });
+        }
+
+        datePickerDialog.show(getSupportFragmentManager(),"date_picker");
+    }
+
+    @Override
+    public void goToMain(Amount amount) {
+        navigator.openMain(this,amount);
     }
 
     @OnClick(R.id.btn_apply)
@@ -258,6 +284,12 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @OnClick(R.id.tv_date)
     public void selectDate(View view){
-        datePickerDialog.show(getSupportFragmentManager(),"date_picker");
+        presenter.showDatePickerDialog();
+    }
+
+    @Override
+    public void onBackPressed() {
+        presenter.goToMain();
+        super.onBackPressed();
     }
 }

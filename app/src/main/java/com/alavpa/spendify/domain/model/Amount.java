@@ -1,10 +1,13 @@
 package com.alavpa.spendify.domain.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by alavpa on 9/02/17.
  */
 
-public class Amount {
+public class Amount implements Parcelable {
 
     private
     long id;
@@ -80,4 +83,40 @@ public class Amount {
     public void setPeriod(Period period) {
         this.period = period;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeByte(this.income ? (byte) 1 : (byte) 0);
+        dest.writeDouble(this.amount);
+        dest.writeString(this.description);
+        dest.writeParcelable(this.category, flags);
+        dest.writeParcelable(this.period, flags);
+    }
+
+    protected Amount(Parcel in) {
+        this.id = in.readLong();
+        this.income = in.readByte() != 0;
+        this.amount = in.readDouble();
+        this.description = in.readString();
+        this.category = in.readParcelable(Category.class.getClassLoader());
+        this.period = in.readParcelable(Period.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Amount> CREATOR = new Parcelable.Creator<Amount>() {
+        @Override
+        public Amount createFromParcel(Parcel source) {
+            return new Amount(source);
+        }
+
+        @Override
+        public Amount[] newArray(int size) {
+            return new Amount[size];
+        }
+    };
 }

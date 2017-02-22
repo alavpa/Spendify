@@ -6,4 +6,5 @@ package com.alavpa.spendify.ui.base;
 
 public interface BaseView {
     void showError(String message);
+    void finish();
 }

@@ -57,6 +57,49 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         this.insertCategory = insertCategory;
     }
 
+    public void initView(){
+
+        String value = decimalFormat.format(this.amount.getAmount());
+        getView().setAmount(value);
+
+        getView().setDescription(amount.getDescription());
+
+        if(amount.getPeriod().getPeriod() == Period.NO_PERIOD){
+            getView().setRepeat(false);
+        }else{
+            getView().setRepeat(true);
+            getView().setPeriod(amount.getPeriod().getPeriod());
+        }
+
+        showDate();
+
+        getCategories.setIncome(amount.isIncome());
+        getCategories.execute(new DisposableSingleObserver<List<Category>>() {
+            @Override
+            public void onSuccess(List<Category> categories) {
+                getView().populateCategories(categories);
+                getView().selectCategory(amount.getCategory());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+    }
+
+    public void setPeriod(int period){
+        int times;
+        if(period == amount.getPeriod().getPeriod()){
+            times = amount.getPeriod().getTimes();
+        }else{
+            times = 1;
+        }
+        amount.getPeriod().setPeriod(period);
+        amount.getPeriod().setTimes(times);
+        getView().setTimes(times-1);
+    }
+
     public void showCategories(){
 
         getCategories.setIncome(amount.isIncome());
@@ -74,41 +117,20 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
     }
 
-    public void setAmount(String amount){
-        try {
-            this.amount.setAmount(decimalFormat.parse(amount).doubleValue());
-        }catch (Exception e){
-            getView().showError(e.getMessage());
-        }
-
-    }
-
-    public void setIsIncome(boolean isIncome){
-        this.amount.setIncome(isIncome);
-    }
-
-    public void showAmount() {
-
-        String amount = decimalFormat.format(this.amount.getAmount());
-        getView().setAmount(amount);
+    public void setAmount(Amount amount){
+        this.amount = amount;
     }
 
     public void send() {
-        amount.setDescription(getView().getDescription());
-        amount.setCategory(getView().selectedCategory());
 
-        Period period = amount.getPeriod();
-
-        if(getView().repeat()){
-            period.setTimes(getView().every()+1);
-            period.setPeriod(getView().period());
-        }
+        fillAmountFromView();
 
         insertAmount.setAmount(amount);
         insertAmount.execute(new DisposableSingleObserver<Amount>() {
             @Override
             public void onSuccess(Amount amount) {
-
+                getView().goToMain(new Amount());
+                getView().finish();
             }
 
             @Override
@@ -129,11 +151,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         }
 
         String dateText = simpleDateFormat.format(amount.getPeriod().getDate());
-        getView().showDate(dateText.substring(0,1).toUpperCase()+dateText.substring(1));
-    }
-
-    public void initDatePicker() {
-        getView().initDatePicker(amount.getPeriod().getDate());
+        getView().setDate(dateText.substring(0,1).toUpperCase()+dateText.substring(1));
     }
 
     public void addCategory(Category category) {
@@ -152,5 +170,25 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
             }
         });
 
+    }
+
+    public void fillAmountFromView(){
+        amount.setDescription(getView().description());
+        amount.setCategory(getView().category());
+
+        Period period = amount.getPeriod();
+
+        if(getView().repeat()){
+            period.setTimes(getView().every()+1);
+            period.setPeriod(getView().period());
+        }
+    }
+    public void goToMain() {
+        fillAmountFromView();
+        getView().goToMain(amount);
+    }
+
+    public void showDatePickerDialog() {
+        getView().showDatePickerDialog(amount.getPeriod().getDate());
     }
 }

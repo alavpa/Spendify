@@ -72,8 +72,8 @@ public class DatePickerDialog extends DialogFragment {
         calendar.setTimeInMillis(date);
 
         datePicker.init(calendar.get(Calendar.YEAR),
-                Calendar.MONTH,
-                Calendar.DAY_OF_MONTH,
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
                 null);
 
     }

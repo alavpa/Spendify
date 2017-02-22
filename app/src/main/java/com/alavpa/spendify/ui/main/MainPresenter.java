@@ -1,6 +1,7 @@
 package com.alavpa.spendify.ui.main;
 
 import com.alavpa.spendify.domain.di.PerActivity;
+import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.base.BasePresenter;
 
 import javax.inject.Inject;
@@ -11,13 +12,33 @@ import javax.inject.Inject;
 @PerActivity
 public class MainPresenter extends BasePresenter<MainView> {
 
+    private
+    Amount amount;
+    private String value;
+
     @Inject
-    public MainPresenter(){}
-    public void showValue(String value) {
-        getView().setAmount(value);
+    public MainPresenter(){
+        amount = new Amount();
     }
 
-    public void goToDetails(String amount, boolean isIncome) {
-        getView().goToDetails(amount,isIncome);
+    public void setAmount(Amount amount){
+        this.amount = amount;
+    }
+
+    public void initView(){
+        getView().setValue(amount.getAmount());
+    }
+
+    public void goToDetails() {
+        getView().goToDetails(amount);
+    }
+
+    public void setValue(double value) {
+        amount.setAmount(value);
+        getView().setValue(value);
+    }
+
+    public void setIncome(boolean income) {
+        amount.setIncome(income);
     }
 }

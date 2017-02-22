@@ -1,5 +1,7 @@
 package com.alavpa.spendify.domain.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
@@ -10,7 +12,7 @@ import java.util.Calendar;
  * Created by alavpa on 14/02/17.
  */
 
-public class Period {
+public class Period implements Parcelable {
 
     @IntDef({NO_PERIOD, PER_DAY, PER_WEEK, PER_MONTH, PER_YEAR})
     @Retention(RetentionPolicy.SOURCE)
@@ -66,4 +68,34 @@ public class Period {
     public void setTimes(int times) {
         this.times = times;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.period);
+        dest.writeLong(this.date);
+        dest.writeInt(this.times);
+    }
+
+    protected Period(Parcel in) {
+        this.period = in.readInt();
+        this.date = in.readLong();
+        this.times = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Period> CREATOR = new Parcelable.Creator<Period>() {
+        @Override
+        public Period createFromParcel(Parcel source) {
+            return new Period(source);
+        }
+
+        @Override
+        public Period[] newArray(int size) {
+            return new Period[size];
+        }
+    };
 }

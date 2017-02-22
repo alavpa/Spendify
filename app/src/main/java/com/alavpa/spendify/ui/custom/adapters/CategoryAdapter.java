@@ -24,7 +24,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
     LayoutInflater inflater;
     List<Category> categories;
     OnAddCategoryClick onAddCategoryClick;
-    int selected = -1;
+    Category selected = null;
 
     public CategoryAdapter(Context context, List<Category> categories, OnAddCategoryClick onAddCategoryClick){
         inflater = LayoutInflater.from(context);
@@ -54,21 +54,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
         return (position==categories.size()-1)?1:0;
     }
 
-    public int getSelected(){
+    public Category getSelected(){
         return selected;
-    }
-
-    public Category getSelectedCategory(){
-        if(selected>=0){
-            return categories.get(selected);
-        }
-
-        return null;
-    }
-
-    public void setSelected(int position){
-        this.selected = position;
-        notifyDataSetChanged();
     }
 
     public void setCategories(Context context, List<Category> categories){
@@ -76,6 +63,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
         this.categories = categories;
         this.categories.add(new Category(context.getString(R.string.add),false));
 
+    }
+
+    public void setSelected(Category category) {
+        this.selected = category;
     }
 
     public abstract class BaseCategoryViewHolder extends RecyclerView.ViewHolder{
@@ -90,7 +81,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
 
         public void bind(Category category){
             tvName.setText(category.getName());
-            itemView.setSelected(getAdapterPosition()==getSelected());
+            if(getSelected()!=null) {
+                itemView.setSelected(category.getId() == getSelected().getId());
+            }
             onClick();
         }
 
@@ -107,14 +100,22 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(getAdapterPosition()==getSelected()){
-                        setSelected(-1);
-                    }else {
-                        setSelected(getAdapterPosition());
+                    Category category = getCategory(getAdapterPosition());
+
+                    if(getSelected()!=null && category.getId()==getSelected().getId()){
+                        setSelected(null);
                     }
+                    else {
+                        setSelected(category);
+                    }
+                    notifyDataSetChanged();
                 }
             });
         }
+    }
+
+    private Category getCategory(int adapterPosition) {
+        return categories.get(adapterPosition);
     }
 
     public class AddCategoryViewHolder extends BaseCategoryViewHolder{

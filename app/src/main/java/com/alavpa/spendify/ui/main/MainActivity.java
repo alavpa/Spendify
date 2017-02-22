@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.domain.di.base.DaggerBaseComponent;
+import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
 
@@ -14,6 +15,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
 
 public class MainActivity extends BaseActivity implements MainView {
 
@@ -42,31 +45,42 @@ public class MainActivity extends BaseActivity implements MainView {
 
         keyboard.setOnPressKey(new Keyboard.OnPressKey() {
             @Override
-            public void onPress(String value) {
-                presenter.showValue(value);
+            public void onPress(double value) {
+                presenter.setValue(value);
             }
         });
 
-        presenter.showValue(keyboard.getValue());
+        Amount amount = getIntent().getParcelableExtra(EXTRA_AMOUNT);
+        if(amount!=null){
+            presenter.setAmount(amount);
+        }
+
+        presenter.initView();
+
     }
 
     @Override
-    public void setAmount(String amount) {
-        tvAmount.setText(amount);
+    public void setValue(double value) {
+        keyboard.setValue(value);
+        tvAmount.setText(keyboard.getFormattedValue());
     }
 
     @Override
-    public void goToDetails(String amount, boolean isIncome) {
-        navigator.openDetails(this,amount,isIncome);
+    public void goToDetails(Amount amount) {
+        navigator.openDetails(this, amount);
     }
 
     @OnClick(R.id.btn_income)
     public void onIncomeClick(View v){
-        presenter.goToDetails(tvAmount.getText().toString(),true);
+        presenter.setIncome(true);
+        presenter.goToDetails();
+        finish();
     }
 
     @OnClick(R.id.btn_outcome)
     public void OnOutcomeClick(View v){
-        presenter.goToDetails(tvAmount.getText().toString(),false);
+        presenter.setIncome(false);
+        presenter.goToDetails();
+        finish();
     }
 }
