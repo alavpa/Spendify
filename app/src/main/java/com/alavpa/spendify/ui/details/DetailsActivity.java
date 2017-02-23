@@ -14,7 +14,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.domain.di.base.DaggerBaseComponent;
+import com.alavpa.spendify.di.HasComponent;
+import com.alavpa.spendify.di.activity.ActivityComponent;
+import com.alavpa.spendify.di.activity.ActivityModule;
+import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
@@ -38,7 +41,7 @@ import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
  * Created by alavpa on 14/02/17.
  */
 
-public class DetailsActivity extends BaseActivity implements DetailsView {
+public class DetailsActivity extends BaseActivity implements DetailsView,HasComponent<ActivityComponent>{
 
     @Inject
     DetailsPresenter presenter;
@@ -78,17 +81,21 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     AddCategoryDialog addCategoryDialog;
 
+    private ActivityComponent component;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
 
-        DaggerBaseComponent.builder()
+        component = DaggerActivityComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .activityModule(getActivityModule())
-                .build()
-                .inject(this);
+                .baseModule(getBaseModule())
+                .activityModule(new ActivityModule())
+                .build();
+
+        component.inject(this);
 
         presenter.attachView(this);
 
@@ -291,5 +298,10 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     public void onBackPressed() {
         presenter.goToMain();
         super.onBackPressed();
+    }
+
+    @Override
+    public ActivityComponent getComponent() {
+        return component;
     }
 }

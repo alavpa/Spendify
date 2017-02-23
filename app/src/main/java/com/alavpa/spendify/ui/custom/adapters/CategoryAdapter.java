@@ -35,7 +35,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
     public BaseCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = inflater.inflate(R.layout.layout_category,parent,false);
-        return (viewType==0)?new CategoryViewHolder(view):new AddCategoryViewHolder(view);
+        return (viewType==0)?new CategoryViewHolder(view):new AddCategoryViewHolder(view,onAddCategoryClick);
     }
 
     @Override
@@ -120,8 +120,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
 
     public class AddCategoryViewHolder extends BaseCategoryViewHolder{
 
-        public AddCategoryViewHolder(View itemView) {
+        OnAddCategoryClick onAddCategoryClick;
+        public AddCategoryViewHolder(View itemView, OnAddCategoryClick onAddCategoryClick) {
             super(itemView);
+            this.onAddCategoryClick = onAddCategoryClick;
         }
 
         @Override

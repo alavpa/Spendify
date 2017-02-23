@@ -11,6 +11,11 @@
     <string name="date_format">EEEE, dd \'de\' MMM \'de\' yyyy</string>
     <string name="add">Agregar</string>
     <string name="add_category">Agregar categoria</string>
+
+    <string-array name="menu">
+        <item>Panel</item>
+        <item>Dashboard</item>
+    </string-array>
     <string-array name="periods">
         <item>día/s</item>
         <item>semana/s</item>

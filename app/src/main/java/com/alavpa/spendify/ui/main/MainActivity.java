@@ -5,7 +5,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.domain.di.base.DaggerBaseComponent;
+import com.alavpa.spendify.di.HasComponent;
+import com.alavpa.spendify.di.activity.ActivityComponent;
+import com.alavpa.spendify.di.activity.ActivityModule;
+import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
@@ -18,7 +21,7 @@ import butterknife.OnClick;
 
 import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
 
-public class MainActivity extends BaseActivity implements MainView {
+public class MainActivity extends BaseActivity implements MainView, HasComponent<ActivityComponent> {
 
     @BindView(R.id.tv_amount)
     TextView tvAmount;
@@ -29,17 +32,21 @@ public class MainActivity extends BaseActivity implements MainView {
     @Inject
     MainPresenter presenter;
 
+    private ActivityComponent component;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        DaggerBaseComponent.builder()
+        component = DaggerActivityComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .activityModule(getActivityModule())
-                .build()
-                .inject(this);
+                .baseModule(getBaseModule())
+                .activityModule(new ActivityModule())
+                .build();
+
+        component.inject(this);
 
         presenter.attachView(this);
 
@@ -82,5 +89,10 @@ public class MainActivity extends BaseActivity implements MainView {
         presenter.setIncome(false);
         presenter.goToDetails();
         finish();
+    }
+
+    @Override
+    public ActivityComponent getComponent() {
+        return component;
     }
 }

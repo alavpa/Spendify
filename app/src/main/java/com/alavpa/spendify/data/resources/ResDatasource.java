@@ -1,4 +1,4 @@
-package com.alavpa.spendify.ui;
+package com.alavpa.spendify.data.resources;
 
 import android.content.Context;
 
@@ -6,16 +6,16 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Created by alavpa on 19/02/17.
+ * Created by alavpa on 23/02/17.
  */
 
 @Singleton
-public class ResourceProvider {
+public class ResDatasource {
 
     Context context;
 
     @Inject
-    public ResourceProvider(Context context){
+    public ResDatasource(Context context){
         this.context = context;
     }
 
@@ -23,4 +23,7 @@ public class ResourceProvider {
         return context.getString(stringResId);
     }
 
+    public String[] getArrayString(int stringArrayResId){
+        return context.getResources().getStringArray(stringArrayResId);
+    }
 }

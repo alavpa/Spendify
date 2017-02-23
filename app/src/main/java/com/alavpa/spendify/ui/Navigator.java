@@ -36,4 +36,8 @@ public class Navigator {
         intent.putExtra(EXTRA_AMOUNT,amount);
         context.startActivity(intent);
     }
+
+    public void openDashboard(Context context) {
+
+    }
 }

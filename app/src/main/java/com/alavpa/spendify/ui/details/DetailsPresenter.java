@@ -2,7 +2,7 @@ package com.alavpa.spendify.ui.details;
 
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.domain.di.PerActivity;
+import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;

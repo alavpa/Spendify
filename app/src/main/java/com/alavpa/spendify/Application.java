@@ -1,8 +1,8 @@
 package com.alavpa.spendify;
 
-import com.alavpa.spendify.domain.di.application.ApplicationComponent;
-import com.alavpa.spendify.domain.di.application.ApplicationModule;
-import com.alavpa.spendify.domain.di.application.DaggerApplicationComponent;
+import com.alavpa.spendify.di.application.ApplicationComponent;
+import com.alavpa.spendify.di.application.ApplicationModule;
+import com.alavpa.spendify.di.application.DaggerApplicationComponent;
 
 /**
  * Created by alavpa on 10/02/17.

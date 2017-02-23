@@ -1,4 +1,4 @@
-package com.alavpa.spendify.domain.di;
+package com.alavpa.spendify.di;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

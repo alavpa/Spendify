@@ -1,12 +1,12 @@
-package com.alavpa.spendify.domain.di.application;
+package com.alavpa.spendify.di.application;
 
 import android.content.Context;
 
 import com.alavpa.spendify.data.Datasource;
 import com.alavpa.spendify.data.db.DbDatasource;
+import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.domain.Repository;
 import com.alavpa.spendify.domain.RepositoryImpl;
-import com.alavpa.spendify.ui.ResourceProvider;
 
 import javax.inject.Singleton;
 
@@ -45,7 +45,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public ResourceProvider provideResourceProvider(){
-        return new ResourceProvider(context);
+    public ResDatasource provideResourceProvider(){
+        return new ResDatasource(context);
     }
 }
