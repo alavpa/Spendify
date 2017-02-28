@@ -80,7 +80,7 @@ public class MenuFragment extends BaseFragment implements MenuView{
             adapter = new MenuAdapter(getActivity(), new MenuAdapter.OnMenuClick() {
                 @Override
                 public void onClick(int position) {
-
+                    menuPresenter.goTo(position);
                 }
             }, menu);
 

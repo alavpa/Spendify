@@ -21,7 +21,7 @@ import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
-import com.alavpa.spendify.ui.base.BaseActivity;
+import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryAdapter;
 import com.alavpa.spendify.ui.custom.dialogs.AddCategoryDialog;
@@ -41,7 +41,7 @@ import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
  * Created by alavpa on 14/02/17.
  */
 
-public class DetailsActivity extends BaseActivity implements DetailsView,HasComponent<ActivityComponent>{
+public class DetailsActivity extends BaseToolbarActivity implements DetailsView,HasComponent<ActivityComponent>{
 
     @Inject
     DetailsPresenter presenter;

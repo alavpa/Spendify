@@ -1,8 +1,9 @@
 package com.alavpa.spendify.di.base;
 
+import android.app.Activity;
+
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.di.application.ApplicationComponent;
-import com.alavpa.spendify.ui.base.BaseActivity;
 
 import dagger.Component;
 
@@ -12,5 +13,5 @@ import dagger.Component;
 @PerActivity
 @Component(dependencies = ApplicationComponent.class, modules = {BaseModule.class})
 public interface BaseComponent {
-    BaseActivity activity();
+    Activity activity();
 }

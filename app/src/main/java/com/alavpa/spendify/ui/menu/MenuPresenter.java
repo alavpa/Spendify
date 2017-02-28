@@ -22,4 +22,12 @@ public class MenuPresenter extends BasePresenter<MenuView> {
         menu = resourceProvider.getArrayString(R.array.menu);
         getView().populateMenu(menu);
     }
+
+    public void goTo(int position) {
+        if(position == 1){
+            getView().goToDashboard();
+        }else{
+            getView().goToMain();
+        }
+    }
 }

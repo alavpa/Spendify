@@ -32,4 +32,12 @@ public class DbUtils {
         return (value)?field+"=1":field+"=0";
     }
 
+    public static String getParam(long param){
+        return String.valueOf(param);
+    }
+
+    public static String getParam(boolean param){
+        return (param)?"1":"0";
+    }
+
 }

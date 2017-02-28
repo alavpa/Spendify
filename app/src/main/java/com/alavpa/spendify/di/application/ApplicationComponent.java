@@ -5,6 +5,7 @@ import com.alavpa.spendify.domain.Repository;
 import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.base.BaseFragment;
+import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
 
 import javax.inject.Singleton;
 
@@ -17,6 +18,7 @@ import dagger.Component;
 @Singleton
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
+    void inject(BaseToolbarActivity baseActivity);
     void inject(BaseActivity baseActivity);
     void inject(BaseFragment baseFragment);
 

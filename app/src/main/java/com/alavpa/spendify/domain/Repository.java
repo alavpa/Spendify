@@ -21,4 +21,6 @@ public interface Repository {
     Single<Amount> insertAmount(Amount amount);
 
     Single<Double> getSumByCategory(Category category);
+
+    Single<List<Amount>> getAmountByCategories(boolean income, long from, long to);
 }

@@ -11,6 +11,7 @@ import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.base.BaseActivity;
+import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
 import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
 
 import javax.inject.Inject;
@@ -21,7 +22,7 @@ import butterknife.OnClick;
 
 import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
 
-public class MainActivity extends BaseActivity implements MainView, HasComponent<ActivityComponent> {
+public class MainActivity extends BaseToolbarActivity implements MainView, HasComponent<ActivityComponent> {
 
     @BindView(R.id.tv_amount)
     TextView tvAmount;

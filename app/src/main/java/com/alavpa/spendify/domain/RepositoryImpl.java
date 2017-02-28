@@ -9,6 +9,7 @@ import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -88,4 +89,29 @@ public class RepositoryImpl implements Repository {
                     }
                 });
     }
+
+    @Override
+    public Single<List<Amount>> getAmountByCategories(final boolean income, final long from, final long to) {
+        return Single.fromCallable(new Callable<List<AmountDb>>() {
+            @Override
+            public List<AmountDb> call() throws Exception {
+                return datasource.getAmountByCategories(income,from,to);
+            }
+        })
+                .flatMap(new Function<List<AmountDb>, SingleSource<List<Amount>>>() {
+                    @Override
+                    public SingleSource<List<Amount>> apply(List<AmountDb> amountDbs) throws Exception {
+                        return Observable.fromIterable(amountDbs)
+                                .map(new Function<AmountDb, Amount>() {
+                                    @Override
+                                    public Amount apply(AmountDb amountDb) throws Exception {
+                                        return AmountMapper.map(amountDb);
+                                    }
+                                })
+                                .toList();
+                    }
+                });
+    }
+
+
 }

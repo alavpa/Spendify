@@ -1,7 +1,8 @@
 package com.alavpa.spendify.di.base;
 
+import android.app.Activity;
+
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.ui.base.BaseActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,15 +14,15 @@ import dagger.Provides;
 public class BaseModule {
 
     private
-    final BaseActivity activity;
+    final Activity activity;
 
-    public BaseModule(BaseActivity activity){
+    public BaseModule(Activity activity){
         this.activity = activity;
     }
 
     @Provides
     @PerActivity
-    public BaseActivity providesActivity(){
+    public Activity providesActivity(){
         return this.activity;
     }
 }

@@ -9,7 +9,9 @@ import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,16 +31,48 @@ public class DbDatasource implements Datasource {
     }
 
     public List<CategoryDb> getCategories(boolean income){
-        List<CategoryDb> categories = new ArrayList<>();
+        List<CategoryDb> categories;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = db.query(CategoryDb.TABLE_NAME,
+        Cursor cursor = getCursorCategories(db,income);
+        categories = getCategoryList(cursor);
+        cursor.close();
+        db.close();
+
+        return categories;
+    }
+
+    private Cursor getCursorCategories(SQLiteDatabase db, boolean income){
+        return db.query(CategoryDb.TABLE_NAME,
                 null,
                 DbUtils.operatorEqual(CategoryDb.COL_INCOME,income),
                 null,null,null,null);
+    }
+
+    private List<CategoryDb> getCategoryList(Cursor cursor){
+        List<CategoryDb> categories = new ArrayList<>();
         while (cursor.moveToNext()){
             categories.add(CategoryDb.MAPPER(cursor));
         }
+        return categories;
+    }
+
+    private Map<Long, CategoryDb> getCategoryMap(Cursor cursor){
+        Map<Long, CategoryDb> categories = new HashMap<>();
+        while (cursor.moveToNext()){
+            CategoryDb categoryDb = CategoryDb.MAPPER(cursor);
+            categories.put(categoryDb.getId(),categoryDb);
+        }
+        return categories;
+    }
+
+    @Override
+    public Map<Long, CategoryDb> getHashCategories(boolean income) {
+        Map<Long,CategoryDb> categories;
+
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = getCursorCategories(db,income);
+        categories = getCategoryMap(cursor);
         cursor.close();
         db.close();
 
@@ -72,6 +106,7 @@ public class DbDatasource implements Datasource {
         ContentValues contentValues = new CategoryDb.Builder()
                 .name(categoryDb.getName())
                 .income(categoryDb.isIncome())
+                .color(categoryDb.getColor())
                 .build();
 
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -104,4 +139,65 @@ public class DbDatasource implements Datasource {
 
         return sum;
     }
+
+    @Override
+    public List<AmountDb> getAmountBy(boolean income, long from, long to) {
+
+        List<AmountDb> list;
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+
+        Cursor cursor = getAmountBy(db,income,from,to);
+
+        list = getAmountList(cursor);
+
+        cursor.close();
+        db.close();
+
+        return list;
+    }
+
+    private Cursor getAmountBy(SQLiteDatabase db, boolean income, long from, long to){
+        return db.query(AmountDb.TABLE_NAME,
+                null,
+                AmountDb.COL_DATE + ">=? AND " +
+                        AmountDb.COL_DATE + "<=? AND " +
+                        AmountDb.COL_INCOME + "=?",
+                new String[]{DbUtils.getParam(from),DbUtils.getParam(to),DbUtils.getParam(income)},
+                AmountDb.COL_CATID,
+                null,
+                null);
+    }
+
+    @Override
+    public Map<Long, AmountDb> getHashAmountBy(boolean income, long from, long to) {
+        Map<Long,AmountDb> list;
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+
+        Cursor cursor = getAmountBy(db,income,from,to);
+
+        list = getAmountMap(cursor);
+
+        cursor.close();
+        db.close();
+
+        return list;
+    }
+
+    private Map<Long, AmountDb> getAmountMap(Cursor cursor){
+        Map<Long, AmountDb> amounts = new HashMap<>();
+        while (cursor.moveToNext()){
+            AmountDb amountDb = AmountDb.MAPPER(cursor);
+            amounts.put(amountDb.getId(),amountDb);
+        }
+        return amounts;
+    }
+
+    private List<AmountDb> getAmountList(Cursor cursor){
+        List<AmountDb> amounts = new ArrayList<>();
+        while (cursor.moveToNext()){
+            amounts.add(AmountDb.MAPPER(cursor));
+        }
+        return amounts;
+    }
+
 }

@@ -16,25 +16,29 @@ public class CategoryDb {
     public static final String COL_ID = "_id";
     public static final String COL_INCOME = "income";
     public static final String COL_NAME = "name";
+    public static final String COL_COLOR = "color";
 
     public static final String CREATE_TABLE = ""
             + "CREATE TABLE " + TABLE_NAME + "("
             + COL_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
             + COL_INCOME + " INTEGER NOT NULL DEFAULT 0,"
+            + COL_COLOR + " INTEGER NOT NULL DEFAULT 0,"
             + COL_NAME + " TEXT NOT NULL"
             + ")";
 
     public static CategoryDb MAPPER(Cursor cursor){
-        CategoryDb amount = new CategoryDb();
-        amount.setId(DbUtils.getLong(cursor,COL_ID));
-        amount.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
-        amount.setName(DbUtils.getString(cursor,COL_NAME));
-        return amount;
+        CategoryDb category = new CategoryDb();
+        category.setId(DbUtils.getLong(cursor,COL_ID));
+        category.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
+        category.setName(DbUtils.getString(cursor,COL_NAME));
+        category.setColor(DbUtils.getInt(cursor,COL_COLOR));
+        return category;
     }
 
     private long id;
     private String name;
     private boolean income;
+    private int color;
 
     public long getId() {
         return id;
@@ -60,6 +64,14 @@ public class CategoryDb {
         this.income = income;
     }
 
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     public static final class Builder{
         private final ContentValues contentValues = new ContentValues();
 
@@ -75,6 +87,11 @@ public class CategoryDb {
 
         public Builder income(boolean income){
             contentValues.put(COL_INCOME,income);
+            return this;
+        }
+
+        public Builder color(int color){
+            contentValues.put(COL_COLOR,color);
             return this;
         }
 

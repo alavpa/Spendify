@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.ui.dashboard.DashboardActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 
@@ -38,6 +39,7 @@ public class Navigator {
     }
 
     public void openDashboard(Context context) {
-
+        Intent intent = getIntent(context, DashboardActivity.class);
+        context.startActivity(intent);
     }
 }

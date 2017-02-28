@@ -18,16 +18,21 @@ public class Category implements Parcelable {
     private
     String name;
 
+    private
+    int color;
+
     public Category(){
         this.id = 0;
         this.income = false;
         this.name = "";
+        this.color = 0;
     }
 
-    public Category(String name, boolean income){
+    public Category(String name, boolean income, int color){
         this.id = 0;
         this.income = income;
         this.name = name;
+        this.color = color;
     }
 
     public long getId() {
@@ -54,6 +59,14 @@ public class Category implements Parcelable {
         this.name = name;
     }
 
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -64,12 +77,14 @@ public class Category implements Parcelable {
         dest.writeLong(this.id);
         dest.writeByte(this.income ? (byte) 1 : (byte) 0);
         dest.writeString(this.name);
+        dest.writeInt(color);
     }
 
     protected Category(Parcel in) {
         this.id = in.readLong();
         this.income = in.readByte() != 0;
         this.name = in.readString();
+        this.color = in.readInt();
     }
 
     public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {

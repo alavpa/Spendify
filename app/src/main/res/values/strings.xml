@@ -3,6 +3,7 @@
     <string name="income">Ingresos</string>
     <string name="outcome">Gastos</string>
     <string name="description">Descripción</string>
+    <string name="titulo">Título</string>
     <string name="repeat">Repetir</string>
     <string name="every">Cada</string>
     <string name="to_outcome">Gastar</string>
@@ -90,4 +91,16 @@
         <item>9</item>
         <item>10</item>
     </string-array>
+    
+    <integer-array name="category_colors">
+        <item>@drawable/bkg_category1</item>
+        <item>@drawable/bkg_category2</item>
+        <item>@drawable/bkg_category3</item>
+        <item>@drawable/bkg_category4</item>
+        <item>@drawable/bkg_category5</item>
+        <item>@drawable/bkg_category6</item>
+        <item>@drawable/bkg_category7</item>
+        <item>@drawable/bkg_category8</item>
+        <item>@drawable/bkg_category9</item>
+    </integer-array>
 </resources>
