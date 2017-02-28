@@ -95,7 +95,7 @@ public class RepositoryImpl implements Repository {
         return Single.fromCallable(new Callable<List<AmountDb>>() {
             @Override
             public List<AmountDb> call() throws Exception {
-                return datasource.getAmountByCategories(income,from,to);
+                return datasource.getAmountBy(income,from,to);
             }
         })
                 .flatMap(new Function<List<AmountDb>, SingleSource<List<Amount>>>() {

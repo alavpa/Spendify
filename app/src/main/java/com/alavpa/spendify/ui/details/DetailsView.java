@@ -30,4 +30,6 @@ public interface DetailsView extends BaseView {
     void showDatePickerDialog(long date);
 
     void goToMain(Amount amount);
+
+    void goToAddCategory(boolean income);
 }

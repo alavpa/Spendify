@@ -1,9 +1,6 @@
 package com.alavpa.spendify.ui.base;
 
-import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
-
-import javax.inject.Inject;
 
 /**
  * Created by alavpa on 10/02/17.
@@ -13,9 +10,6 @@ public class BasePresenter<T extends BaseView> {
 
     private
     T view;
-
-    @Inject
-    public ResDatasource resourceProvider;
 
     private
     UseCase[] useCases;

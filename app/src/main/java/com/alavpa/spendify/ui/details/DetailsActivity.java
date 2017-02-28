@@ -192,7 +192,7 @@ public class DetailsActivity extends BaseToolbarActivity implements DetailsView,
                 @Override
                 public void onAddClick() {
 
-                    addCategoryDialog.show(getSupportFragmentManager(),"add_category");
+                    presenter.goToAddCategory();
 
                 }
             });
@@ -282,6 +282,11 @@ public class DetailsActivity extends BaseToolbarActivity implements DetailsView,
     @Override
     public void goToMain(Amount amount) {
         navigator.openMain(this,amount);
+    }
+
+    @Override
+    public void goToAddCategory(boolean income) {
+        navigator.openAddCategory(this, income);
     }
 
     @OnClick(R.id.btn_apply)

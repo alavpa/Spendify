@@ -61,7 +61,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
     public void setCategories(Context context, List<Category> categories){
 
         this.categories = categories;
-        this.categories.add(new Category(context.getString(R.string.add),false));
+        this.categories.add(new Category(context.getString(R.string.add),false,0));
 
     }
 

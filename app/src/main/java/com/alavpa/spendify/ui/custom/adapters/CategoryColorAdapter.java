@@ -1,6 +1,7 @@
 package com.alavpa.spendify.ui.custom.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +22,10 @@ import butterknife.ButterKnife;
 public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdapter.CategoryViewHolder> {
 
     LayoutInflater inflater;
-    List<Integer> categories;
+    List<Drawable> categories;
     Integer selected = null;
 
-    public CategoryColorAdapter(Context context, List<Integer> categories){
+    public CategoryColorAdapter(Context context, List<Drawable> categories){
         inflater = LayoutInflater.from(context);
         setCategoryColors(categories);
     }
@@ -37,7 +38,7 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
 
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
-        Integer category = categories.get(position);
+        Drawable category = categories.get(position);
         holder.bind(category);
     }
 
@@ -46,16 +47,11 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
         return categories.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return (position==categories.size()-1)?1:0;
-    }
-
     public Integer getSelected(){
         return selected;
     }
 
-    public void setCategoryColors(List<Integer> categories){
+    public void setCategoryColors(List<Drawable> categories){
 
         this.categories = categories;
 
@@ -75,10 +71,12 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
             ButterKnife.bind(this,itemView);
         }
 
-        public void bind(Integer color){
-            flCategory.setBackgroundResource(color);
+        public void bind(Drawable color){
+            flCategory.setBackground(color);
             if(getSelected()!=null) {
                 itemView.setSelected(getAdapterPosition() == getSelected());
+            }else {
+                itemView.setSelected(false);
             }
             onClick();
         }

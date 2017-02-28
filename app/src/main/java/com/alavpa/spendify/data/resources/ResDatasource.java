@@ -1,7 +1,12 @@
 package com.alavpa.spendify.data.resources;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -36,5 +41,23 @@ public class ResDatasource {
         }else {
             return context.getResources().getColor(colorResId);
         }
+    }
+
+    public int[] getArrayInt(int intArrayResId){
+        return context.getResources().getIntArray(intArrayResId);
+    }
+
+    public TypedArray getTypedArray(int intArrayResId){
+        return context.getResources().obtainTypedArray(intArrayResId);
+    }
+
+    public List<Drawable> getDrawableArray(int intArrayResId){
+        List<Drawable> list = new ArrayList<>();
+        TypedArray typedArray = getTypedArray(intArrayResId);
+        for(int i=0;i<typedArray.length();i++){
+            list.add(typedArray.getDrawable(i));
+        }
+        typedArray.recycle();
+        return list;
     }
 }

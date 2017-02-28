@@ -2,6 +2,7 @@ package com.alavpa.spendify.ui.details;
 
 
 import com.alavpa.spendify.R;
+import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
@@ -41,12 +42,17 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     private
     InsertCategory insertCategory;
 
+    private ResDatasource resDatasource;
+
     @Inject
-    public DetailsPresenter(GetCategories getCategories,
+    public DetailsPresenter(ResDatasource resDatasource,
+                            GetCategories getCategories,
                             InsertAmount insertAmount,
                             InsertCategory insertCategory){
+
         super(getCategories, insertAmount, insertCategory);
 
+        this.resDatasource = resDatasource;
         this.amount = new Amount();
         this.decimalFormat = new DecimalFormat();
         this.decimalFormat.setMinimumFractionDigits(2);
@@ -146,7 +152,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
     public void showDate(){
         if(simpleDateFormat==null){
-            simpleDateFormat = new SimpleDateFormat(resourceProvider.getString(R.string.date_format),
+            simpleDateFormat = new SimpleDateFormat(resDatasource.getString(R.string.date_format),
                     Locale.getDefault());
         }
 
@@ -190,5 +196,9 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
     public void showDatePickerDialog() {
         getView().showDatePickerDialog(amount.getPeriod().getDate());
+    }
+
+    public void goToAddCategory() {
+        getView().goToAddCategory(amount.isIncome());
     }
 }

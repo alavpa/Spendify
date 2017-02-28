@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.ui.category.add.AddCategoryActivity;
 import com.alavpa.spendify.ui.dashboard.DashboardActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
@@ -18,6 +19,7 @@ import javax.inject.Singleton;
 public class Navigator {
 
     public static final String EXTRA_AMOUNT = "EXTRA_AMOUNT";
+    public static final String EXTRA_INCOME = "EXTRA_INCOME";
 
     @Inject
     public Navigator(){}
@@ -40,6 +42,12 @@ public class Navigator {
 
     public void openDashboard(Context context) {
         Intent intent = getIntent(context, DashboardActivity.class);
+        context.startActivity(intent);
+    }
+
+    public void openAddCategory(Context context, boolean income) {
+        Intent intent = getIntent(context, AddCategoryActivity.class);
+        intent.putExtra(EXTRA_INCOME,income);
         context.startActivity(intent);
     }
 }

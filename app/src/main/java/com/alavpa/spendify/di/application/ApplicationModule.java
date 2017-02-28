@@ -45,7 +45,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public ResDatasource provideResourceProvider(){
+    public ResDatasource provideResDatasource(){
         return new ResDatasource(context);
     }
 }

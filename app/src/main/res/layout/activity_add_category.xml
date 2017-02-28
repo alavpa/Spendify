@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/padding">
 
-    <CheckBox
+    <CheckBox android:id="@+id/chk_income"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin"
@@ -22,7 +22,7 @@
         android:layout_marginBottom="@dimen/margin"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/colors"
+        android:id="@+id/rv_colors"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
