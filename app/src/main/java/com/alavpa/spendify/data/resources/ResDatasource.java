@@ -5,6 +5,8 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
+import com.alavpa.spendify.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +61,17 @@ public class ResDatasource {
         }
         typedArray.recycle();
         return list;
+    }
+
+    public int[] getCategoryColorsArray(){
+        return new int[]{R.drawable.bkg_category1,
+                R.drawable.bkg_category2,
+                R.drawable.bkg_category3,
+                R.drawable.bkg_category4,
+                R.drawable.bkg_category5,
+                R.drawable.bkg_category6,
+                R.drawable.bkg_category7,
+                R.drawable.bkg_category8,
+                R.drawable.bkg_category9};
     }
 }

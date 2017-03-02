@@ -14,6 +14,7 @@ public class CategoryMapper {
         category.setId(source.getId());
         category.setName(source.getName());
         category.setIncome(source.isIncome());
+        category.setColor(source.getColor());
 
         return category;
     }
@@ -23,6 +24,7 @@ public class CategoryMapper {
         categoryDb.setId(source.getId());
         categoryDb.setName(source.getName());
         categoryDb.setIncome(source.isIncome());
+        categoryDb.setColor(source.getColor());
 
         return categoryDb;
     }

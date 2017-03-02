@@ -1,5 +1,6 @@
 package com.alavpa.spendify.ui.details;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
+import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryAdapter;
@@ -186,9 +188,12 @@ public class DetailsActivity extends BaseToolbarActivity implements DetailsView,
     }
 
     @Override
-    public void populateCategories(List<Category> categories) {
+    public void populateCategories(List<Category> categories, int[] backgrouns) {
         if(categoryAdapter==null) {
-            categoryAdapter = new CategoryAdapter(this, categories, new CategoryAdapter.OnAddCategoryClick() {
+            categoryAdapter = new CategoryAdapter(this,
+                    categories,
+                    backgrouns,
+                    new CategoryAdapter.OnAddCategoryClick() {
                 @Override
                 public void onAddClick() {
 
@@ -198,7 +203,7 @@ public class DetailsActivity extends BaseToolbarActivity implements DetailsView,
             });
             rvCategories.setAdapter(categoryAdapter);
         }else{
-            categoryAdapter.setCategories(this,categories);
+            categoryAdapter.setCategories(categories);
             categoryAdapter.notifyDataSetChanged();
         }
     }
@@ -303,6 +308,14 @@ public class DetailsActivity extends BaseToolbarActivity implements DetailsView,
     public void onBackPressed() {
         presenter.goToMain();
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode== Navigator.REQUEST_CODE_ADD_CATEGORY &&
+                resultCode == RESULT_OK){
+            presenter.showCategories();
+        }
     }
 
     @Override

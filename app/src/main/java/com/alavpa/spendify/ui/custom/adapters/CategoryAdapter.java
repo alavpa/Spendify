@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
@@ -21,21 +22,36 @@ import butterknife.ButterKnife;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCategoryViewHolder> {
 
+    public static final int VIEW_TYPE_CATEGORY = 0;
+    public static final int VIEW_TYPE_ADD = 1;
+
     LayoutInflater inflater;
     List<Category> categories;
     OnAddCategoryClick onAddCategoryClick;
     Category selected = null;
+    int[] backgrounds;
 
-    public CategoryAdapter(Context context, List<Category> categories, OnAddCategoryClick onAddCategoryClick){
+    public CategoryAdapter(Context context,
+                           List<Category> categories,
+                           int[] backgrounds,
+                           OnAddCategoryClick onAddCategoryClick){
+
         inflater = LayoutInflater.from(context);
         this.onAddCategoryClick = onAddCategoryClick;
-        setCategories(context,categories);
+        this.backgrounds = backgrounds;
+        setCategories(categories);
     }
     @Override
     public BaseCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = inflater.inflate(R.layout.layout_category,parent,false);
-        return (viewType==0)?new CategoryViewHolder(view):new AddCategoryViewHolder(view,onAddCategoryClick);
+        View view;
+        if(viewType==VIEW_TYPE_ADD) {
+            view = inflater.inflate(R.layout.layout_category_add, parent, false);
+            return new AddCategoryViewHolder(view,onAddCategoryClick);
+        }
+
+        view = inflater.inflate(R.layout.layout_category, parent, false);
+        return new CategoryViewHolder(view);
     }
 
     @Override
@@ -51,17 +67,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
 
     @Override
     public int getItemViewType(int position) {
-        return (position==categories.size()-1)?1:0;
+        return (position==categories.size()-1)?VIEW_TYPE_ADD:VIEW_TYPE_CATEGORY;
     }
 
     public Category getSelected(){
         return selected;
     }
 
-    public void setCategories(Context context, List<Category> categories){
+    public void setCategories(List<Category> categories){
 
         this.categories = categories;
-        this.categories.add(new Category(context.getString(R.string.add),false,0));
+        this.categories.add(null);
 
     }
 
@@ -71,31 +87,41 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
 
     public abstract class BaseCategoryViewHolder extends RecyclerView.ViewHolder{
 
+
+        public BaseCategoryViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public abstract void bind(Category category);
+
+    }
+    public class CategoryViewHolder extends BaseCategoryViewHolder{
+
+        @BindView(R.id.ll_bkg)
+        LinearLayout llBkg;
         @BindView(R.id.tv_name)
         TextView tvName;
 
-        public BaseCategoryViewHolder(View itemView) {
+        public CategoryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
 
+        @Override
         public void bind(Category category){
+
             tvName.setText(category.getName());
-            if(getSelected()!=null) {
-                itemView.setSelected(category.getId() == getSelected().getId());
+            itemView.setBackgroundResource(backgrounds[category.getColor()]);
+            if (getSelected() != null) {
+                boolean selected = category.getId() == getSelected().getId();
+                itemView.setSelected(selected);
+            }else{
+                itemView.setSelected(false);
             }
+
             onClick();
         }
 
-        public abstract void onClick();
-    }
-    public class CategoryViewHolder extends BaseCategoryViewHolder{
-
-        public CategoryViewHolder(View itemView) {
-            super(itemView);
-        }
-
-        @Override
         public void onClick() {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -121,12 +147,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
     public class AddCategoryViewHolder extends BaseCategoryViewHolder{
 
         OnAddCategoryClick onAddCategoryClick;
+
         public AddCategoryViewHolder(View itemView, OnAddCategoryClick onAddCategoryClick) {
             super(itemView);
             this.onAddCategoryClick = onAddCategoryClick;
         }
 
         @Override
+        public void bind(Category category){
+            onClick();
+        }
+
         public void onClick() {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -12,6 +12,7 @@ import com.alavpa.spendify.di.HasComponent;
 import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
+import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryColorAdapter;
@@ -22,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by alavpa on 28/02/17.
@@ -61,6 +63,9 @@ public class AddCategoryActivity extends BaseToolbarActivity implements AddCateg
         rvColors.setLayoutManager(new GridLayoutManager(this));
 
         presenter.showColors();
+
+        boolean income = getIntent().getBooleanExtra(Navigator.EXTRA_INCOME,false);
+        chkIncome.setChecked(income);
     }
 
     @Override
@@ -77,5 +82,31 @@ public class AddCategoryActivity extends BaseToolbarActivity implements AddCateg
             adapter.setCategoryColors(colors);
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public String name() {
+        return etTitle.getText().toString();
+    }
+
+    @Override
+    public boolean income() {
+        return chkIncome.isChecked();
+    }
+
+    @Override
+    public int color() {
+        return adapter.getSelected();
+    }
+
+    @Override
+    public void onSendSuccess() {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @OnClick(R.id.btn_ok)
+    public void onSend(){
+        presenter.send();
     }
 }

@@ -2,6 +2,7 @@ package com.alavpa.spendify.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.category.add.AddCategoryActivity;
@@ -20,6 +21,8 @@ public class Navigator {
 
     public static final String EXTRA_AMOUNT = "EXTRA_AMOUNT";
     public static final String EXTRA_INCOME = "EXTRA_INCOME";
+
+    public static final int REQUEST_CODE_ADD_CATEGORY = 1;
 
     @Inject
     public Navigator(){}
@@ -45,9 +48,9 @@ public class Navigator {
         context.startActivity(intent);
     }
 
-    public void openAddCategory(Context context, boolean income) {
+    public void openAddCategory(AppCompatActivity context, boolean income) {
         Intent intent = getIntent(context, AddCategoryActivity.class);
         intent.putExtra(EXTRA_INCOME,income);
-        context.startActivity(intent);
+        context.startActivityForResult(intent,REQUEST_CODE_ADD_CATEGORY);
     }
 }

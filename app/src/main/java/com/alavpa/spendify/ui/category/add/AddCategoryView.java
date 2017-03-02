@@ -13,4 +13,12 @@ import java.util.List;
 public interface AddCategoryView extends BaseView {
 
     void populateColors(List<Drawable> colors);
+
+    String name();
+
+    boolean income();
+
+    int color();
+
+    void onSendSuccess();
 }

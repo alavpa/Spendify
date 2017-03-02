@@ -11,7 +11,8 @@ import java.util.List;
  */
 
 public interface DetailsView extends BaseView {
-    void populateCategories(List<Category> categories);
+
+    void populateCategories(List<Category> categories,int[] backgrouns);
 
     void setAmount(String amount);
 

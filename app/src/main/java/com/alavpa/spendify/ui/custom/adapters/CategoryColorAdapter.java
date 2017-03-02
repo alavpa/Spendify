@@ -1,7 +1,6 @@
 package com.alavpa.spendify.ui.custom.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.alavpa.spendify.R;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,10 +19,10 @@ import butterknife.ButterKnife;
 public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdapter.CategoryViewHolder> {
 
     LayoutInflater inflater;
-    List<Drawable> categories;
+    int[] categories;
     Integer selected = null;
 
-    public CategoryColorAdapter(Context context, List<Drawable> categories){
+    public CategoryColorAdapter(Context context, int[] categories){
         inflater = LayoutInflater.from(context);
         setCategoryColors(categories);
     }
@@ -38,20 +35,20 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
 
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
-        Drawable category = categories.get(position);
+        int category = categories[position];
         holder.bind(category);
     }
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return categories.length;
     }
 
     public Integer getSelected(){
         return selected;
     }
 
-    public void setCategoryColors(List<Drawable> categories){
+    public void setCategoryColors(int[] categories){
 
         this.categories = categories;
 
@@ -71,8 +68,8 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
             ButterKnife.bind(this,itemView);
         }
 
-        public void bind(Drawable color){
-            flCategory.setBackground(color);
+        public void bind(int color){
+            flCategory.setBackgroundResource(color);
             if(getSelected()!=null) {
                 itemView.setSelected(getAdapterPosition() == getSelected());
             }else {
