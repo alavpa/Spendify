@@ -12,6 +12,7 @@ public class AmountBarPart{
 
     private float startX, endX;
     private float startY, endY;
+    private float angle;
 
     private
     float percent;
@@ -42,6 +43,10 @@ public class AmountBarPart{
         endY = offsetHeight + height;
     }
 
+    public void calculateAngle() {
+        angle = percent * 360.0f;
+    }
+
     public float getStartX() {
         return startX;
     }
@@ -56,6 +61,10 @@ public class AmountBarPart{
 
     public float getEndY() {
         return endY;
+    }
+
+    public float getAngle() {
+        return angle;
     }
 
     public static List<AmountBarPart> getParts(ResDatasource resDatasource, List<Amount> amounts, float total){

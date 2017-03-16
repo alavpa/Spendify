@@ -28,6 +28,10 @@
         <activity android:name=".ui.category.add.AddCategoryActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:name=".ui.dashboard.details.DashboardDetailsActivity"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

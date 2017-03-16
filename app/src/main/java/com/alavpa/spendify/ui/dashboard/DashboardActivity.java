@@ -2,7 +2,7 @@ package com.alavpa.spendify.ui.dashboard;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
@@ -11,10 +11,7 @@ import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
-import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
-import com.alavpa.spendify.ui.custom.LinearLayoutManager;
-import com.alavpa.spendify.ui.custom.adapters.AmountAdapter;
 import com.alavpa.spendify.ui.custom.widgets.AmountBar;
 import com.alavpa.spendify.ui.model.AmountBarPart;
 
@@ -55,18 +52,8 @@ public class DashboardActivity extends BaseToolbarActivity implements DashboardV
     @BindView(R.id.tv_income)
     TextView tvIncome;
 
-    @BindView(R.id.rv_income)
-    RecyclerView rvIncome;
-
-    @BindView(R.id.rv_outcome)
-    RecyclerView rvOutcome;
-
     @BindView(R.id.tv_total)
     TextView tvTotal;
-
-    AmountAdapter incomeAdapter;
-
-    AmountAdapter outcomeAdapter;
 
     public
     ActivityComponent component;
@@ -92,11 +79,20 @@ public class DashboardActivity extends BaseToolbarActivity implements DashboardV
     }
 
     public void initView(){
-        //rvIncome.setHasFixedSize(true);
-        rvIncome.setLayoutManager(new LinearLayoutManager(this));
 
-        //rvOutcome.setHasFixedSize(true);
-        rvOutcome.setLayoutManager(new LinearLayoutManager(this));
+        barIncome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.openIncomeDetails(tvIncome.getText().toString());
+            }
+        });
+
+        barOutcome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.openOutcomeDetails(tvOutcome.getText().toString());
+            }
+        });
     }
 
     @Override
@@ -127,33 +123,13 @@ public class DashboardActivity extends BaseToolbarActivity implements DashboardV
     }
 
     @Override
+    public void openDetails(boolean income, String amount) {
+        navigator.openDashboardDetails(this,income,amount);
+    }
+
+    @Override
     public ActivityComponent getComponent() {
         return component;
     }
 
-    public void populateIncome(List<Amount> amounts, int[] colors){
-        if(incomeAdapter==null){
-            incomeAdapter = new AmountAdapter(this,
-                    amounts,
-                    colors,
-                    decimalFormat,
-                    simpleDateFormat);
-
-            rvIncome.setAdapter(incomeAdapter);
-
-        }
-    }
-
-    public void populateOutcome(List<Amount> amounts, int[] colors){
-        if(outcomeAdapter==null){
-            outcomeAdapter = new AmountAdapter(this,
-                    amounts,
-                    colors,
-                    decimalFormat,
-                    simpleDateFormat);
-
-            rvOutcome.setAdapter(outcomeAdapter);
-
-        }
-    }
 }

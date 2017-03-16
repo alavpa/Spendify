@@ -1,6 +1,5 @@
 package com.alavpa.spendify.ui.dashboard;
 
-import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.base.BaseView;
 import com.alavpa.spendify.ui.model.AmountBarPart;
 
@@ -22,7 +21,5 @@ public interface DashboardView extends BaseView{
 
     void showTotal(String total);
 
-    void populateIncome(List<Amount> incomes, int[] categoryColorsArray);
-
-    void populateOutcome(List<Amount> outcomes, int[] categoryColorsArray);
+    void openDetails(boolean income, String amount);
 }

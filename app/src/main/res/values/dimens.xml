@@ -8,4 +8,5 @@
     <dimen name="item_category_size">50dp</dimen>
     <dimen name="item_amount_size">20dp</dimen>
     <dimen name="amountbar_size">30dp</dimen>
+    <dimen name="amountcircle_size">300dp</dimen>
 </resources>

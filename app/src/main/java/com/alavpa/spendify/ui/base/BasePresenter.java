@@ -2,6 +2,7 @@ package com.alavpa.spendify.ui.base;
 
 import com.alavpa.spendify.domain.usecases.base.UseCase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class BasePresenter<T extends BaseView> {
     List<UseCase> useCases;
 
     public BasePresenter(UseCase... useCases){
-        this.useCases = Arrays.asList(useCases);
+        this.useCases = new ArrayList<>(Arrays.asList(useCases));
     }
 
     public void attachView(T view){

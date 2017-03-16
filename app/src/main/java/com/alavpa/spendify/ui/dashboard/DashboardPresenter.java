@@ -96,11 +96,13 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
             }
         });
 
+        addUseCase(useCase);
+
 
     }
 
     public void populateOutcome(float totalPartial, float total){
-        
+
         AmountBarPart income = new AmountBarPart(totalPartial/total, resDatasource.getColor(R.color.red));
         List<AmountBarPart> amountBarPartList = new ArrayList<>();
         amountBarPartList.add(income);
@@ -114,6 +116,14 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
         amountBarPartList.add(income);
         getView().showIncome(amountBarPartList);
 
+    }
+
+    public void openIncomeDetails(String amount) {
+        getView().openDetails(true, amount);
+    }
+
+    public void openOutcomeDetails(String amount) {
+        getView().openDetails(false,amount);
     }
 }
 

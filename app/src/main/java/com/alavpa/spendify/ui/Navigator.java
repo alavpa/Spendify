@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.category.add.AddCategoryActivity;
 import com.alavpa.spendify.ui.dashboard.DashboardActivity;
+import com.alavpa.spendify.ui.dashboard.details.DashboardDetailsActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 
@@ -45,6 +46,13 @@ public class Navigator {
 
     public void openDashboard(Context context) {
         Intent intent = getIntent(context, DashboardActivity.class);
+        context.startActivity(intent);
+    }
+
+    public void openDashboardDetails(Context context, boolean income, String amount) {
+        Intent intent = getIntent(context, DashboardDetailsActivity.class);
+        intent.putExtra(EXTRA_INCOME,income);
+        intent.putExtra(EXTRA_AMOUNT,amount);
         context.startActivity(intent);
     }
 
