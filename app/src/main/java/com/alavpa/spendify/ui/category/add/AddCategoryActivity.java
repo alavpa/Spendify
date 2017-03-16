@@ -1,6 +1,5 @@
 package com.alavpa.spendify.ui.category.add;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -13,11 +12,9 @@ import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.ui.Navigator;
-import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
+import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryColorAdapter;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,7 +26,7 @@ import butterknife.OnClick;
  * Created by alavpa on 28/02/17.
  */
 
-public class AddCategoryActivity extends BaseToolbarActivity implements AddCategoryView,
+public class AddCategoryActivity extends BaseActivity implements AddCategoryView,
         HasComponent<ActivityComponent>{
 
     @BindView(R.id.chk_income)
@@ -74,7 +71,7 @@ public class AddCategoryActivity extends BaseToolbarActivity implements AddCateg
     }
 
     @Override
-    public void populateColors(List<Drawable> colors) {
+    public void populateColors(int[] colors) {
         if(adapter==null){
             adapter = new CategoryColorAdapter(this,colors);
             rvColors.setAdapter(adapter);

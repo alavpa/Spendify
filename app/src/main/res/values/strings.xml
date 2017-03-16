@@ -12,6 +12,7 @@
     <string name="date_format">EEEE, dd \'de\' MMM \'de\' yyyy</string>
     <string name="add">Agregar</string>
     <string name="add_category">Agregar categoria</string>
+    <string name="total">Total</string>
 
     <string-array name="menu">
         <item>Panel</item>

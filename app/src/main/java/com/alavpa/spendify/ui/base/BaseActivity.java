@@ -43,6 +43,17 @@ public class BaseActivity extends AppCompatActivity implements BaseView{
         super.onCreate(savedInstanceState);
         getApplicationComponent()
                 .inject(this);
+
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public ApplicationComponent getApplicationComponent(){

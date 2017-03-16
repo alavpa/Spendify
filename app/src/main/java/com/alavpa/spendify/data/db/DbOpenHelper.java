@@ -31,25 +31,20 @@ public class DbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(CategoryDb.CREATE_TABLE);
         db.execSQL(AmountDb.CREATE_TABLE);
 
-        db.insert(CategoryDb.TABLE_NAME,null,new CategoryDb.Builder()
-                .name("Ocio")
-                .income(false)
-                .build());
-
-        db.insert(CategoryDb.TABLE_NAME,null,new CategoryDb.Builder()
-                .name("Hogar")
-                .income(false)
-                .build());
-
-        db.insert(CategoryDb.TABLE_NAME,null,new CategoryDb.Builder()
-                .name("Nomina")
-                .income(true)
-                .build());
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        return super.getReadableDatabase();
+    }
+
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        return super.getWritableDatabase();
     }
 }

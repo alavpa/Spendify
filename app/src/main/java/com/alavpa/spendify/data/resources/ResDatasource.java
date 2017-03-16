@@ -3,7 +3,7 @@ package com.alavpa.spendify.data.resources;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import com.alavpa.spendify.R;
 
@@ -35,14 +35,8 @@ public class ResDatasource {
         return context.getResources().getStringArray(stringArrayResId);
     }
 
-    @SuppressWarnings("deprecation")
     public int getColor(int colorResId){
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return context.getResources().getColor(colorResId,null);
-        }else {
-            return context.getResources().getColor(colorResId);
-        }
+        return ContextCompat.getColor(context,colorResId);
     }
 
     public int[] getArrayInt(int intArrayResId){
@@ -63,7 +57,7 @@ public class ResDatasource {
         return list;
     }
 
-    public int[] getCategoryColorsArray(){
+    public int[] getCategoryBackgroundsArray(){
         return new int[]{R.drawable.bkg_category1,
                 R.drawable.bkg_category2,
                 R.drawable.bkg_category3,
@@ -73,5 +67,17 @@ public class ResDatasource {
                 R.drawable.bkg_category7,
                 R.drawable.bkg_category8,
                 R.drawable.bkg_category9};
+    }
+
+    public int[] getCategoryColorsArray(){
+        return new int[]{R.color.red,
+                R.color.pink,
+                R.color.purple,
+                R.color.deep_purple,
+                R.color.indigo,
+                R.color.blue,
+                R.color.light_blue,
+                R.color.cyan,
+                R.color.teal};
     }
 }

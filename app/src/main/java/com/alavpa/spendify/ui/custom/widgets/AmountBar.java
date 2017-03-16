@@ -1,4 +1,4 @@
-package com.alavpa.spendify.ui.custom.graphics;
+package com.alavpa.spendify.ui.custom.widgets;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.alavpa.spendify.ui.model.AmountBarPart;
 
 import java.util.List;
 
@@ -62,7 +64,8 @@ public class AmountBar extends View {
                 canvas.drawRect(part.getStartX(),
                         part.getStartY(),
                         part.getEndX(),
-                        part.getEndY(), paint);
+                        part.getEndY(),
+                        paint);
 
             }
         }
@@ -97,54 +100,5 @@ public class AmountBar extends View {
         this.parts = parts;
     }
 
-    public static class AmountBarPart{
 
-        private float startX, endX;
-        private float startY, endY;
-
-        private
-        float percent;
-
-        private
-        int color;
-
-        public AmountBarPart(float percent, int color){
-            this.percent = percent;
-            this.color = color;
-        }
-
-        public float getPercent() {
-            return percent;
-        }
-
-        public int getColor() {
-            return color;
-        }
-
-        public void calculateX(float offsetWidth, float width) {
-            startX = offsetWidth;
-            endX = offsetWidth + percent * width;
-        }
-
-        public void calculateY(float offsetHeight, float height) {
-            startY = offsetHeight;
-            endY = offsetHeight + height;
-        }
-
-        public float getStartX() {
-            return startX;
-        }
-
-        public float getEndX() {
-            return endX;
-        }
-
-        public float getStartY() {
-            return startY;
-        }
-
-        public float getEndY() {
-            return endY;
-        }
-    }
 }

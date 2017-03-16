@@ -20,7 +20,7 @@ public interface Repository {
 
     Single<Amount> insertAmount(Amount amount);
 
-    Single<Double> getSumByCategory(Category category);
+    Single<Double> getSumBy(boolean income, long from, long to);
 
-    Single<List<Amount>> getAmountByCategories(boolean income, long from, long to);
+    Single<List<Amount>> getAmountBy(boolean income, long from, long to);
 }

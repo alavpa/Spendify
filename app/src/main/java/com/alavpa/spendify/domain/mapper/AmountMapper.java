@@ -21,9 +21,10 @@ public class AmountMapper {
         amount.setAmount(source.getAmount());
         Period period = new Period(source.getDate(),source.getTimes(),source.getPeriod());
         amount.setPeriod(period);
-        Category category = CategoryMapper.map(source.getCategoryDb());
-        amount.setCategory(category);
-
+        if(source.getCategoryDb()!=null) {
+            Category category = CategoryMapper.map(source.getCategoryDb());
+            amount.setCategory(category);
+        }
         return amount;
     }
 
@@ -37,8 +38,11 @@ public class AmountMapper {
         amount.setPeriod(source.getPeriod().getPeriod());
         amount.setDate(source.getPeriod().getDate());
         amount.setTimes(source.getPeriod().getTimes());
-        CategoryDb categoryDb = CategoryMapper.map(source.getCategory());
-        amount.setCategoryDb(categoryDb);
+
+        if(source.getCategory()!=null) {
+            CategoryDb categoryDb = CategoryMapper.map(source.getCategory());
+            amount.setCategoryDb(categoryDb);
+        }
 
         return amount;
     }

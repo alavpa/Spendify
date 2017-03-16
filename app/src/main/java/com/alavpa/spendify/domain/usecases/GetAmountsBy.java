@@ -8,15 +8,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Single;
 
 /**
  * Created by alavpa on 19/02/17.
  */
 
-public class GetAmountByCategories extends UseCase{
+public class GetAmountsBy extends UseCase<List<Amount>>{
 
     Repository repository;
     private boolean income;
@@ -24,7 +22,7 @@ public class GetAmountByCategories extends UseCase{
     private long to;
 
     @Inject
-    public GetAmountByCategories(Repository repository){
+    public GetAmountsBy(Repository repository){
         this.repository = repository;
     }
 
@@ -40,12 +38,8 @@ public class GetAmountByCategories extends UseCase{
         this.to = to;
     }
 
-    public void execute(DisposableSingleObserver<List<Amount>> disposable){
-        repository.getAmountByCategories(income,from,to)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(disposable);
-
-        addDisposable(disposable);
+    @Override
+    public Single<List<Amount>> build() {
+        return repository.getAmountBy(income,from,to);
     }
 }

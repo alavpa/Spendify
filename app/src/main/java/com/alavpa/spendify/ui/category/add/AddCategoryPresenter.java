@@ -1,15 +1,10 @@
 package com.alavpa.spendify.ui.category.add;
 
-import android.graphics.drawable.Drawable;
-
-import com.alavpa.spendify.R;
 import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.usecases.InsertCategory;
 import com.alavpa.spendify.ui.base.BasePresenter;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -37,7 +32,7 @@ public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
     }
     public void showColors(){
 
-        List<Drawable> colors = resDatasource.getDrawableArray(R.array.category_colors);
+        int[] colors = resDatasource.getCategoryBackgroundsArray();
 
         getView().populateColors(colors);
     }

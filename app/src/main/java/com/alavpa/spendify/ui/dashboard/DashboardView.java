@@ -1,7 +1,8 @@
 package com.alavpa.spendify.ui.dashboard;
 
+import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.base.BaseView;
-import com.alavpa.spendify.ui.custom.graphics.AmountBar;
+import com.alavpa.spendify.ui.model.AmountBarPart;
 
 import java.util.List;
 
@@ -11,7 +12,17 @@ import java.util.List;
 public interface DashboardView extends BaseView{
 
 
-    void showOutcome(List<AmountBar.AmountBarPart> outcome);
+    void showOutcome(List<AmountBarPart> outcome);
 
-    void showIncome(List<AmountBar.AmountBarPart> income);
+    void showIncome(List<AmountBarPart> income);
+
+    void showTotalOutcome(String totalOutcome);
+
+    void showTotalIncome(String totalIncome);
+
+    void showTotal(String total);
+
+    void populateIncome(List<Amount> incomes, int[] categoryColorsArray);
+
+    void populateOutcome(List<Amount> outcomes, int[] categoryColorsArray);
 }

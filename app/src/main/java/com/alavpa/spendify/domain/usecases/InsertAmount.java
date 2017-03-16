@@ -6,15 +6,13 @@ import com.alavpa.spendify.domain.usecases.base.UseCase;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Single;
 
 /**
  * Created by alavpa on 19/02/17.
  */
 
-public class InsertAmount extends UseCase{
+public class InsertAmount extends UseCase<Amount>{
 
     Repository repository;
     private Amount amount;
@@ -28,12 +26,9 @@ public class InsertAmount extends UseCase{
         this.amount = amount;
     }
 
-    public void execute(DisposableSingleObserver<Amount> disposable){
-        repository.insertAmount(amount)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(disposable);
-
-        addDisposable(disposable);
+    @Override
+    public Single<Amount> build() {
+        return repository.insertAmount(amount);
     }
+
 }

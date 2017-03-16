@@ -31,8 +31,6 @@ public class Keyboard extends FrameLayout {
 
     private boolean writingIntegerPart;
 
-
-
     private
     double value;
     private

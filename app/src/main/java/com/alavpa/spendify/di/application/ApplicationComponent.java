@@ -7,6 +7,9 @@ import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.base.BaseFragment;
 import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -25,4 +28,6 @@ public interface ApplicationComponent {
     Navigator navigator();
     Repository repository();
     ResDatasource resDatasource();
+    DecimalFormat decimalFormat();
+    SimpleDateFormat simpleDateFormat();
 }

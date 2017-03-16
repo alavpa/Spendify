@@ -34,7 +34,7 @@ public class DbDatasource implements Datasource {
         List<CategoryDb> categories;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = getCursorCategories(db,income);
+        Cursor cursor = getCategories(db,income);
         categories = getCategoryList(cursor);
         cursor.close();
         db.close();
@@ -42,7 +42,7 @@ public class DbDatasource implements Datasource {
         return categories;
     }
 
-    private Cursor getCursorCategories(SQLiteDatabase db, boolean income){
+    private Cursor getCategories(SQLiteDatabase db, boolean income){
         return db.query(CategoryDb.TABLE_NAME,
                 null,
                 DbUtils.operatorEqual(CategoryDb.COL_INCOME,income),
@@ -71,7 +71,7 @@ public class DbDatasource implements Datasource {
         Map<Long,CategoryDb> categories;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = getCursorCategories(db,income);
+        Cursor cursor = getCategories(db,income);
         categories = getCategoryMap(cursor);
         cursor.close();
         db.close();
@@ -118,37 +118,47 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
-    public double getSumByCategory(long categoryId){
+    public double getSumBy(boolean income, long from, long to){
 
-        double sum = 0;
+        double total = 0;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT SUM(" + AmountDb.COL_AMOUNT + ") " +
                         "FROM " + AmountDb.TABLE_NAME + " " +
-                        "WHERE " + AmountDb.COL_CATID + " = ?",
-                new String[]{String.valueOf(categoryId)},
+                        "WHERE " + AmountDb.COL_INCOME + "=? AND " +
+                        AmountDb.COL_DATE + ">=? AND " +
+                        AmountDb.COL_DATE + "<=?",
+
+                new String[]{DbUtils.getParam(income),
+                        DbUtils.getParam(from),
+                        DbUtils.getParam(to)},
                 null);
 
         if (cursor.moveToFirst()){
-            sum = cursor.getDouble(0);
+            total = cursor.getDouble(0);
         }
 
         cursor.close();
+
         db.close();
 
-        return sum;
+        return total;
     }
 
     @Override
-    public List<AmountDb> getAmountBy(boolean income, long from, long to) {
+    public synchronized List<AmountDb> getAmountBy(boolean income, long from, long to) {
 
         List<AmountDb> list;
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
+        Cursor cursorCat = getCategories(db,income);
+        Map<Long,CategoryDb> categories = getCategoryMap(cursorCat);
+        cursorCat.close();
+
         Cursor cursor = getAmountBy(db,income,from,to);
 
-        list = getAmountList(cursor);
+        list = getAmountList(cursor,categories);
 
         cursor.close();
         db.close();
@@ -173,9 +183,13 @@ public class DbDatasource implements Datasource {
         Map<Long,AmountDb> list;
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
+        Cursor cursorCat = getCategories(db,income);
+        Map<Long,CategoryDb> categories = getCategoryMap(cursorCat);
+        cursorCat.close();
+
         Cursor cursor = getAmountBy(db,income,from,to);
 
-        list = getAmountMap(cursor);
+        list = getAmountMap(cursor, categories);
 
         cursor.close();
         db.close();
@@ -183,21 +197,29 @@ public class DbDatasource implements Datasource {
         return list;
     }
 
-    private Map<Long, AmountDb> getAmountMap(Cursor cursor){
+    private Map<Long, AmountDb> getAmountMap(Cursor cursor, Map<Long,CategoryDb> categoryDbMap){
         Map<Long, AmountDb> amounts = new HashMap<>();
         while (cursor.moveToNext()){
             AmountDb amountDb = AmountDb.MAPPER(cursor);
+            long catId = DbUtils.getLong(cursor,AmountDb.COL_CATID);
+            amountDb.setCategoryDb(categoryDbMap.get(catId));
             amounts.put(amountDb.getId(),amountDb);
         }
         return amounts;
     }
 
-    private List<AmountDb> getAmountList(Cursor cursor){
+    private List<AmountDb> getAmountList(Cursor cursor, Map<Long,CategoryDb> categoryDbMap){
         List<AmountDb> amounts = new ArrayList<>();
         while (cursor.moveToNext()){
-            amounts.add(AmountDb.MAPPER(cursor));
+            AmountDb amountDb = AmountDb.MAPPER(cursor);
+            amounts.add(amountDb);
+
+            long catId = DbUtils.getLong(cursor,AmountDb.COL_CATID);
+            amountDb.setCategoryDb(categoryDbMap.get(catId));
         }
         return amounts;
     }
+
+
 
 }

@@ -83,7 +83,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         getCategories.execute(new DisposableSingleObserver<List<Category>>() {
             @Override
             public void onSuccess(List<Category> categories) {
-                getView().populateCategories(categories,resDatasource.getCategoryColorsArray());
+                getView().populateCategories(categories,resDatasource.getCategoryBackgroundsArray());
                 getView().selectCategory(amount.getCategory());
             }
 
@@ -112,7 +112,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         getCategories.execute(new DisposableSingleObserver<List<Category>>() {
             @Override
             public void onSuccess(List<Category> categories) {
-                getView().populateCategories(categories,resDatasource.getCategoryColorsArray());
+                getView().populateCategories(categories,resDatasource.getCategoryBackgroundsArray());
             }
 
             @Override
@@ -141,7 +141,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
             @Override
             public void onError(Throwable e) {
-
+                getView().showError(e.getMessage());
             }
         });
     }

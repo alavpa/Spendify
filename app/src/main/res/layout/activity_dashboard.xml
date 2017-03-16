@@ -5,17 +5,110 @@
     android:layout_height="match_parent"
     android:padding="@dimen/padding">
 
-    <com.alavpa.spendify.ui.custom.graphics.AmountBar
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/income"/>
+
+        <TextView android:id="@+id/tv_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="€"/>
+
+    </LinearLayout>
+
+    <com.alavpa.spendify.ui.custom.widgets.AmountBar
         android:id="@+id/bar_income"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/amountbar_size"
+        android:layout_weight="0"
         android:layout_marginBottom="@dimen/margin"/>
 
-    <com.alavpa.spendify.ui.custom.graphics.AmountBar
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_income"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/margin"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/outcome"/>
+
+        <TextView android:id="@+id/tv_outcome"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                android:gravity="right"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="€"/>
+
+    </LinearLayout>
+
+    <com.alavpa.spendify.ui.custom.widgets.AmountBar
         android:id="@+id/bar_outcome"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="@dimen/amountbar_size"
+        android:layout_weight="0"
+        android:layout_marginBottom="@dimen/margin"/>
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_outcome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/margin"/>
 
 
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/total"/>
+
+        <TextView android:id="@+id/tv_total"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="right"
+                  android:layout_weight="1"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="€"/>
+
+    </LinearLayout>
 
 </LinearLayout>

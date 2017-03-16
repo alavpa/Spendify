@@ -1,27 +1,31 @@
 package com.alavpa.spendify.domain.usecases;
 
 import com.alavpa.spendify.domain.Repository;
-import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Single;
 
-/**
- * Created by alavpa on 19/02/17.
- */
+public class GetSumBy extends UseCase<Double>{
 
-public class GetCategories extends UseCase<List<Category>>{
+    long from;
+    long to;
+    boolean income;
 
     Repository repository;
-    private boolean income;
 
     @Inject
-    public GetCategories(Repository repository){
+    public GetSumBy(Repository repository){
         this.repository = repository;
+    }
+
+    public void setFrom(long from) {
+        this.from = from;
+    }
+
+    public void setTo(long to) {
+        this.to = to;
     }
 
     public void setIncome(boolean income) {
@@ -29,7 +33,7 @@ public class GetCategories extends UseCase<List<Category>>{
     }
 
     @Override
-    public Single<List<Category>> build() {
-        return repository.getCategories(income);
+    public Single<Double> build() {
+        return repository.getSumBy(income, from,to);
     }
 }

@@ -20,7 +20,7 @@ public interface Datasource {
 
     AmountDb insertAmount(AmountDb amountDb);
 
-    double getSumByCategory(long categoryId);
+    double getSumBy(boolean income, long from, long to);
 
     List<AmountDb> getAmountBy(boolean income, long from, long to);
 

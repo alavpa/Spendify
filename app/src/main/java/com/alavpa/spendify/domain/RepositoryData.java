@@ -23,12 +23,12 @@ import io.reactivex.functions.Function;
  * Created by alavpa on 19/02/17.
  */
 @Singleton
-public class RepositoryImpl implements Repository {
+public class RepositoryData implements Repository {
 
     Datasource datasource;
 
     @Inject
-    public RepositoryImpl(Datasource datasource){
+    public RepositoryData(Datasource datasource){
         this.datasource = datasource;
     }
 
@@ -80,18 +80,17 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public Single<Double> getSumByCategory(Category category) {
-        return Single.just(category.getId())
-                .map(new Function<Long, Double>() {
-                    @Override
-                    public Double apply(Long categoryId) throws Exception {
-                        return datasource.getSumByCategory(categoryId);
-                    }
-                });
+    public Single<Double> getSumBy(final boolean income, final long from, final long to) {
+        return Single.fromCallable(new Callable<Double>() {
+            @Override
+            public Double call() throws Exception {
+                return datasource.getSumBy(income, from,to);
+            }
+        });
     }
 
     @Override
-    public Single<List<Amount>> getAmountByCategories(final boolean income, final long from, final long to) {
+    public Single<List<Amount>> getAmountBy(final boolean income, final long from, final long to) {
         return Single.fromCallable(new Callable<List<AmountDb>>() {
             @Override
             public List<AmountDb> call() throws Exception {
