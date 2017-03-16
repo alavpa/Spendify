@@ -30,7 +30,7 @@ public class DbDatasource implements Datasource {
         this.dbOpenHelper = dbOpenHelper;
     }
 
-    public List<CategoryDb> getCategories(boolean income){
+    public synchronized List<CategoryDb> getCategories(boolean income){
         List<CategoryDb> categories;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
@@ -67,7 +67,7 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
-    public Map<Long, CategoryDb> getHashCategories(boolean income) {
+    public synchronized Map<Long, CategoryDb> getHashCategories(boolean income) {
         Map<Long,CategoryDb> categories;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
@@ -80,7 +80,7 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
-    public AmountDb insertAmount(AmountDb amountDb){
+    public synchronized AmountDb insertAmount(AmountDb amountDb){
 
         ContentValues contentValues = new AmountDb.Builder()
                 .amount(amountDb.getAmount())
@@ -101,7 +101,7 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
-    public CategoryDb insertCategory(CategoryDb categoryDb){
+    public synchronized CategoryDb insertCategory(CategoryDb categoryDb){
 
         ContentValues contentValues = new CategoryDb.Builder()
                 .name(categoryDb.getName())
@@ -118,7 +118,7 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
-    public double getSumBy(boolean income, long from, long to){
+    public synchronized double getSumBy(boolean income, long from, long to){
 
         double total = 0;
 
@@ -179,7 +179,7 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
-    public Map<Long, AmountDb> getHashAmountBy(boolean income, long from, long to) {
+    public synchronized Map<Long, AmountDb> getHashAmountBy(boolean income, long from, long to) {
         Map<Long,AmountDb> list;
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 

@@ -100,8 +100,7 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
     }
 
     public void populateOutcome(float totalPartial, float total){
-
-
+        
         AmountBarPart income = new AmountBarPart(totalPartial/total, resDatasource.getColor(R.color.red));
         List<AmountBarPart> amountBarPartList = new ArrayList<>();
         amountBarPartList.add(income);
