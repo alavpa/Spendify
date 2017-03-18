@@ -1,8 +1,6 @@
 package com.alavpa.spendify.ui.details;
 
 
-import com.alavpa.spendify.R;
-import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
@@ -15,7 +13,6 @@ import com.alavpa.spendify.ui.base.BasePresenter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -30,8 +27,11 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     private
     Amount amount;
 
-    private DecimalFormat decimalFormat;
-    private SimpleDateFormat simpleDateFormat;
+    @Inject
+    public DecimalFormat decimalFormat;
+
+    @Inject
+    public SimpleDateFormat simpleDateFormat;
 
     private
     GetCategories getCategories;
@@ -42,21 +42,14 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     private
     InsertCategory insertCategory;
 
-    private ResDatasource resDatasource;
-
     @Inject
-    public DetailsPresenter(ResDatasource resDatasource,
-                            GetCategories getCategories,
+    public DetailsPresenter(GetCategories getCategories,
                             InsertAmount insertAmount,
                             InsertCategory insertCategory){
 
         super(getCategories, insertAmount, insertCategory);
 
-        this.resDatasource = resDatasource;
         this.amount = new Amount();
-        this.decimalFormat = new DecimalFormat();
-        this.decimalFormat.setMinimumFractionDigits(2);
-        this.decimalFormat.setMaximumFractionDigits(2);
 
         this.getCategories = getCategories;
         this.insertAmount = insertAmount;
@@ -83,7 +76,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         getCategories.execute(new DisposableSingleObserver<List<Category>>() {
             @Override
             public void onSuccess(List<Category> categories) {
-                getView().populateCategories(categories,resDatasource.getCategoryBackgroundsArray());
+                getView().populateCategories(categories,resources.getCategoryBackgroundsArray());
                 getView().selectCategory(amount.getCategory());
             }
 
@@ -112,7 +105,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         getCategories.execute(new DisposableSingleObserver<List<Category>>() {
             @Override
             public void onSuccess(List<Category> categories) {
-                getView().populateCategories(categories,resDatasource.getCategoryBackgroundsArray());
+                getView().populateCategories(categories,resources.getCategoryBackgroundsArray());
             }
 
             @Override
@@ -135,7 +128,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         insertAmount.execute(new DisposableSingleObserver<Amount>() {
             @Override
             public void onSuccess(Amount amount) {
-                getView().goToMain(new Amount());
+                navigator.openMain(new Amount());
                 getView().finish();
             }
 
@@ -151,10 +144,6 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     }
 
     public void showDate(){
-        if(simpleDateFormat==null){
-            simpleDateFormat = new SimpleDateFormat(resDatasource.getString(R.string.date_format),
-                    Locale.getDefault());
-        }
 
         String dateText = simpleDateFormat.format(amount.getPeriod().getDate());
         getView().setDate(dateText.substring(0,1).toUpperCase()+dateText.substring(1));
@@ -191,7 +180,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     }
     public void goToMain() {
         fillAmountFromView();
-        getView().goToMain(amount);
+        navigator.openMain(new Amount());
     }
 
     public void showDatePickerDialog() {
@@ -199,6 +188,6 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     }
 
     public void goToAddCategory() {
-        getView().goToAddCategory(amount.isIncome());
+        navigator.openAddCategory(amount.isIncome());
     }
 }

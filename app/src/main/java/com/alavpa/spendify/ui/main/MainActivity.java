@@ -10,7 +10,6 @@ import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.domain.model.Amount;
-import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
 import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
 
@@ -71,11 +70,6 @@ public class MainActivity extends BaseToolbarActivity implements MainView, HasCo
     public void setValue(double value) {
         keyboard.setValue(value);
         tvAmount.setText(keyboard.getFormattedValue());
-    }
-
-    @Override
-    public void goToDetails(Amount amount) {
-        navigator.openDetails(this, amount);
     }
 
     @OnClick(R.id.btn_income)

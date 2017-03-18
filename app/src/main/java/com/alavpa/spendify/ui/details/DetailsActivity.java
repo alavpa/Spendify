@@ -284,16 +284,6 @@ public class DetailsActivity extends BaseToolbarActivity implements DetailsView,
         datePickerDialog.show(getSupportFragmentManager(),"date_picker");
     }
 
-    @Override
-    public void goToMain(Amount amount) {
-        navigator.openMain(this,amount);
-    }
-
-    @Override
-    public void goToAddCategory(boolean income) {
-        navigator.openAddCategory(this, income);
-    }
-
     @OnClick(R.id.btn_apply)
     public void send(View view){
         presenter.send();

@@ -20,6 +20,4 @@ public interface DashboardView extends BaseView{
     void showTotalIncome(String totalIncome);
 
     void showTotal(String total);
-
-    void openDetails(boolean income, String amount);
 }

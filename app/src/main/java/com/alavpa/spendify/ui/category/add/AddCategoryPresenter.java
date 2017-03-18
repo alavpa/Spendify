@@ -1,6 +1,5 @@
 package com.alavpa.spendify.ui.category.add;
 
-import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.usecases.InsertCategory;
@@ -17,22 +16,18 @@ import io.reactivex.observers.DisposableSingleObserver;
 @PerActivity
 public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
 
-    ResDatasource resDatasource;
     InsertCategory insertCategory;
 
     @Inject
-    public AddCategoryPresenter(ResDatasource resDatasource,
-                                InsertCategory insertCategory){
+    public AddCategoryPresenter(InsertCategory insertCategory){
 
         super(insertCategory);
-
-        this.resDatasource = resDatasource;
         this.insertCategory = insertCategory;
 
     }
     public void showColors(){
 
-        int[] colors = resDatasource.getCategoryBackgroundsArray();
+        int[] colors = resources.getCategoryBackgroundsArray();
 
         getView().populateColors(colors);
     }

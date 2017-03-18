@@ -123,11 +123,6 @@ public class DashboardActivity extends BaseToolbarActivity implements DashboardV
     }
 
     @Override
-    public void openDetails(boolean income, String amount) {
-        navigator.openDashboardDetails(this,income,amount);
-    }
-
-    @Override
     public ActivityComponent getComponent() {
         return component;
     }

@@ -1,7 +1,7 @@
 package com.alavpa.spendify.ui.dashboard;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.data.resources.ResDatasource;
+import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.usecases.GetAmountsBy;
 import com.alavpa.spendify.domain.usecases.GetSumBy;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
@@ -23,9 +23,9 @@ import io.reactivex.observers.DisposableSingleObserver;
  * Created by alavpa on 24/02/17.
  */
 
+@PerActivity
 public class DashboardPresenter extends BasePresenter<DashboardView>{
 
-    ResDatasource resDatasource;
     GetAmountsBy getAmountsBy;
     GetSumBy getSumByOutcome;
     GetSumBy getSumByIncome;
@@ -33,21 +33,17 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
     Calendar from = Calendar.getInstance();
     Calendar to = Calendar.getInstance();
 
-    DecimalFormat decimalFormat = new DecimalFormat();
+    @Inject
+    DecimalFormat decimalFormat;
 
     @Inject
-    public DashboardPresenter(ResDatasource resDatasource,
-                              GetAmountsBy getAmountsBy,
+    public DashboardPresenter(GetAmountsBy getAmountsBy,
                               GetSumBy getSumByOutcome,
                               GetSumBy getSumByIncome){
         super(getAmountsBy, getSumByIncome, getSumByOutcome);
-        this.resDatasource = resDatasource;
         this.getAmountsBy = getAmountsBy;
         this.getSumByOutcome = getSumByOutcome;
         this.getSumByIncome = getSumByIncome;
-
-        decimalFormat.setMaximumFractionDigits(2);
-        decimalFormat.setMinimumFractionDigits(2);
 
     }
 
@@ -103,7 +99,7 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
 
     public void populateOutcome(float totalPartial, float total){
 
-        AmountBarPart income = new AmountBarPart(totalPartial/total, resDatasource.getColor(R.color.red));
+        AmountBarPart income = new AmountBarPart(totalPartial/total, resources.getColor(R.color.red));
         List<AmountBarPart> amountBarPartList = new ArrayList<>();
         amountBarPartList.add(income);
         getView().showOutcome(amountBarPartList);
@@ -111,7 +107,7 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
 
     public void populateIncome(float totalPartial, float total){
 
-        AmountBarPart income = new AmountBarPart(totalPartial/total, resDatasource.getColor(R.color.blue));
+        AmountBarPart income = new AmountBarPart(totalPartial/total, resources.getColor(R.color.blue));
         List<AmountBarPart> amountBarPartList = new ArrayList<>();
         amountBarPartList.add(income);
         getView().showIncome(amountBarPartList);
@@ -119,11 +115,11 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
     }
 
     public void openIncomeDetails(String amount) {
-        getView().openDetails(true, amount);
+        navigator.openDashboardDetails(true, amount);
     }
 
     public void openOutcomeDetails(String amount) {
-        getView().openDetails(false,amount);
+        navigator.openDashboardDetails(false,amount);
     }
 }
 

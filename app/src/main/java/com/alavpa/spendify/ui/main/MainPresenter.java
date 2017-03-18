@@ -14,10 +14,10 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     private
     Amount amount;
-    private String value;
 
     @Inject
     public MainPresenter(){
+        super();
         amount = new Amount();
     }
 
@@ -30,7 +30,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void goToDetails() {
-        getView().goToDetails(amount);
+        navigator.openDetails(amount);
     }
 
     public void setValue(double value) {

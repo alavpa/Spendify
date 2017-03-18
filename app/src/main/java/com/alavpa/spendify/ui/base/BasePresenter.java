@@ -1,16 +1,28 @@
 package com.alavpa.spendify.ui.base;
 
+import com.alavpa.spendify.data.resources.ResDatasource;
+import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
+import com.alavpa.spendify.ui.Navigator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Created by alavpa on 10/02/17.
  */
 
+@PerActivity
 public class BasePresenter<T extends BaseView> {
+
+    @Inject
+    protected ResDatasource resources;
+
+    @Inject
+    protected Navigator navigator;
 
     private
     T view;
@@ -18,6 +30,7 @@ public class BasePresenter<T extends BaseView> {
     private
     List<UseCase> useCases;
 
+    @Inject
     public BasePresenter(UseCase... useCases){
         this.useCases = new ArrayList<>(Arrays.asList(useCases));
     }

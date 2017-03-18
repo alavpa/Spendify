@@ -66,12 +66,12 @@ public class MenuFragment extends BaseFragment implements MenuView{
 
     @Override
     public void goToDashboard() {
-        navigator.openDashboard(getActivity());
+        navigator.openDashboard();
     }
 
     @Override
     public void goToMain() {
-        navigator.openMain(getActivity(),new Amount());
+        navigator.openMain(new Amount());
     }
 
     @Override

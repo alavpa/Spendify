@@ -1,6 +1,5 @@
 package com.alavpa.spendify.ui.details;
 
-import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.ui.base.BaseView;
 
@@ -29,8 +28,4 @@ public interface DetailsView extends BaseView {
     void setTimes(int times);
     void setPeriod(int period);
     void showDatePickerDialog(long date);
-
-    void goToMain(Amount amount);
-
-    void goToAddCategory(boolean income);
 }

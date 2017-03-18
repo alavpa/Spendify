@@ -14,9 +14,7 @@ import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.di.application.ApplicationComponent;
 import com.alavpa.spendify.di.base.BaseModule;
-import com.alavpa.spendify.ui.Navigator;
-
-import javax.inject.Inject;
+import com.alavpa.spendify.di.base.DaggerBaseComponent;
 
 /**
  * Created by alavpa on 10/02/17.
@@ -24,10 +22,6 @@ import javax.inject.Inject;
 
 @PerActivity
 public class BaseActivity extends AppCompatActivity implements BaseView{
-
-    @Inject
-    protected
-    Navigator navigator;
 
     public Toolbar toolbar;
 
@@ -41,7 +35,10 @@ public class BaseActivity extends AppCompatActivity implements BaseView{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getApplicationComponent()
+        DaggerBaseComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .baseModule(new BaseModule(this))
+                .build()
                 .inject(this);
 
     }
