@@ -3,6 +3,9 @@ package com.alavpa.spendify.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.alavpa.spendify.data.Datasource;
+import com.alavpa.spendify.data.db.model.CategoryDb;
+
 /**
  * Created by alavpa on 9/02/17.
  */
@@ -20,6 +23,13 @@ public class Category implements Parcelable {
 
     private
     int color;
+
+    protected Category(Parcel in) {
+        this.id = in.readLong();
+        this.income = in.readByte() != 0;
+        this.name = in.readString();
+        this.color = in.readInt();
+    }
 
     public Category(){
         this.id = 0;
@@ -80,13 +90,6 @@ public class Category implements Parcelable {
         dest.writeInt(color);
     }
 
-    protected Category(Parcel in) {
-        this.id = in.readLong();
-        this.income = in.readByte() != 0;
-        this.name = in.readString();
-        this.color = in.readInt();
-    }
-
     public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
         @Override
         public Category createFromParcel(Parcel source) {
@@ -98,4 +101,28 @@ public class Category implements Parcelable {
             return new Category[size];
         }
     };
+
+    public Category insert(Datasource datasource){
+        CategoryDb categoryDb = datasource.insertCategory(toCategoryDb());
+        return fromCategoryDb(categoryDb);
+    }
+
+    public Category fromCategoryDb(CategoryDb categoryDb){
+        this.setId(categoryDb.getId());
+        this.setName(categoryDb.getName());
+        this.setIncome(categoryDb.isIncome());
+        this.setColor(categoryDb.getColor());
+
+        return this;
+    }
+
+    public CategoryDb toCategoryDb(){
+        CategoryDb categoryDb = new CategoryDb();
+        categoryDb.setId(this.getId());
+        categoryDb.setName(this.getName());
+        categoryDb.setIncome(this.isIncome());
+        categoryDb.setColor(this.getColor());
+
+        return categoryDb;
+    }
 }

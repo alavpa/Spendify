@@ -3,8 +3,6 @@ package com.alavpa.spendify.domain;
 import com.alavpa.spendify.data.Datasource;
 import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
-import com.alavpa.spendify.domain.mapper.AmountMapper;
-import com.alavpa.spendify.domain.mapper.CategoryMapper;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 
@@ -38,11 +36,12 @@ public class RepositoryData implements Repository {
                 .flatMap(new Function<Boolean, SingleSource<? extends List<Category>>>() {
                     @Override
                     public SingleSource<? extends List<Category>> apply(Boolean income) throws Exception {
+
                         return Observable.fromIterable(datasource.getCategories(income))
                                 .map(new Function<CategoryDb, Category>() {
                                     @Override
                                     public Category apply(CategoryDb categoryDb) throws Exception {
-                                        return CategoryMapper.map(categoryDb);
+                                        return new Category().fromCategoryDb(categoryDb);
                                     }
                                 })
                                 .toList();
@@ -56,11 +55,7 @@ public class RepositoryData implements Repository {
                 .map(new Function<Category, Category>() {
                     @Override
                     public Category apply(Category category) throws Exception {
-
-                        CategoryDb categoryData =
-                                datasource.insertCategory(CategoryMapper.map(category));
-
-                        return CategoryMapper.map(categoryData);
+                        return category.insert(datasource);
                     }
                 });
     }
@@ -71,10 +66,7 @@ public class RepositoryData implements Repository {
                 .map(new Function<Amount, Amount>() {
                     @Override
                     public Amount apply(Amount amount) throws Exception {
-                        AmountDb amountData =
-                                datasource.insertAmount(AmountMapper.map(amount));
-
-                        return AmountMapper.map(amountData);
+                        return amount.insert(datasource);
                     }
                 });
     }
@@ -104,7 +96,7 @@ public class RepositoryData implements Repository {
                                 .map(new Function<AmountDb, Amount>() {
                                     @Override
                                     public Amount apply(AmountDb amountDb) throws Exception {
-                                        return AmountMapper.map(amountDb);
+                                        return new Amount().fromAmountDb(amountDb);
                                     }
                                 })
                                 .toList();

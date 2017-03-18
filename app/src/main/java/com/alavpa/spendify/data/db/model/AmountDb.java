@@ -28,23 +28,11 @@ public class AmountDb {
             + COL_INCOME + " INTEGER NOT NULL DEFAULT 0,"
             + COL_AMOUNT + " REAL NOT NULL DEFAULT 0,"
             + COL_DESC + " TEXT,"
-            + COL_CATID + " INTEGER,"
+            + COL_CATID + " INTEGER NOT NULL,"
             + COL_PERIOD + " INTEGER NOT NULL DEFAULT -1,"
             + COL_TIMES + " INTEGER NOT NULL DEFAULT 0,"
             + COL_DATE + " INTEGER NOT NULL"
             + ")";
-
-    public static AmountDb MAPPER(Cursor cursor){
-        AmountDb amountDb = new AmountDb();
-        amountDb.setId(DbUtils.getLong(cursor,COL_ID));
-        amountDb.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
-        amountDb.setAmount(DbUtils.getDouble(cursor,COL_AMOUNT));
-        amountDb.setDescription(DbUtils.getString(cursor,COL_DESC));
-        amountDb.setPeriod(DbUtils.getInt(cursor,COL_PERIOD));
-        amountDb.setTimes(DbUtils.getInt(cursor,COL_TIMES));
-        amountDb.setDate(DbUtils.getLong(cursor,COL_DATE));
-        return amountDb;
-    }
 
     private long id;
     private boolean income;
@@ -118,6 +106,17 @@ public class AmountDb {
 
     public void setDate(long date) {
         this.date = date;
+    }
+
+    public AmountDb fromCursor(Cursor cursor){
+        this.setId(DbUtils.getLong(cursor,COL_ID));
+        this.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
+        this.setAmount(DbUtils.getDouble(cursor,COL_AMOUNT));
+        this.setDescription(DbUtils.getString(cursor,COL_DESC));
+        this.setPeriod(DbUtils.getInt(cursor,COL_PERIOD));
+        this.setTimes(DbUtils.getInt(cursor,COL_TIMES));
+        this.setDate(DbUtils.getLong(cursor,COL_DATE));
+        return this;
     }
 
     public static final class Builder{

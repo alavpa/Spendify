@@ -26,15 +26,6 @@ public class CategoryDb {
             + COL_NAME + " TEXT NOT NULL"
             + ")";
 
-    public static CategoryDb MAPPER(Cursor cursor){
-        CategoryDb category = new CategoryDb();
-        category.setId(DbUtils.getLong(cursor,COL_ID));
-        category.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
-        category.setName(DbUtils.getString(cursor,COL_NAME));
-        category.setColor(DbUtils.getInt(cursor,COL_COLOR));
-        return category;
-    }
-
     private long id;
     private String name;
     private boolean income;
@@ -70,6 +61,14 @@ public class CategoryDb {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public CategoryDb fromCursor(Cursor cursor){
+        this.setId(DbUtils.getLong(cursor,COL_ID));
+        this.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
+        this.setName(DbUtils.getString(cursor,COL_NAME));
+        this.setColor(DbUtils.getInt(cursor,COL_COLOR));
+        return this;
     }
 
     public static final class Builder{

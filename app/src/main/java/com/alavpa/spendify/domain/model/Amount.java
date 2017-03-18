@@ -3,6 +3,10 @@ package com.alavpa.spendify.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.alavpa.spendify.data.Datasource;
+import com.alavpa.spendify.data.db.model.AmountDb;
+import com.alavpa.spendify.data.db.model.CategoryDb;
+
 /**
  * Created by alavpa on 9/02/17.
  */
@@ -26,6 +30,15 @@ public class Amount implements Parcelable {
 
     private
     Period period;
+
+    protected Amount(Parcel in) {
+        this.id = in.readLong();
+        this.income = in.readByte() != 0;
+        this.amount = in.readDouble();
+        this.description = in.readString();
+        this.category = in.readParcelable(Category.class.getClassLoader());
+        this.period = in.readParcelable(Period.class.getClassLoader());
+    }
 
     public Amount(){
         this.id = 0;
@@ -99,15 +112,6 @@ public class Amount implements Parcelable {
         dest.writeParcelable(this.period, flags);
     }
 
-    protected Amount(Parcel in) {
-        this.id = in.readLong();
-        this.income = in.readByte() != 0;
-        this.amount = in.readDouble();
-        this.description = in.readString();
-        this.category = in.readParcelable(Category.class.getClassLoader());
-        this.period = in.readParcelable(Period.class.getClassLoader());
-    }
-
     public static final Parcelable.Creator<Amount> CREATOR = new Parcelable.Creator<Amount>() {
         @Override
         public Amount createFromParcel(Parcel source) {
@@ -119,4 +123,44 @@ public class Amount implements Parcelable {
             return new Amount[size];
         }
     };
+
+    public Amount insert(Datasource datasource){
+        AmountDb amountDb = datasource.insertAmount(toAmountDb());
+        return fromAmountDb(amountDb);
+    }
+
+    public AmountDb toAmountDb(){
+        AmountDb amountDb = new AmountDb();
+
+        amountDb.setId(this.getId());
+        amountDb.setIncome(this.isIncome());
+        amountDb.setDescription(this.getDescription());
+        amountDb.setAmount(this.getAmount());
+        amountDb.setPeriod(this.getPeriod().getPeriod());
+        amountDb.setDate(this.getPeriod().getDate());
+        amountDb.setTimes(this.getPeriod().getTimes());
+
+        if(this.getCategory()!=null) {
+            CategoryDb categoryDb = this.getCategory().toCategoryDb();
+            amountDb.setCategoryDb(categoryDb);
+        }
+
+        return amountDb;
+    }
+
+    public Amount fromAmountDb(AmountDb amountDb){
+
+        setId(amountDb.getId());
+        setIncome(amountDb.isIncome());
+        setDescription(amountDb.getDescription());
+        setAmount(amountDb.getAmount());
+        Period period = new Period(amountDb.getDate(),amountDb.getTimes(),amountDb.getPeriod());
+        setPeriod(period);
+        if(amountDb.getCategoryDb()!=null) {
+            Category category = new Category().fromCategoryDb(amountDb.getCategoryDb());
+            setCategory(category);
+        }
+
+        return this;
+    }
 }

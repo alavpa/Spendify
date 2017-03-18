@@ -52,7 +52,7 @@ public class DbDatasource implements Datasource {
     private List<CategoryDb> getCategoryList(Cursor cursor){
         List<CategoryDb> categories = new ArrayList<>();
         while (cursor.moveToNext()){
-            categories.add(CategoryDb.MAPPER(cursor));
+            categories.add(new CategoryDb().fromCursor(cursor));
         }
         return categories;
     }
@@ -60,22 +60,9 @@ public class DbDatasource implements Datasource {
     private Map<Long, CategoryDb> getCategoryMap(Cursor cursor){
         Map<Long, CategoryDb> categories = new HashMap<>();
         while (cursor.moveToNext()){
-            CategoryDb categoryDb = CategoryDb.MAPPER(cursor);
+            CategoryDb categoryDb = new CategoryDb().fromCursor(cursor);
             categories.put(categoryDb.getId(),categoryDb);
         }
-        return categories;
-    }
-
-    @Override
-    public synchronized Map<Long, CategoryDb> getHashCategories(boolean income) {
-        Map<Long,CategoryDb> categories;
-
-        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = getCategories(db,income);
-        categories = getCategoryMap(cursor);
-        cursor.close();
-        db.close();
-
         return categories;
     }
 
@@ -151,16 +138,22 @@ public class DbDatasource implements Datasource {
 
         List<AmountDb> list;
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        db.beginTransaction();
+        try {
+            Cursor cursorCat = getCategories(db,income);
+            Map<Long,CategoryDb> categories = getCategoryMap(cursorCat);
+            cursorCat.close();
 
-        Cursor cursorCat = getCategories(db,income);
-        Map<Long,CategoryDb> categories = getCategoryMap(cursorCat);
-        cursorCat.close();
+            Cursor cursor = getAmountBy(db,income,from,to);
 
-        Cursor cursor = getAmountBy(db,income,from,to);
+            list = getAmountList(cursor,categories);
 
-        list = getAmountList(cursor,categories);
+            cursor.close();
+            db.setTransactionSuccessful();
+        }finally {
+            db.endTransaction();
+        }
 
-        cursor.close();
         db.close();
 
         return list;
@@ -178,40 +171,10 @@ public class DbDatasource implements Datasource {
                 null);
     }
 
-    @Override
-    public synchronized Map<Long, AmountDb> getHashAmountBy(boolean income, long from, long to) {
-        Map<Long,AmountDb> list;
-        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-
-        Cursor cursorCat = getCategories(db,income);
-        Map<Long,CategoryDb> categories = getCategoryMap(cursorCat);
-        cursorCat.close();
-
-        Cursor cursor = getAmountBy(db,income,from,to);
-
-        list = getAmountMap(cursor, categories);
-
-        cursor.close();
-        db.close();
-
-        return list;
-    }
-
-    private Map<Long, AmountDb> getAmountMap(Cursor cursor, Map<Long,CategoryDb> categoryDbMap){
-        Map<Long, AmountDb> amounts = new HashMap<>();
-        while (cursor.moveToNext()){
-            AmountDb amountDb = AmountDb.MAPPER(cursor);
-            long catId = DbUtils.getLong(cursor,AmountDb.COL_CATID);
-            amountDb.setCategoryDb(categoryDbMap.get(catId));
-            amounts.put(amountDb.getId(),amountDb);
-        }
-        return amounts;
-    }
-
     private List<AmountDb> getAmountList(Cursor cursor, Map<Long,CategoryDb> categoryDbMap){
         List<AmountDb> amounts = new ArrayList<>();
         while (cursor.moveToNext()){
-            AmountDb amountDb = AmountDb.MAPPER(cursor);
+            AmountDb amountDb = new AmountDb().fromCursor(cursor);
             amounts.add(amountDb);
 
             long catId = DbUtils.getLong(cursor,AmountDb.COL_CATID);
