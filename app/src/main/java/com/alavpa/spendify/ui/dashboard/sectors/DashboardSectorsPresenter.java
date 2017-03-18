@@ -1,9 +1,9 @@
-package com.alavpa.spendify.ui.dashboard.details;
+package com.alavpa.spendify.ui.dashboard.sectors;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.domain.model.Amount;
-import com.alavpa.spendify.domain.usecases.GetAmountsBy;
+import com.alavpa.spendify.domain.model.Sector;
+import com.alavpa.spendify.domain.usecases.GetSectorsBy;
 import com.alavpa.spendify.domain.usecases.GetSumBy;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
 import com.alavpa.spendify.ui.base.BasePresenter;
@@ -19,12 +19,11 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.observers.DisposableSingleObserver;
 
 @PerActivity
-class DashboardDetailsPresenter extends BasePresenter<DashboardDetailsView> {
-
-    private
-    GetAmountsBy getAmountsBy;
+class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
 
     private GetSumBy getSumBy;
+
+    private GetSectorsBy getSectorsBy;
 
     private
     boolean income;
@@ -37,10 +36,11 @@ class DashboardDetailsPresenter extends BasePresenter<DashboardDetailsView> {
 
 
     @Inject
-    public DashboardDetailsPresenter(GetAmountsBy getAmountsBy, GetSumBy getSumBy){
-        super(getAmountsBy, getSumBy);
-        this.getAmountsBy = getAmountsBy;
+    public DashboardSectorsPresenter(GetSumBy getSumBy, GetSectorsBy getSectorsBy){
         this.getSumBy = getSumBy;
+        this.getSectorsBy = getSectorsBy;
+
+        addUseCases(getSumBy, getSectorsBy);
     }
 
     public void setIncome(boolean income) {
@@ -67,17 +67,17 @@ class DashboardDetailsPresenter extends BasePresenter<DashboardDetailsView> {
         getSumBy.setFrom(from.getTimeInMillis());
         getSumBy.setTo(to.getTimeInMillis());
 
-        getAmountsBy.setIncome(income);
-        getAmountsBy.setTo(to.getTimeInMillis());
-        getAmountsBy.setFrom(from.getTimeInMillis());
+        getSectorsBy.setIncome(income);
+        getSectorsBy.setTo(to.getTimeInMillis());
+        getSectorsBy.setFrom(from.getTimeInMillis());
 
         UseCase<List<AmountBarPart>> useCase = new UseCase<List<AmountBarPart>>() {
             @Override
             public Single<List<AmountBarPart>> build() {
-                return Single.zip(getSumBy.build(), getAmountsBy.build(), new BiFunction<Double, List<Amount>, List<AmountBarPart>>() {
+                return Single.zip(getSumBy.build(), getSectorsBy.build(), new BiFunction<Double, List<Sector>, List<AmountBarPart>>() {
                     @Override
-                    public List<AmountBarPart> apply(Double total, List<Amount> amounts) throws Exception {
-                        List<AmountBarPart> amountBarPartList = AmountBarPart.getParts(resources,amounts,total.floatValue());
+                    public List<AmountBarPart> apply(Double total, List<Sector> sectors) throws Exception {
+                        List<AmountBarPart> amountBarPartList = AmountBarPart.getParts(resources,sectors,total);
                         return amountBarPartList;
                     }
                 });
@@ -96,12 +96,12 @@ class DashboardDetailsPresenter extends BasePresenter<DashboardDetailsView> {
             }
         });
 
-        addUseCase(useCase);
+        addUseCases(useCase);
 
-        getAmountsBy.execute(new DisposableSingleObserver<List<Amount>>() {
+        getSectorsBy.execute(new DisposableSingleObserver<List<Sector>>() {
             @Override
-            public void onSuccess(List<Amount> amounts) {
-                getView().populateDetails(amounts,resources.getCategoryColorsArray());
+            public void onSuccess(List<Sector> sectors) {
+                getView().populateDetails(sectors,resources.getCategoryColorsArray());
             }
 
             @Override
@@ -110,5 +110,9 @@ class DashboardDetailsPresenter extends BasePresenter<DashboardDetailsView> {
             }
         });
 
+    }
+
+    public void onClickSector(Sector sector) {
+        navigator.openDashboardAmounts(sector);
     }
 }

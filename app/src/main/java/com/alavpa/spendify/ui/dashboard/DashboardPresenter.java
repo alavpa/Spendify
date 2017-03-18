@@ -40,11 +40,11 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
     public DashboardPresenter(GetAmountsBy getAmountsBy,
                               GetSumBy getSumByOutcome,
                               GetSumBy getSumByIncome){
-        super(getAmountsBy, getSumByIncome, getSumByOutcome);
         this.getAmountsBy = getAmountsBy;
         this.getSumByOutcome = getSumByOutcome;
         this.getSumByIncome = getSumByIncome;
 
+        addUseCases(getAmountsBy, getSumByIncome, getSumByOutcome);
     }
 
     public void initView() {
@@ -92,7 +92,7 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
             }
         });
 
-        addUseCase(useCase);
+        addUseCases(useCase);
 
 
     }
@@ -115,11 +115,11 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
     }
 
     public void openIncomeDetails(String amount) {
-        navigator.openDashboardDetails(true, amount);
+        navigator.openDashboardSectors(true, amount);
     }
 
     public void openOutcomeDetails(String amount) {
-        navigator.openDashboardDetails(false,amount);
+        navigator.openDashboardSectors(false,amount);
     }
 }
 

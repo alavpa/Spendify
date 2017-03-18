@@ -6,7 +6,6 @@ import com.alavpa.spendify.domain.usecases.base.UseCase;
 import com.alavpa.spendify.ui.Navigator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,8 +30,8 @@ public class BasePresenter<T extends BaseView> {
     List<UseCase> useCases;
 
     @Inject
-    public BasePresenter(UseCase... useCases){
-        this.useCases = new ArrayList<>(Arrays.asList(useCases));
+    public BasePresenter(){
+        this.useCases = new ArrayList<>();
     }
 
     public void attachView(T view){
@@ -47,8 +46,12 @@ public class BasePresenter<T extends BaseView> {
         view = null;
     }
 
-    public void addUseCase(UseCase useCase){
-        useCases.add(useCase);
+    public void addUseCases(UseCase... useCases){
+
+        for(UseCase useCase : useCases){
+            this.useCases.add(useCase);
+        }
+
     }
 
     public void dispose(){

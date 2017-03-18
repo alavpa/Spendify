@@ -2,6 +2,7 @@ package com.alavpa.spendify.data;
 
 import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
+import com.alavpa.spendify.data.db.model.SectorDb;
 
 import java.util.List;
 
@@ -20,5 +21,9 @@ public interface Datasource {
     double getSumBy(boolean income, long from, long to);
 
     List<AmountDb> getAmountBy(boolean income, long from, long to);
+
+    List<SectorDb> getSectors(boolean income, long from, long to);
+
+    List<AmountDb> getAmountsByCategoryId(long id, long from, long to);
 
 }

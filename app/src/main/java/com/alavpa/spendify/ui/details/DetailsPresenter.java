@@ -47,13 +47,13 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
                             InsertAmount insertAmount,
                             InsertCategory insertCategory){
 
-        super(getCategories, insertAmount, insertCategory);
-
         this.amount = new Amount();
 
         this.getCategories = getCategories;
         this.insertAmount = insertAmount;
         this.insertCategory = insertCategory;
+
+        addUseCases(getCategories, insertAmount, insertCategory);
     }
 
     public void initView(){

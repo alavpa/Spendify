@@ -3,6 +3,7 @@ package com.alavpa.spendify.domain;
 
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
+import com.alavpa.spendify.domain.model.Sector;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface Repository {
     Single<Double> getSumBy(boolean income, long from, long to);
 
     Single<List<Amount>> getAmountBy(boolean income, long from, long to);
+
+    Single<List<Sector>> getSectorsBy(boolean income, long from, long to);
+
+    Single<List<Amount>> getAmountsByCategoryId(long id, long from, long to);
 }

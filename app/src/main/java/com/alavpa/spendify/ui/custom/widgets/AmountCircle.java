@@ -57,7 +57,5 @@ public class AmountCircle extends AmountView {
             canvas.drawArc(oval, angleOffset, amountBarPart.getAngle(), true, paint);
             angleOffset += amountBarPart.getAngle();
         }
-
-
     }
 }

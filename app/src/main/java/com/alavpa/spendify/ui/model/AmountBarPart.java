@@ -1,12 +1,10 @@
 package com.alavpa.spendify.ui.model;
 
 import com.alavpa.spendify.data.resources.ResDatasource;
-import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.model.Sector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AmountBarPart{
 
@@ -67,27 +65,17 @@ public class AmountBarPart{
         return angle;
     }
 
-    public static List<AmountBarPart> getParts(ResDatasource resDatasource, List<Amount> amounts, float total){
-        Map<Integer, Double> valuesByColor = new HashMap<>();
+    public static List<AmountBarPart> getParts(ResDatasource resDatasource, List<Sector> sectors, double total){
+
         List<AmountBarPart> parts = new ArrayList<>();
 
-        for(Amount amount : amounts){
-            double value = 0;
-            if(valuesByColor.keySet().contains(amount.getCategory().getColor())){
-                value = valuesByColor.get(amount.getCategory().getColor());
-                valuesByColor.remove(amount.getCategory().getColor());
-            }
+        for (Sector sector : sectors){
 
-            value +=amount.getAmount();
-            valuesByColor.put(amount.getCategory().getColor(),value);
+            int rgb = resDatasource.getColor(resDatasource.getCategoryColorsArray()[sector.getCategory().getColor()]);
+            Double percent = Double.valueOf(sector.getAmount()/total);
+            parts.add(new AmountBarPart(percent.floatValue(),rgb));
         }
 
-        for (Integer color : valuesByColor.keySet()){
-            float value = valuesByColor.get(color).floatValue();
-
-            int rgb = resDatasource.getColor(resDatasource.getCategoryColorsArray()[color]);
-            parts.add(new AmountBarPart(value/total,rgb));
-        }
         return parts;
     }
 }

@@ -1,4 +1,4 @@
-package com.alavpa.spendify.ui.dashboard.details;
+package com.alavpa.spendify.ui.dashboard.sectors;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,16 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.HasComponent;
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
-import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.ui.Navigator;
-import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
+import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.custom.LinearLayoutManager;
-import com.alavpa.spendify.ui.custom.adapters.AmountAdapter;
+import com.alavpa.spendify.ui.custom.adapters.SectorAdapter;
 import com.alavpa.spendify.ui.custom.widgets.AmountCircle;
 import com.alavpa.spendify.ui.model.AmountBarPart;
 
@@ -33,10 +32,10 @@ import butterknife.ButterKnife;
  */
 
 @PerActivity
-public class DashboardDetailsActivity extends BaseToolbarActivity implements DashboardDetailsView, HasComponent<ActivityComponent> {
+public class DashboardSectorsActivity extends BaseActivity implements DashboardSectorsView {
 
     @Inject
-    DashboardDetailsPresenter presenter;
+    DashboardSectorsPresenter presenter;
 
     @Inject
     DecimalFormat decimalFormat;
@@ -56,7 +55,7 @@ public class DashboardDetailsActivity extends BaseToolbarActivity implements Das
     @BindView(R.id.tv_title)
     TextView tvTitle;
 
-    AmountAdapter detailsAdapter;
+    SectorAdapter detailsAdapter;
 
     public
     ActivityComponent component;
@@ -64,7 +63,7 @@ public class DashboardDetailsActivity extends BaseToolbarActivity implements Das
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard_details);
+        setContentView(R.layout.activity_dashboard_sectors);
 
         ButterKnife.bind(this);
 
@@ -107,22 +106,21 @@ public class DashboardDetailsActivity extends BaseToolbarActivity implements Das
         barDetails.invalidate();
     }
 
-
     @Override
-    public ActivityComponent getComponent() {
-        return component;
-    }
-
-    public void populateDetails(List<Amount> amounts, int[] colors){
+    public void populateDetails(List<Sector> sectors, int[] colors){
         if(detailsAdapter==null){
-            detailsAdapter = new AmountAdapter(this,
-                    amounts,
+            detailsAdapter = new SectorAdapter(this,
+                    sectors,
                     colors,
                     decimalFormat,
-                    simpleDateFormat);
+                    new SectorAdapter.OnClickSector() {
+                        @Override
+                        public void onClick(Sector sector) {
+                            presenter.onClickSector(sector);
+                        }
+                    });
 
             rvDetails.setAdapter(detailsAdapter);
-
         }
     }
 }

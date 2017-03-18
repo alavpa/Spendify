@@ -5,9 +5,11 @@ import android.content.Intent;
 
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.ui.category.add.AddCategoryActivity;
 import com.alavpa.spendify.ui.dashboard.DashboardActivity;
-import com.alavpa.spendify.ui.dashboard.details.DashboardDetailsActivity;
+import com.alavpa.spendify.ui.dashboard.amounts.DashboardAmountsActivity;
+import com.alavpa.spendify.ui.dashboard.sectors.DashboardSectorsActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 
@@ -23,6 +25,7 @@ public class Navigator {
 
     public static final String EXTRA_AMOUNT = "EXTRA_AMOUNT";
     public static final String EXTRA_INCOME = "EXTRA_INCOME";
+    public static final String EXTRA_SECTOR = "EXTRA_SECTOR";
 
     public static final int REQUEST_CODE_ADD_CATEGORY = 1;
 
@@ -52,10 +55,16 @@ public class Navigator {
         activity.startActivity(intent);
     }
 
-    public void openDashboardDetails(boolean income, String amount) {
-        Intent intent = getIntent(DashboardDetailsActivity.class);
+    public void openDashboardSectors(boolean income, String amount) {
+        Intent intent = getIntent(DashboardSectorsActivity.class);
         intent.putExtra(EXTRA_INCOME,income);
         intent.putExtra(EXTRA_AMOUNT,amount);
+        activity.startActivity(intent);
+    }
+
+    public void openDashboardAmounts(Sector sector) {
+        Intent intent = getIntent(DashboardAmountsActivity.class);
+        intent.putExtra(EXTRA_SECTOR,sector);
         activity.startActivity(intent);
     }
 

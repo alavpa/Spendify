@@ -3,8 +3,10 @@ package com.alavpa.spendify.domain;
 import com.alavpa.spendify.data.Datasource;
 import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
+import com.alavpa.spendify.data.db.model.SectorDb;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
+import com.alavpa.spendify.domain.model.Sector;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -87,6 +89,53 @@ public class RepositoryData implements Repository {
             @Override
             public List<AmountDb> call() throws Exception {
                 return datasource.getAmountBy(income,from,to);
+            }
+        })
+                .flatMap(new Function<List<AmountDb>, SingleSource<List<Amount>>>() {
+                    @Override
+                    public SingleSource<List<Amount>> apply(List<AmountDb> amountDbs) throws Exception {
+                        return Observable.fromIterable(amountDbs)
+                                .map(new Function<AmountDb, Amount>() {
+                                    @Override
+                                    public Amount apply(AmountDb amountDb) throws Exception {
+                                        return new Amount().fromAmountDb(amountDb);
+                                    }
+                                })
+                                .toList();
+                    }
+                });
+    }
+
+    @Override
+    public Single<List<Sector>> getSectorsBy(final boolean income, final long from, final long to) {
+
+        return Single.fromCallable(new Callable<List<SectorDb>>() {
+            @Override
+            public List<SectorDb> call() throws Exception {
+                return datasource.getSectors(income,from,to);
+            }
+        })
+                .flatMap(new Function<List<SectorDb>, SingleSource<List<Sector>>>() {
+                    @Override
+                    public SingleSource<List<Sector>> apply(List<SectorDb> sectors) throws Exception {
+                        return Observable.fromIterable(sectors)
+                                .map(new Function<SectorDb, Sector>() {
+                                    @Override
+                                    public Sector apply(SectorDb sectorDb) throws Exception {
+                                        return new Sector().fromSectorDb(sectorDb);
+                                    }
+                                })
+                                .toList();
+                    }
+                });
+    }
+
+    @Override
+    public Single<List<Amount>> getAmountsByCategoryId(final long id, final long from, final long to) {
+        return Single.fromCallable(new Callable<List<AmountDb>>() {
+            @Override
+            public List<AmountDb> call() throws Exception {
+                return datasource.getAmountsByCategoryId(id, from, to);
             }
         })
                 .flatMap(new Function<List<AmountDb>, SingleSource<List<Amount>>>() {

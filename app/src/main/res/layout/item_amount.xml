@@ -16,25 +16,18 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-        <FrameLayout
-                android:id="@+id/fl_category"
-                android:layout_width="@dimen/item_category_size"
-                android:layout_height="@dimen/item_category_size"
-                android:layout_weight="0"
-                android:layout_marginRight="@dimen/margin"/>
-
         <TextView
-                android:id="@+id/tv_category"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"/>
+                android:layout_weight="1"/>
 
         <TextView
                 android:id="@+id/tv_amount"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:layout_weight="1"/>
+                android:layout_weight="0"/>
 
         <TextView
                 android:layout_width="wrap_content"

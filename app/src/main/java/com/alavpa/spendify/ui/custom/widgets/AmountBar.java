@@ -36,22 +36,22 @@ public class AmountBar extends AmountView {
         int width = getWidth();
         int height = getHeight();
 
-        if (parts != null) {
-            float offsetWidth = 0;
-            for (AmountBarPart part : parts) {
 
-                part.calculateX(offsetWidth,width);
-                part.calculateY(0,height);
-                offsetWidth = part.getEndX();
+        float offsetWidth = 0;
+        for (AmountBarPart part : parts) {
 
-                paint.setColor(part.getColor());
-                canvas.drawRect(part.getStartX(),
-                        part.getStartY(),
-                        part.getEndX(),
-                        part.getEndY(),
-                        paint);
+            part.calculateX(offsetWidth, width);
+            part.calculateY(0, height);
+            offsetWidth = part.getEndX();
 
-            }
+            paint.setColor(part.getColor());
+            canvas.drawRect(part.getStartX(),
+                    part.getStartY(),
+                    part.getEndX(),
+                    part.getEndY(),
+                    paint);
+
         }
+
     }
 }

@@ -1,6 +1,6 @@
-package com.alavpa.spendify.ui.dashboard.details;
+package com.alavpa.spendify.ui.dashboard.sectors;
 
-import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.ui.base.BaseView;
 import com.alavpa.spendify.ui.model.AmountBarPart;
 
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by alavpa on 24/02/17.
  */
-public interface DashboardDetailsView extends BaseView{
+public interface DashboardSectorsView extends BaseView{
 
 
     void showDetails(List<AmountBarPart> details);
@@ -18,5 +18,5 @@ public interface DashboardDetailsView extends BaseView{
 
     void showAmount(String amount);
 
-    void populateDetails(List<Amount> details, int[] categoryColorsArray);
+    void populateDetails(List<Sector> details, int[] categoryColorsArray);
 }

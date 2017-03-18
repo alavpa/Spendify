@@ -20,10 +20,8 @@ public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
 
     @Inject
     public AddCategoryPresenter(InsertCategory insertCategory){
-
-        super(insertCategory);
         this.insertCategory = insertCategory;
-
+        addUseCases(insertCategory);
     }
     public void showColors(){
 

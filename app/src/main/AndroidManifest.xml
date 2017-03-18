@@ -29,7 +29,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:name=".ui.dashboard.details.DashboardDetailsActivity"
+        <activity android:name=".ui.dashboard.sectors.DashboardSectorsActivity"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:name=".ui.dashboard.amounts.DashboardAmountsActivity"
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="stateHidden"/>
     </application>

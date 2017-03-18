@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.alavpa.spendify.ui.model.AmountBarPart;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +44,7 @@ public abstract class AmountView extends View {
     }
 
     private void init(){
+        parts = new ArrayList<>();
         paint.setStyle(Paint.Style.FILL);
     }
 
