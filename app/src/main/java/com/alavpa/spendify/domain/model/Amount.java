@@ -154,7 +154,7 @@ public class Amount implements Parcelable {
         setIncome(amountDb.isIncome());
         setDescription(amountDb.getDescription());
         setAmount(amountDb.getAmount());
-        Period period = new Period(amountDb.getDate(),amountDb.getTimes(),amountDb.getPeriod());
+        Period period = new Period(amountDb.getDate(),amountDb.getPeriod(), amountDb.getTimes());
         setPeriod(period);
         if(amountDb.getCategoryDb()!=null) {
             Category category = new Category().fromCategoryDb(amountDb.getCategoryDb());

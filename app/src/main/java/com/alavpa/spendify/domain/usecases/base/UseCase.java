@@ -28,6 +28,11 @@ public abstract class UseCase<T> {
         addDisposable(disposable);
     }
 
+    public void execute(){
+        Disposable disposable = build().subscribe();
+        addDisposable(disposable);
+    }
+
     protected void addDisposable(Disposable disposable){
         disposables.add(disposable);
     }

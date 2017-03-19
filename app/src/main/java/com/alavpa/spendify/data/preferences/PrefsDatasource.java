@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.alavpa.spendify.domain.model.Period;
+
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -20,6 +22,8 @@ public class PrefsDatasource {
     private static final String KEY_OFFLIMIT = "KEY_OFFLIMIT";
     private static final String KEY_PROMISES = "KEY_PROMISES";
     private static final String KEY_PROMISES_PERIOD = "KEY_PROMISES_PERIOD";
+    private static final String KEY_PROMISES_PERIOD_TIMES = "KEY_PROMISES_PERIOD_TIMES";
+    private static final String KEY_PROMISES_PERIOD_DATE = "KEY_PROMISES_PERIOD_DATE";
     private SharedPreferences sharedPreferences;
 
     @Inject
@@ -92,15 +96,21 @@ public class PrefsDatasource {
         set(KEY_PROMISES,value);
     }
 
-    public long getNotifyPromisesPeriod(){
-        long period = 3*24*60*60*1000;
-        period = sharedPreferences.getLong(KEY_PROMISES_PERIOD,period);
+    public Period getNotifyPromisesPeriod(){
 
-        return period;
+        Calendar calendar = Calendar.getInstance();
+        long date = sharedPreferences.getLong(KEY_PROMISES_PERIOD_DATE,calendar.getTimeInMillis());
+        int period = sharedPreferences.getInt(KEY_PROMISES_PERIOD,Period.PER_DAY);
+        int times = sharedPreferences.getInt(KEY_PROMISES_PERIOD_TIMES,1);
+
+        return new Period(date,period,times);
     }
 
-    public void setNotifyPromisesPeriod(long period){
-        set(KEY_PROMISES_PERIOD,period);
+    public void setNotifyPromisesPeriod(Period period){
+
+        set(KEY_PROMISES_PERIOD_DATE,period.getDate());
+        set(KEY_PROMISES_PERIOD,period.getPeriod());
+        set(KEY_PROMISES_PERIOD_TIMES,period.getTimes());
     }
 
     private void set(String key, boolean value){

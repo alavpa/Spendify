@@ -1,5 +1,6 @@
 package com.alavpa.spendify.ui.base;
 
+import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.di.PerActivity;
@@ -17,6 +18,9 @@ import javax.inject.Inject;
 
 @PerActivity
 public class BasePresenter<T extends BaseView> {
+
+    @Inject
+    protected AlarmManager alarmManager;
 
     @Inject
     protected PrefsDatasource preferences;

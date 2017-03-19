@@ -24,7 +24,6 @@ public class Period implements Parcelable {
     public static final int PER_MONTH = 2;
     public static final int PER_YEAR = 3;
 
-    @PeriodMode
     private
     int period;
 
@@ -39,7 +38,7 @@ public class Period implements Parcelable {
         times = 0;
     }
 
-    public Period(long date, int times, int period){
+    public Period(long date, int period, int times){
         this.period = period;
         this.date = date;
         this.times = times;
@@ -49,7 +48,16 @@ public class Period implements Parcelable {
         return period;
     }
 
-    public void setPeriod(int period) {
+    public void setPeriod(@PeriodMode int period) {
+
+        if(period != this.period){
+            times = 1;
+
+            if(period==NO_PERIOD){
+                times = 0;
+            }
+        }
+
         this.period = period;
     }
 

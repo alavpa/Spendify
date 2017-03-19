@@ -1,15 +1,21 @@
 package com.alavpa.spendify.ui.init.reminder;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.Spinner;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.ui.base.BaseActivity;
+import com.alavpa.spendify.ui.custom.widgets.period.PeriodWidget;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -34,14 +40,13 @@ public class RemiderActivity extends BaseActivity implements ReminderView{
     @BindView(R.id.tv_endday)
     TextView tvEndDay;
 
-    @BindView(R.id.sp_times)
-    Spinner spTimes;
-
-    @BindView(R.id.sp_period)
-    Spinner spPeriod;
+    @BindView(R.id.w_period)
+    PeriodWidget wPeriod;
 
     @BindView(R.id.btn_apply)
     TextView btnApply;
+
+    TimePickerDialog timePickerDialog;
 
     @Inject
     ReminderPresenter presenter;
@@ -51,12 +56,51 @@ public class RemiderActivity extends BaseActivity implements ReminderView{
         setContentView(R.layout.activity_reminder);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
+
         setPresenter(presenter);
+
+        tvEndDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.showTimePickerDialog(tvEndDay.getText().toString());
+            }
+        });
 
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.onApply();
+
+                String time = null;
+                Period period = null;
+
+                if(chkEndDay.isChecked()){
+                    time = tvEndDay.getText().toString();
+                }
+
+                if(chkPromises.isChecked()){
+                    period = wPeriod.getPeriod();
+                }
+
+                presenter.onApply(chkEndDay.isChecked(),
+                        chkEndMonth.isChecked(),
+                        chkOfflimit.isChecked(),
+                        chkPromises.isChecked(),
+                        time,
+                        period);
+            }
+        });
+
+        chkEndDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                tvEndDay.setVisibility((isChecked)?View.VISIBLE:View.GONE);
+            }
+        });
+
+        chkPromises.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                wPeriod.setVisibility((isChecked)?View.VISIBLE:View.GONE);
             }
         });
     }
@@ -65,6 +109,18 @@ public class RemiderActivity extends BaseActivity implements ReminderView{
     protected void onResume() {
         super.onResume();
         presenter.initViews();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(timePickerDialog!=null){
+            if(timePickerDialog.isShowing()){
+                timePickerDialog.dismiss();
+            }
+            timePickerDialog = null;
+        }
     }
 
     @Override
@@ -89,6 +145,40 @@ public class RemiderActivity extends BaseActivity implements ReminderView{
 
     @Override
     public void showEndOfDayTime(String time) {
+        tvEndDay.setText(time);
+    }
 
+
+
+    @Override
+    public void showPromisesPeriod(Period period){
+        wPeriod.setPeriod(period);
+    }
+
+    @Override
+    public void showTimePickerDialog(Calendar calendar) {
+
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+
+        if(timePickerDialog == null){
+            timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int hour, int min) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR_OF_DAY, hour);
+                    calendar.set(Calendar.MINUTE,min);
+                    calendar.set(Calendar.SECOND,0);
+
+                    presenter.setEndDayTime(calendar);
+                }
+            },hour,min,true);
+
+        }else {
+
+            timePickerDialog.updateTime(hour, min);
+        }
+
+        timePickerDialog.show();
     }
 }

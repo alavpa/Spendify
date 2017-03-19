@@ -30,6 +30,18 @@ public class MenuPresenter extends BasePresenter<MenuView> {
             navigator.openDashboard();
         }
 
+        if(position == 2){
+            navigator.openStartCategories();
+        }
+
+        if(position == 3){
+            navigator.openSelectDay();
+        }
+
+        if(position == 5){
+            navigator.openReminder();
+        }
+
         getView().hideMenu();
     }
 }

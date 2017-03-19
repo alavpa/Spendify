@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.alavpa.spendify">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
     <application
         android:name=".Application"
         android:allowBackup="true"
@@ -54,6 +56,13 @@
         <activity android:name=".ui.dashboard.amounts.DashboardAmountsActivity"
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="stateHidden"/>
+
+        <receiver android:name=".ui.receiver.AlarmReceiver">
+            <intent-filter>
+                <action android:name="com.alavpa.spendify.data.alarm.ACTION_ALARM_ENDDAY"/>
+                <action android:name="com.alavpa.spendify.data.alarm.ACTION_ALARM_ENDMONTH"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

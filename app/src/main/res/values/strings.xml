@@ -10,11 +10,12 @@
     <string name="to_income">Ingresar</string>
     <string name="send">Guardar</string>
     <string name="date_format">EEEE, dd \'de\' MMM \'de\' yyyy</string>
+    <string name="datetime_format">EEEE, dd \'de\' MMM \'de\' yyyy \'a las\' HH:mm</string>
     <string name="add">Agregar</string>
-    <string name="add_category">Agregar categoria</string>
+    <string name="add_category">Agregar categoría</string>
     <string name="total">Total</string>
     <string name="select_day_message">Selecciona que día de cada mes quieres empezar las cuentas:</string>
-    <string name="start_categories_message">Agrega algunas categorias en las que puedas clasificar tus ingresos y tus gastos:</string>
+    <string name="start_categories_message">Agrega algunas categorías en las que puedas clasificar tus ingresos y tus gastos:</string>
     <string name="logo">家計簿</string>
     <string name="next">Siguiente</string>
     <string name="finish">Finalizar</string>
@@ -25,9 +26,12 @@
 
     <string-array name="menu">
         <item>Dashboard</item>
-        <item>Promesas</item>
         <item>Meses</item>
-        <item>Configuración</item>
+        <item>Categorías</item>
+        <item>Inicio de mes</item>
+        <item>Promesas</item>
+        <item>Notificaciones</item>
+
     </string-array>
     <string-array name="periods">
         <item>día/s</item>
