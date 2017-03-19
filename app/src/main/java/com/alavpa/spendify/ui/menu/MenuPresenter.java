@@ -30,6 +30,10 @@ public class MenuPresenter extends BasePresenter<MenuView> {
             navigator.openDashboard();
         }
 
+        if(position == 0){
+            navigator.openMonths();
+        }
+
         if(position == 2){
             navigator.openStartCategories();
         }

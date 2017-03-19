@@ -17,6 +17,7 @@ import com.alavpa.spendify.ui.init.reminder.NotificationsActivity;
 import com.alavpa.spendify.ui.init.reminder.RemiderActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 import com.alavpa.spendify.ui.menu.MenuFragment;
+import com.alavpa.spendify.ui.months.MonthsActivity;
 
 import dagger.Component;
 
@@ -42,4 +43,6 @@ public interface ActivityComponent {
     void inject(SelectDayMonthActivity selectDayMonthActivity);
 
     void inject(NotificationsActivity notificationsActivity);
+
+    void inject(MonthsActivity monthsActivity);
 }

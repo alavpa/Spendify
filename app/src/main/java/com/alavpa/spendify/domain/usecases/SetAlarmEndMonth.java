@@ -4,7 +4,6 @@ import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
 
-import java.util.Calendar;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -29,15 +28,7 @@ public class SetAlarmEndMonth extends UseCase<Object>{
             @Override
             public Object call() throws Exception {
 
-                Calendar alarm = Calendar.getInstance();
-                alarm.set(Calendar.DATE,preferences.getMonthDay());
-                alarm.set(Calendar.DATE,-1);
-
-                if(alarm.getTimeInMillis()<Calendar.getInstance().getTimeInMillis()){
-                    alarm.add(Calendar.MONTH,1);
-                }
-
-                alarmManager.setAlarmEndMonth(alarm);
+                alarmManager.setAlarmEndMonth(preferences.getMonthDay());
                 return new Object();
             }
         });

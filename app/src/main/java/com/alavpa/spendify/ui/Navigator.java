@@ -18,6 +18,7 @@ import com.alavpa.spendify.ui.init.day.SelectDayActivity;
 import com.alavpa.spendify.ui.init.day.SelectDayMonthActivity;
 import com.alavpa.spendify.ui.init.reminder.RemiderActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
+import com.alavpa.spendify.ui.months.MonthsActivity;
 
 import javax.inject.Inject;
 
@@ -102,6 +103,10 @@ public class Navigator {
         activity.startActivity(intent);
     }
 
+    public void openMonths(){
+        Intent intent = getIntent(MonthsActivity.class);
+        activity.startActivity(intent);
+    }
 
     public void openReminder(){
         Intent intent = getIntent(RemiderActivity.class);

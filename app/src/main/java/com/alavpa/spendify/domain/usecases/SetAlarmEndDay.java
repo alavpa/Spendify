@@ -31,17 +31,7 @@ public class SetAlarmEndDay extends UseCase<Object>{
             @Override
             public Object call() throws Exception {
 
-                Calendar alarm = Calendar.getInstance();
-
-                alarm.set(Calendar.HOUR_OF_DAY,time.get(Calendar.HOUR_OF_DAY));
-                alarm.set(Calendar.MINUTE,time.get(Calendar.MINUTE));
-                alarm.set(Calendar.SECOND,0);
-
-                if(alarm.getTimeInMillis()<Calendar.getInstance().getTimeInMillis()){
-                    alarm.add(Calendar.DATE,1);
-                }
-
-                alarmManager.setAlarmEndDay(alarm);
+                alarmManager.setAlarmEndDay(time);
                 return new Object();
             }
         });

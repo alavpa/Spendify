@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
-import com.alavpa.spendify.domain.usecases.SetAlarmEndDay;
-import com.alavpa.spendify.domain.usecases.SetAlarmEndMonth;
+import com.alavpa.spendify.data.preferences.PrefsDatasource;
 
 import java.util.Calendar;
 
@@ -16,10 +15,10 @@ import javax.inject.Singleton;
 @Singleton
 public class AlarmReceiver extends WakefulBroadcastReceiver{
     @Inject
-    SetAlarmEndDay setAlarmEndDay;
+    PrefsDatasource preferences;
 
     @Inject
-    SetAlarmEndMonth setAlarmEndMonth;
+    AlarmManager alarmManager;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -35,7 +34,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver{
     }
 
     private void rescheduleAlarmEndMonth() {
-        setAlarmEndMonth.execute();
+
+        alarmManager.setAlarmEndMonth(preferences.getMonthDay());
     }
 
     public void rescheduleAlarmEndDay(long time){
@@ -43,7 +43,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver{
         calendar.setTimeInMillis(time);
         calendar.add(Calendar.DATE,1);
 
-        setAlarmEndDay.setTime(calendar);
-        setAlarmEndDay.execute();
+        alarmManager.setAlarmEndDay(calendar);
     }
 }

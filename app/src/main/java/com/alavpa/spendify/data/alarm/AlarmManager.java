@@ -29,6 +29,16 @@ public class AlarmManager {
 
     public void setAlarmEndDay(Calendar time){
 
+        Calendar alarm = Calendar.getInstance();
+
+        alarm.set(Calendar.HOUR_OF_DAY,time.get(Calendar.HOUR_OF_DAY));
+        alarm.set(Calendar.MINUTE,time.get(Calendar.MINUTE));
+        alarm.set(Calendar.SECOND,0);
+
+        if(alarm.getTimeInMillis()<Calendar.getInstance().getTimeInMillis()){
+            alarm.add(Calendar.DATE,1);
+        }
+
         Intent intent = new Intent(ACTION_ALARM_ENDDAY);
         intent.putExtra(EXTRA_ALARM_DATA,time.getTimeInMillis());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ALARM_ENDDAY,intent,PendingIntent.FLAG_ONE_SHOT);
@@ -36,14 +46,22 @@ public class AlarmManager {
         alarmManager.set(android.app.AlarmManager.RTC,time.getTimeInMillis(),pendingIntent);
     }
 
-    public void setAlarmEndMonth(Calendar time){
+    public void setAlarmEndMonth(int day){
+
+        Calendar alarm = Calendar.getInstance();
+        alarm.set(Calendar.DATE,day);
+        alarm.set(Calendar.DATE,-1);
+
+        if(alarm.getTimeInMillis()<Calendar.getInstance().getTimeInMillis()){
+            alarm.add(Calendar.MONTH,1);
+        }
 
         Intent intent = new Intent(ACTION_ALARM_ENDMONTH);
 
-        intent.putExtra(EXTRA_ALARM_DATA,time.getTimeInMillis());
+        intent.putExtra(EXTRA_ALARM_DATA,alarm.getTimeInMillis());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ALARM_ENDMONTH,intent,PendingIntent.FLAG_ONE_SHOT);
 
-        alarmManager.set(android.app.AlarmManager.RTC,time.getTimeInMillis(),pendingIntent);
+        alarmManager.set(android.app.AlarmManager.RTC,alarm.getTimeInMillis(),pendingIntent);
     }
 
     public void cancelAlarmEndDay() {
