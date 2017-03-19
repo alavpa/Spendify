@@ -125,4 +125,9 @@ public class Category implements Parcelable {
 
         return categoryDb;
     }
+
+    public Category update(Datasource datasource) {
+        CategoryDb categoryDb = datasource.updateCategory(toCategoryDb());
+        return fromCategoryDb(categoryDb);
+    }
 }

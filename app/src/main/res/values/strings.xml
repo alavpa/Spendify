@@ -14,8 +14,14 @@
     <string name="add_category">Agregar categoria</string>
     <string name="total">Total</string>
     <string name="select_day_message">Selecciona que día de cada mes quieres empezar las cuentas:</string>
+    <string name="start_categories_message">Agrega algunas categorias en las que puedas clasificar tus ingresos y tus gastos:</string>
     <string name="logo">家計簿</string>
     <string name="next">Siguiente</string>
+    <string name="finish">Finalizar</string>
+    <string name="notify_end_day">Avisame al final del día para repasar mis cuentas.</string>
+    <string name="notify_offlimit">Activar las notificaciones cuando excedo del límite en algún gasto.</string>
+    <string name="notify_end_month">Avísame al terminar el mes.</string>
+    <string name="notify_promises">Recuérdame mis promesas.</string>
 
     <string-array name="menu">
         <item>Dashboard</item>

@@ -63,6 +63,17 @@ public class RepositoryData implements Repository {
     }
 
     @Override
+    public Single<Category> updateCategory(Category category) {
+        return Single.just(category)
+                .map(new Function<Category, Category>() {
+                    @Override
+                    public Category apply(Category category) throws Exception {
+                        return category.update(datasource);
+                    }
+                });
+    }
+
+    @Override
     public Single<Amount> insertAmount(Amount amount) {
         return Single.just(amount)
                 .map(new Function<Amount, Amount>() {

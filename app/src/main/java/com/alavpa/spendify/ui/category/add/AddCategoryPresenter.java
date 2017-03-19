@@ -2,7 +2,7 @@ package com.alavpa.spendify.ui.category.add;
 
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Category;
-import com.alavpa.spendify.domain.usecases.InsertCategory;
+import com.alavpa.spendify.domain.usecases.InsertOrUpdateCategory;
 import com.alavpa.spendify.ui.base.BasePresenter;
 
 import javax.inject.Inject;
@@ -16,29 +16,41 @@ import io.reactivex.observers.DisposableSingleObserver;
 @PerActivity
 public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
 
-    InsertCategory insertCategory;
+    InsertOrUpdateCategory insertOrUpdateCategory;
+    private Category category;
 
     @Inject
-    public AddCategoryPresenter(InsertCategory insertCategory){
-        this.insertCategory = insertCategory;
-        addUseCases(insertCategory);
+    public AddCategoryPresenter(InsertOrUpdateCategory insertOrUpdateCategory){
+        this.insertOrUpdateCategory = insertOrUpdateCategory;
+        addUseCases(insertOrUpdateCategory);
     }
     public void showColors(){
 
         int[] colors = resources.getCategoryBackgroundsArray();
 
-        getView().populateColors(colors);
+        getView().populateColors(colors, category.getColor());
     }
 
-    public void send() {
-        String name = getView().name();
-        boolean income = getView().income();
-        int color = getView().color();
+    public void showIncome(){
+        getView().showIncome(category.isIncome());
+    }
 
-        Category category = new Category(name,income,color);
+    public void showName(){
+        getView().showName(category.getName());
+    }
 
-        insertCategory.setCategory(category);
-        insertCategory.execute(new DisposableSingleObserver<Category>() {
+    public void showSelected(){
+        getView().setSelected(category.getColor());
+    }
+
+    public void send(String name, boolean income, int color) {
+
+        category.setName(name);
+        category.setIncome(income);
+        category.setColor(color);
+
+        insertOrUpdateCategory.setCategory(category);
+        insertOrUpdateCategory.execute(new DisposableSingleObserver<Category>() {
             @Override
             public void onSuccess(Category category) {
                 getView().onSendSuccess();
@@ -50,5 +62,9 @@ public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
             }
         });
 
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

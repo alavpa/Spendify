@@ -33,6 +33,6 @@ public abstract class UseCase<T> {
     }
 
     public void dispose(){
-        disposables.dispose();
+        disposables.clear();
     }
 }

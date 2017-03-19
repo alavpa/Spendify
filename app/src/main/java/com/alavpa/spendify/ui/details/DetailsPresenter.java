@@ -7,7 +7,7 @@ import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.domain.usecases.GetCategories;
 import com.alavpa.spendify.domain.usecases.InsertAmount;
-import com.alavpa.spendify.domain.usecases.InsertCategory;
+import com.alavpa.spendify.domain.usecases.InsertOrUpdateCategory;
 import com.alavpa.spendify.ui.base.BasePresenter;
 
 import java.text.DecimalFormat;
@@ -42,20 +42,20 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     InsertAmount insertAmount;
 
     private
-    InsertCategory insertCategory;
+    InsertOrUpdateCategory insertOrUpdateCategory;
 
     @Inject
     public DetailsPresenter(GetCategories getCategories,
                             InsertAmount insertAmount,
-                            InsertCategory insertCategory){
+                            InsertOrUpdateCategory insertOrUpdateCategory){
 
         this.amount = new Amount();
 
         this.getCategories = getCategories;
         this.insertAmount = insertAmount;
-        this.insertCategory = insertCategory;
+        this.insertOrUpdateCategory = insertOrUpdateCategory;
 
-        addUseCases(getCategories, insertAmount, insertCategory);
+        addUseCases(getCategories, insertAmount, insertOrUpdateCategory);
     }
 
     public void initView(){
@@ -168,6 +168,9 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     }
 
     public void goToAddCategory() {
-        navigator.openAddCategory(amount.isIncome());
+
+        Category category = new Category();
+        category.setIncome(amount.isIncome());
+        navigator.openAddCategory(category);
     }
 }

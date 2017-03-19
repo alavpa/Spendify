@@ -15,6 +15,7 @@ public interface Datasource {
     List<CategoryDb> getCategories(boolean income);
 
     CategoryDb insertCategory(CategoryDb categoryDb);
+    CategoryDb updateCategory(CategoryDb categoryDb);
 
     AmountDb insertAmount(AmountDb amountDb);
 

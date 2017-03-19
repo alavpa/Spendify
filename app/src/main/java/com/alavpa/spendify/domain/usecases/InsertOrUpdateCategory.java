@@ -12,13 +12,13 @@ import io.reactivex.Single;
  * Created by alavpa on 19/02/17.
  */
 
-public class InsertCategory extends UseCase<Category>{
+public class InsertOrUpdateCategory extends UseCase<Category>{
 
     Repository repository;
     private Category category;
 
     @Inject
-    public InsertCategory(Repository repository){
+    public InsertOrUpdateCategory(Repository repository){
         this.repository = repository;
     }
 
@@ -28,6 +28,10 @@ public class InsertCategory extends UseCase<Category>{
 
     @Override
     public Single<Category> build() {
-        return repository.insertCategory(category);
+        if(category.getId()<=0) {
+            return repository.insertCategory(category);
+        }else{
+            return repository.updateCategory(category);
+        }
     }
 }

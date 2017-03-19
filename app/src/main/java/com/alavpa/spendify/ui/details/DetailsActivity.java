@@ -40,7 +40,7 @@ import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
  * Created by alavpa on 14/02/17.
  */
 
-public class DetailsActivity extends BaseNoMenuActivity implements DetailsView{
+public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
 
     @Inject
     DetailsPresenter presenter;
@@ -105,7 +105,7 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView{
         presenter.initView();
     }
 
-    public void initView(){
+    public void initView() {
 
         days = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
@@ -130,7 +130,7 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView{
         spPeriod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
+                switch (position) {
                     case Period.PER_DAY:
                         spTimes.setAdapter(days);
                         break;
@@ -161,9 +161,9 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView{
         chkRepeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     llRepeat.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     llRepeat.setVisibility(View.GONE);
                 }
             }
@@ -173,20 +173,26 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView{
 
     @Override
     public void populateCategories(List<Category> categories, int[] backgrouns) {
-        if(categoryAdapter==null) {
+        if (categoryAdapter == null) {
             categoryAdapter = new CategoryAdapter(this,
                     categories,
                     backgrouns,
-                    new CategoryAdapter.OnAddCategoryClick() {
-                @Override
-                public void onAddClick() {
+                    true,
+                    new CategoryAdapter.OnCategoryClick() {
+                        @Override
+                        public void onClick(Category category) {
 
-                    presenter.goToAddCategory();
+                        }
 
-                }
-            });
+                        @Override
+                        public void onAddClick() {
+
+                            presenter.goToAddCategory();
+
+                        }
+                    });
             rvCategories.setAdapter(categoryAdapter);
-        }else{
+        } else {
             categoryAdapter.setCategories(categories);
             categoryAdapter.notifyDataSetChanged();
         }
@@ -255,7 +261,7 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView{
 
     @Override
     public void showDatePickerDialog(long date) {
-        if(datePickerDialog == null) {
+        if (datePickerDialog == null) {
             datePickerDialog = DatePickerDialog.getInstance(date, new DatePickerDialog.OnDatePickerSelected() {
                 @Override
                 public void onDateSet(long date) {
@@ -265,23 +271,23 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView{
             });
         }
 
-        datePickerDialog.show(getSupportFragmentManager(),"date_picker");
+        datePickerDialog.show(getSupportFragmentManager(), "date_picker");
     }
 
     @OnClick(R.id.btn_apply)
-    public void send(View view){
+    public void send(View view) {
         presenter.send();
     }
 
     @OnClick(R.id.tv_date)
-    public void selectDate(View view){
+    public void selectDate(View view) {
         presenter.showDatePickerDialog();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode== Navigator.REQUEST_CODE_ADD_CATEGORY &&
-                resultCode == RESULT_OK){
+        if (requestCode == Navigator.REQUEST_CODE_ADD_CATEGORY &&
+                resultCode == RESULT_OK) {
             presenter.showCategories();
         }
     }

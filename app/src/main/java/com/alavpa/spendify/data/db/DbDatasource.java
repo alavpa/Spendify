@@ -106,6 +106,26 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
+    public CategoryDb updateCategory(CategoryDb categoryDb) {
+        ContentValues contentValues = new CategoryDb.Builder()
+                .name(categoryDb.getName())
+                .income(categoryDb.isIncome())
+                .color(categoryDb.getColor())
+                .build();
+
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+
+        db.update(CategoryDb.TABLE_NAME,
+                contentValues,
+                CategoryDb.COL_ID + "=?",
+                new String[]{String.valueOf(categoryDb.getId())});
+
+        db.close();
+
+        return categoryDb;
+    }
+
+    @Override
     public synchronized double getSumBy(boolean income, long from, long to) {
 
         double total = 0;

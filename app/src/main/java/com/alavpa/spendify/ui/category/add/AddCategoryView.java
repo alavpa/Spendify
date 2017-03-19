@@ -8,13 +8,13 @@ import com.alavpa.spendify.ui.base.BaseView;
 
 public interface AddCategoryView extends BaseView {
 
-    void populateColors(int[] colors);
-
-    String name();
-
-    boolean income();
-
-    int color();
-
+    void populateColors(int[] colors, int selected);
+    
     void onSendSuccess();
+
+    void showIncome(boolean income);
+
+    void showName(String name);
+
+    void setSelected(int color);
 }

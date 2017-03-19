@@ -19,6 +19,8 @@ public interface Repository {
 
     Single<Category> insertCategory(Category category);
 
+    Single<Category> updateCategory(Category category);
+
     Single<Amount> insertAmount(Amount amount);
 
     Single<Double> getSumBy(boolean income, long from, long to);

@@ -7,6 +7,9 @@ import android.widget.Toast;
 
 import com.alavpa.spendify.Application;
 import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.activity.ActivityComponent;
+import com.alavpa.spendify.di.activity.ActivityModule;
+import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.di.application.ApplicationComponent;
 import com.alavpa.spendify.di.base.BaseModule;
 import com.alavpa.spendify.di.base.DaggerBaseComponent;
@@ -58,6 +61,14 @@ public class BaseActivity extends AppCompatActivity implements BaseView{
 
     protected void setPresenter(BasePresenter basePresenter){
         this.basePresenter = basePresenter;
+    }
+
+    protected ActivityComponent getActivityComponent(){
+        return DaggerActivityComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .baseModule(getBaseModule())
+                .activityModule(new ActivityModule())
+                .build();
     }
 
 }

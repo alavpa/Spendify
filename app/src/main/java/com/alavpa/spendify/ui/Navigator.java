@@ -5,13 +5,16 @@ import android.content.Intent;
 
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.ui.category.add.AddCategoryActivity;
 import com.alavpa.spendify.ui.dashboard.DashboardActivity;
 import com.alavpa.spendify.ui.dashboard.amounts.DashboardAmountsActivity;
 import com.alavpa.spendify.ui.dashboard.sectors.DashboardSectorsActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
+import com.alavpa.spendify.ui.init.categories.StartCategoriesActivity;
 import com.alavpa.spendify.ui.init.day.SelectDayActivity;
+import com.alavpa.spendify.ui.init.reminder.RemiderActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 
 import javax.inject.Inject;
@@ -22,6 +25,7 @@ import javax.inject.Inject;
 @PerActivity
 public class Navigator {
 
+    public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     private Activity activity;
 
     public static final String EXTRA_AMOUNT = "EXTRA_AMOUNT";
@@ -70,14 +74,24 @@ public class Navigator {
         activity.startActivity(intent);
     }
 
-    public void openAddCategory(boolean income) {
+    public void openAddCategory(Category category) {
         Intent intent = getIntent(AddCategoryActivity.class);
-        intent.putExtra(EXTRA_INCOME,income);
+        intent.putExtra(EXTRA_CATEGORY,category);
         activity.startActivityForResult(intent,REQUEST_CODE_ADD_CATEGORY);
     }
 
     public void openSelectDay() {
         Intent intent = getIntent(SelectDayActivity.class);
+        activity.startActivity(intent);
+    }
+
+    public void openStartCategories() {
+        Intent intent = getIntent(StartCategoriesActivity.class);
+        activity.startActivity(intent);
+    }
+
+    public void openReminder(){
+        Intent intent = getIntent(RemiderActivity.class);
         activity.startActivity(intent);
     }
 }

@@ -1,7 +1,6 @@
 package com.alavpa.spendify.ui.init.day;
 
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.base.BasePresenter;
 
 import javax.inject.Inject;
@@ -23,7 +22,6 @@ public class SelectDayPresenter extends BasePresenter<SelectDayView> {
         int day = Double.valueOf(value).intValue();
         preferences.setInitialized(true);
         preferences.setMonthDay(day);
-        navigator.openMain(new Amount());
-        getView().finish();
+        navigator.openStartCategories();
     }
 }

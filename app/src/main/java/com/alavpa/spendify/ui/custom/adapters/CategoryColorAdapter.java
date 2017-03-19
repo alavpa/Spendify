@@ -54,8 +54,12 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
 
     }
 
-    public void setSelected(Integer category) {
-        this.selected = category;
+    public void setSelected(int category) {
+        if(category>0) {
+            this.selected = category;
+        }else {
+            this.selected = null;
+        }
     }
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder{
@@ -84,7 +88,7 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
                 public void onClick(View v) {
 
                     if(getSelected()!=null && getAdapterPosition()==getSelected()){
-                        setSelected(null);
+                        setSelected(0);
                     }
                     else {
                         setSelected(getAdapterPosition());

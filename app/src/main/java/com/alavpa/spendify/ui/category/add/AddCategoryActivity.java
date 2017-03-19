@@ -9,6 +9,7 @@ import android.widget.EditText;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
+import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
@@ -55,38 +56,40 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
 
         rvColors.setLayoutManager(new GridLayoutManager(this));
 
-        boolean income = getIntent().getBooleanExtra(Navigator.EXTRA_INCOME,false);
-        chkIncome.setChecked(income);
+        Category category = getIntent().getParcelableExtra(Navigator.EXTRA_CATEGORY);
+        presenter.setCategory(category);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         presenter.showColors();
+        presenter.showIncome();
+        presenter.showName();
+        presenter.showSelected();
     }
 
     @Override
-    public void populateColors(int[] colors) {
+    public void populateColors(int[] colors, int selected) {
         if(adapter==null){
             adapter = new CategoryColorAdapter(this,colors);
+            adapter.setSelected(selected);
             rvColors.setAdapter(adapter);
         }else{
             adapter.setCategoryColors(colors);
+            adapter.setSelected(selected);
             adapter.notifyDataSetChanged();
         }
     }
 
-    @Override
     public String name() {
         return etTitle.getText().toString();
     }
 
-    @Override
     public boolean income() {
         return chkIncome.isChecked();
     }
 
-    @Override
     public int color() {
         return adapter.getSelected();
     }
@@ -97,8 +100,23 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
         finish();
     }
 
+    @Override
+    public void showIncome(boolean income) {
+        chkIncome.setChecked(income);
+    }
+
+    @Override
+    public void showName(String name) {
+        etTitle.setText(name);
+    }
+
+    @Override
+    public void setSelected(int color) {
+        adapter.setSelected(color);
+    }
+
     @OnClick(R.id.btn_ok)
     public void onSend(){
-        presenter.send();
+        presenter.send(name(),income(),color());
     }
 }

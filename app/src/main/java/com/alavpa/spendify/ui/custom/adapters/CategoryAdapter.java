@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.domain.model.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,44 +32,48 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
 
     LayoutInflater inflater;
     List<Category> categories;
-    OnAddCategoryClick onAddCategoryClick;
+    OnCategoryClick onCategoryClick;
     Category selected = null;
     int[] backgrounds;
     Drawable addDrawable;
+    boolean selectable;
 
     public CategoryAdapter(Context context,
                            List<Category> categories,
                            int[] backgrounds,
-                           OnAddCategoryClick onAddCategoryClick){
+                           boolean selectable,
+                           OnCategoryClick onCategoryClick) {
 
         inflater = LayoutInflater.from(context);
-        this.onAddCategoryClick = onAddCategoryClick;
+        this.onCategoryClick = onCategoryClick;
         this.backgrounds = backgrounds;
+        this.selectable = selectable;
         setCategories(categories);
-        addDrawable  = ContextCompat.getDrawable(context,R.drawable.ic_action_add);
-        int color = ContextCompat.getColor(context,R.color.colorAccent);
+        addDrawable = ContextCompat.getDrawable(context, R.drawable.ic_action_add);
+        int color = ContextCompat.getColor(context, R.color.colorAccent);
         addDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
 
     }
+
     @Override
     public BaseCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view;
-        if(viewType==VIEW_TYPE_ADD) {
+        if (viewType == VIEW_TYPE_ADD) {
             view = inflater.inflate(R.layout.layout_category_add, parent, false);
-            return new AddCategoryViewHolder(view,onAddCategoryClick);
+            return new AddCategoryViewHolder(view, onCategoryClick);
         }
 
         view = inflater.inflate(R.layout.layout_category, parent, false);
-        return new CategoryViewHolder(view);
+        return new CategoryViewHolder(view, onCategoryClick);
     }
 
     @Override
     public void onBindViewHolder(BaseCategoryViewHolder holder, int position) {
         Category category = categories.get(position);
-        if(holder.getItemViewType()==VIEW_TYPE_ADD) {
+        if (holder.getItemViewType() == VIEW_TYPE_ADD) {
             holder.bind(addDrawable);
-        }else{
+        } else {
             holder.bind(category);
 
         }
@@ -81,16 +86,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
 
     @Override
     public int getItemViewType(int position) {
-        return (position==categories.size()-1)?VIEW_TYPE_ADD:VIEW_TYPE_CATEGORY;
+        return (position == categories.size() - 1) ? VIEW_TYPE_ADD : VIEW_TYPE_CATEGORY;
     }
 
-    public Category getSelected(){
+    public Category getSelected() {
         return selected;
     }
 
-    public void setCategories(List<Category> categories){
+    public boolean isSelectable() {
+        return selectable;
+    }
 
-        this.categories = categories;
+    public void setCategories(List<Category> categories) {
+
+        this.categories = new ArrayList<>(categories);
         this.categories.add(null);
 
     }
@@ -99,37 +108,48 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
         this.selected = category;
     }
 
-    public abstract class BaseCategoryViewHolder extends RecyclerView.ViewHolder{
-        public BaseCategoryViewHolder(View itemView) {
+    public abstract class BaseCategoryViewHolder extends RecyclerView.ViewHolder {
+        OnCategoryClick onCategoryClick;
+
+        public BaseCategoryViewHolder(View itemView, OnCategoryClick onCategoryClick) {
             super(itemView);
+            this.onCategoryClick = onCategoryClick;
         }
-        public void bind(Category category){}
-        public void bind(Drawable drawable){}
+
+        public void bind(Category category) {
+        }
+
+        public void bind(Drawable drawable) {
+        }
     }
-    public class CategoryViewHolder extends BaseCategoryViewHolder{
+
+    public class CategoryViewHolder extends BaseCategoryViewHolder {
 
         @BindView(R.id.ll_bkg)
         LinearLayout llBkg;
         @BindView(R.id.tv_name)
         TextView tvName;
 
-        public CategoryViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this,itemView);
+        public CategoryViewHolder(View itemView, OnCategoryClick onCategoryClick) {
+            super(itemView, onCategoryClick);
+            ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Category category){
+        public void bind(Category category) {
 
             tvName.setText(category.getName());
             itemView.setBackgroundResource(backgrounds[category.getColor()]);
+
             if (getSelected() != null) {
                 boolean selected = category.getId() == getSelected().getId();
                 itemView.setSelected(selected);
-            }else{
+            } else {
                 itemView.setSelected(false);
             }
 
+
             onClick();
+
         }
 
         public void onClick() {
@@ -137,15 +157,22 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
                 @Override
                 public void onClick(View v) {
                     Category category = getCategory(getAdapterPosition());
+                    if(isSelectable()) {
 
-                    if(getSelected()!=null && category.getId()==getSelected().getId()){
-                        setSelected(null);
+                        if (getSelected() != null && category.getId() == getSelected().getId()) {
+                            setSelected(null);
+                        } else {
+                            setSelected(category);
+                        }
+                        notifyDataSetChanged();
                     }
-                    else {
-                        setSelected(category);
+
+                    if(onCategoryClick!=null) {
+                        onCategoryClick.onClick(category);
                     }
-                    notifyDataSetChanged();
                 }
+
+
             });
         }
     }
@@ -154,19 +181,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
         return categories.get(adapterPosition);
     }
 
-    public class AddCategoryViewHolder extends BaseCategoryViewHolder{
+    public class AddCategoryViewHolder extends BaseCategoryViewHolder {
 
         @BindView(R.id.iv_add)
         ImageView ivAdd;
-        OnAddCategoryClick onAddCategoryClick;
 
-        public AddCategoryViewHolder(View itemView, OnAddCategoryClick onAddCategoryClick) {
-            super(itemView);
-            ButterKnife.bind(this,itemView);
-            this.onAddCategoryClick = onAddCategoryClick;
+        public AddCategoryViewHolder(View itemView, OnCategoryClick onCategoryClick) {
+            super(itemView, onCategoryClick);
+            ButterKnife.bind(this, itemView);
+            this.onCategoryClick = onCategoryClick;
         }
 
-        public void bind(Drawable drawable){
+        public void bind(Drawable drawable) {
             ivAdd.setImageDrawable(drawable);
             onClick();
         }
@@ -175,13 +201,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onAddCategoryClick.onAddClick();
+                    onCategoryClick.onAddClick();
                 }
             });
         }
     }
 
-    public interface OnAddCategoryClick{
+    public interface OnCategoryClick {
+        void onClick(Category category);
+
         void onAddClick();
     }
 }
