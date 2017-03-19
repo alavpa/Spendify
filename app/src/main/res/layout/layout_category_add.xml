@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_bkg"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/padding"
-    android:layout_margin="@dimen/margin_grid">
+              android:id="@+id/ll_bkg"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/bkg_category_add"
+              android:padding="@dimen/padding"
+              android:layout_margin="@dimen/margin_grid">
 
     <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_action_add"/>
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:src="@drawable/ic_action_add"
+               android:id="@+id/iv_add"/>
 
 </LinearLayout>

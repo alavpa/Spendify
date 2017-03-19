@@ -19,8 +19,12 @@ import java.util.List;
 
 public abstract class AmountView extends View {
 
+    protected static final int SHADOW_COLOR = 0x99000000;
+    protected static final int SHADOW_DISTANCE = 1;
+
     List<AmountBarPart> parts;
     Paint paint = new Paint();
+    Paint shadow = new Paint();
 
     public AmountView(Context context) {
         super(context);
@@ -46,6 +50,14 @@ public abstract class AmountView extends View {
     private void init(){
         parts = new ArrayList<>();
         paint.setStyle(Paint.Style.FILL);
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        paint.setAntiAlias(true);
+
+
+        shadow.setStyle(Paint.Style.FILL);
+        shadow.setColor(SHADOW_COLOR);
+        shadow.setFlags(Paint.ANTI_ALIAS_FLAG);
+        shadow.setAntiAlias(true);
     }
 
     @Override
@@ -74,10 +86,6 @@ public abstract class AmountView extends View {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-    }
-
-    public List<AmountBarPart> getParts() {
-        return parts;
     }
 
     public void setParts(List<AmountBarPart> parts) {

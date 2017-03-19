@@ -7,14 +7,26 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:editTextColor">@color/colorAccent</item>
+        <item name="android:checkboxStyle">@style/CheckBoxStyle</item>
+
     </style>
 
     <style name="ToolBarStyle" parent="AppTheme">
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
         <item name="actionMenuTextColor">@color/white</item>
+    </style>
+
+    <style name="CheckBoxStyle" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="LinkStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/link_textcolor</item>
+        <item name="android:background">@drawable/link_background</item>
     </style>
 
 </resources>

@@ -9,7 +9,7 @@ public interface DashboardAmountsView extends BaseView {
 
     void populateDetails(List<Amount> amounts);
 
-    void showCategoryColor(int color);
+    void showCategoryColor(int colorResId);
 
     void showCategoryName(String name);
 

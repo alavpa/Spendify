@@ -6,12 +6,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.HasComponent;
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
-import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
+import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.widgets.AmountBar;
 import com.alavpa.spendify.ui.model.AmountBarPart;
 
@@ -29,7 +27,7 @@ import butterknife.ButterKnife;
  */
 
 @PerActivity
-public class DashboardActivity extends BaseToolbarActivity implements DashboardView, HasComponent<ActivityComponent> {
+public class DashboardActivity extends BaseNoMenuActivity implements DashboardView {
 
     @Inject
     DashboardPresenter presenter;
@@ -55,9 +53,6 @@ public class DashboardActivity extends BaseToolbarActivity implements DashboardV
     @BindView(R.id.tv_total)
     TextView tvTotal;
 
-    public
-    ActivityComponent component;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,16 +60,22 @@ public class DashboardActivity extends BaseToolbarActivity implements DashboardV
 
         ButterKnife.bind(this);
 
-        component = DaggerActivityComponent.builder()
+        DaggerActivityComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .baseModule(getBaseModule())
                 .activityModule(new ActivityModule())
-                .build();
+                .build()
+                .inject(this);
 
-        component.inject(this);
-        presenter.attachView(this);
+        setPresenter(presenter);
 
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         presenter.initView();
     }
 
@@ -120,11 +121,6 @@ public class DashboardActivity extends BaseToolbarActivity implements DashboardV
     @Override
     public void showTotal(String total) {
         tvTotal.setText(total);
-    }
-
-    @Override
-    public ActivityComponent getComponent() {
-        return component;
     }
 
 }

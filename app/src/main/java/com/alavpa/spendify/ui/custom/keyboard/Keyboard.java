@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alavpa.spendify.R;
@@ -37,6 +38,11 @@ public class Keyboard extends FrameLayout {
     DecimalFormat decimalFormat = new DecimalFormat();
     private OnPressKey onPressKey;
     private int decimals;
+    private int integers;
+    private int max = Integer.MAX_VALUE;
+    private int min = Integer.MIN_VALUE;
+
+    TextView textView;
 
     public Keyboard(Context context) {
         super(context);
@@ -69,17 +75,30 @@ public class Keyboard extends FrameLayout {
                 attrs,
                 R.styleable.Keyboard);
 
-        int decimals;
+        int decimals, integers;
         try {
-            decimals = a.getInteger(R.styleable.Keyboard_decimals,0);
+            decimals = a.getInteger(R.styleable.Keyboard_decimals,-1);
+            integers = a.getInteger(R.styleable.Keyboard_integers,-1);
+            max = a.getInteger(R.styleable.Keyboard_max,Integer.MAX_VALUE);
+            min = a.getInteger(R.styleable.Keyboard_min,Integer.MIN_VALUE);
+
         } finally {
             a.recycle();
         }
 
-        decimalFormat.setMaximumFractionDigits(decimals);
-        decimalFormat.setMinimumFractionDigits(decimals);
+        if(integers>=0){
+            decimalFormat.setMaximumIntegerDigits(integers);
+            decimalFormat.setMinimumIntegerDigits(integers);
+            setIntegers(integers);
+        }
 
-        setDecimals(decimals);
+        if(decimals>=0) {
+            decimalFormat.setMaximumFractionDigits(decimals);
+            decimalFormat.setMinimumFractionDigits(decimals);
+            setDecimals(decimals);
+        }
+
+
 
         writingIntegerPart = true;
 
@@ -104,6 +123,7 @@ public class Keyboard extends FrameLayout {
 
     public void setValue(double value) {
         this.value = value;
+        textView.setText(getFormattedValue());
     }
 
     public int getDecimals() {
@@ -113,6 +133,11 @@ public class Keyboard extends FrameLayout {
     public void setDecimals(int decimals) {
         this.decimals = decimals;
     }
+
+    public void setIntegers(int integers) {
+        this.integers = integers;
+    }
+
 
     @OnClick({R.id.key_one,
             R.id.key_two,
@@ -153,6 +178,11 @@ public class Keyboard extends FrameLayout {
     @OnClick(R.id.key_action)
     public void onActionClick(View v) {
 
+        remove();
+
+    }
+
+    private void remove(){
         if(!writingIntegerPart){
             if(decimalPart.isEmpty()){
                 writingIntegerPart = true;
@@ -174,7 +204,11 @@ public class Keyboard extends FrameLayout {
     private void setInternalValue(){
         String internalValue;
         if(integerPart.isEmpty()){
-            internalValue = "0";
+            if(min>Integer.MIN_VALUE){
+                internalValue = decimalFormat.format(min);
+            }else {
+                internalValue = decimalFormat.format(0);
+            }
         }else {
             internalValue = integerPart;
         }
@@ -187,11 +221,23 @@ public class Keyboard extends FrameLayout {
         setValue(internalValue);
     }
 
-    public void setOnPressKey(OnPressKey onPressKey){
-        this.onPressKey = onPressKey;
-    }
-
     public interface OnPressKey{
         void onPress(double value);
     }
+
+    public void setTextView(TextView tv){
+        this.textView = tv;
+        onPressKey = new OnPressKey() {
+            @Override
+            public void onPress(double value) {
+                if(value>max || value<min) {
+                    remove();
+                }else{
+                    textView.setText(getFormattedValue());
+                }
+            }
+        };
+    }
+
+
 }

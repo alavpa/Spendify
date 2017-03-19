@@ -8,6 +8,8 @@ import com.alavpa.spendify.ui.dashboard.DashboardActivity;
 import com.alavpa.spendify.ui.dashboard.amounts.DashboardAmountsActivity;
 import com.alavpa.spendify.ui.dashboard.sectors.DashboardSectorsActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
+import com.alavpa.spendify.ui.init.StartActivity;
+import com.alavpa.spendify.ui.init.day.SelectDayActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 import com.alavpa.spendify.ui.menu.MenuFragment;
 
@@ -27,4 +29,6 @@ public interface ActivityComponent {
     void inject(AddCategoryActivity addCategoryActivity);
     void inject(DashboardSectorsActivity dashboardSectorsActivity);
     void inject(DashboardAmountsActivity dashboardAmountsActivity);
+    void inject(SelectDayActivity selectDayActivity);
+    void inject(StartActivity startActivity);
 }

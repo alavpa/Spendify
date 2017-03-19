@@ -7,12 +7,11 @@ import android.widget.TextView;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.ui.Navigator;
-import com.alavpa.spendify.ui.base.BaseActivity;
+import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.LinearLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.SectorAdapter;
 import com.alavpa.spendify.ui.custom.widgets.AmountCircle;
@@ -32,7 +31,7 @@ import butterknife.ButterKnife;
  */
 
 @PerActivity
-public class DashboardSectorsActivity extends BaseActivity implements DashboardSectorsView {
+public class DashboardSectorsActivity extends BaseNoMenuActivity implements DashboardSectorsView {
 
     @Inject
     DashboardSectorsPresenter presenter;
@@ -57,9 +56,6 @@ public class DashboardSectorsActivity extends BaseActivity implements DashboardS
 
     SectorAdapter detailsAdapter;
 
-    public
-    ActivityComponent component;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,14 +63,15 @@ public class DashboardSectorsActivity extends BaseActivity implements DashboardS
 
         ButterKnife.bind(this);
 
-        component = DaggerActivityComponent.builder()
+        DaggerActivityComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .baseModule(getBaseModule())
                 .activityModule(new ActivityModule())
-                .build();
+                .build()
+                .inject(this);
 
-        component.inject(this);
-        presenter.attachView(this);
+
+        setPresenter(presenter);
 
         initView();
         boolean income = getIntent().getBooleanExtra(Navigator.EXTRA_INCOME,false);
@@ -82,6 +79,12 @@ public class DashboardSectorsActivity extends BaseActivity implements DashboardS
 
         String amount = getIntent().getStringExtra(Navigator.EXTRA_AMOUNT);
         presenter.setAmount(amount);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         presenter.initView();
     }
 

@@ -1,5 +1,6 @@
 package com.alavpa.spendify.di.application;
 
+import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.domain.Repository;
 
@@ -19,5 +20,6 @@ public interface ApplicationComponent {
 
     Repository repository();
     ResDatasource resDatasource();
+    PrefsDatasource prefsDatasource();
     SimpleDateFormat simpleDateFormat();
 }

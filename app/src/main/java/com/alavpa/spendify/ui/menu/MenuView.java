@@ -8,9 +8,6 @@ import com.alavpa.spendify.ui.base.BaseView;
 
 public interface MenuView extends BaseView{
 
-    void goToDashboard();
-
-    void goToMain();
-
     void populateMenu(String[] menu);
+    void hideMenu();
 }

@@ -1,5 +1,6 @@
 package com.alavpa.spendify.ui.base;
 
+import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
@@ -16,6 +17,9 @@ import javax.inject.Inject;
 
 @PerActivity
 public class BasePresenter<T extends BaseView> {
+
+    @Inject
+    protected PrefsDatasource preferences;
 
     @Inject
     protected ResDatasource resources;
@@ -44,6 +48,7 @@ public class BasePresenter<T extends BaseView> {
 
     public void detachView(){
         view = null;
+        dispose();
     }
 
     public void addUseCases(UseCase... useCases){
@@ -58,6 +63,5 @@ public class BasePresenter<T extends BaseView> {
         for(UseCase useCase : useCases){
             useCase.dispose();
         }
-        detachView();
     }
 }

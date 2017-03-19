@@ -15,18 +15,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.HasComponent;
-import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.ui.Navigator;
-import com.alavpa.spendify.ui.base.toolbar.BaseToolbarActivity;
+import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryAdapter;
-import com.alavpa.spendify.ui.custom.dialogs.AddCategoryDialog;
 import com.alavpa.spendify.ui.custom.dialogs.DatePickerDialog;
 
 import java.util.List;
@@ -43,7 +40,7 @@ import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
  * Created by alavpa on 14/02/17.
  */
 
-public class DetailsActivity extends BaseToolbarActivity implements DetailsView,HasComponent<ActivityComponent>{
+public class DetailsActivity extends BaseNoMenuActivity implements DetailsView{
 
     @Inject
     DetailsPresenter presenter;
@@ -81,39 +78,34 @@ public class DetailsActivity extends BaseToolbarActivity implements DetailsView,
 
     DatePickerDialog datePickerDialog;
 
-    AddCategoryDialog addCategoryDialog;
-
-    private ActivityComponent component;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
 
-        component = DaggerActivityComponent.builder()
+        DaggerActivityComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .baseModule(getBaseModule())
                 .activityModule(new ActivityModule())
-                .build();
+                .build()
+                .inject(this);
 
-        component.inject(this);
+        setPresenter(presenter);
 
-        presenter.attachView(this);
+        Amount amount = getIntent().getParcelableExtra(EXTRA_AMOUNT);
+        presenter.setAmount(amount);
 
         initView();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.dispose();
+    protected void onResume() {
+        super.onResume();
+        presenter.initView();
     }
 
     public void initView(){
-
-        Amount amount = getIntent().getParcelableExtra(EXTRA_AMOUNT);
-        presenter.setAmount(amount);
 
         days = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
@@ -177,14 +169,6 @@ public class DetailsActivity extends BaseToolbarActivity implements DetailsView,
             }
         });
 
-        addCategoryDialog = AddCategoryDialog.getInstance(amount.isIncome(), new AddCategoryDialog.OnAddCategoryListener() {
-            @Override
-            public void onOk(Category category) {
-                presenter.addCategory(category);
-            }
-        });
-
-        presenter.initView();
     }
 
     @Override
@@ -295,21 +279,10 @@ public class DetailsActivity extends BaseToolbarActivity implements DetailsView,
     }
 
     @Override
-    public void onBackPressed() {
-        presenter.goToMain();
-        super.onBackPressed();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode== Navigator.REQUEST_CODE_ADD_CATEGORY &&
                 resultCode == RESULT_OK){
             presenter.showCategories();
         }
-    }
-
-    @Override
-    public ActivityComponent getComponent() {
-        return component;
     }
 }

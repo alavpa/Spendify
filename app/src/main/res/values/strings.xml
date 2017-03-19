@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Spendify</string>
+    <string name="app_name">Kakeibify</string>
     <string name="income">Ingresos</string>
     <string name="outcome">Gastos</string>
     <string name="description">Descripción</string>
@@ -13,10 +13,15 @@
     <string name="add">Agregar</string>
     <string name="add_category">Agregar categoria</string>
     <string name="total">Total</string>
+    <string name="select_day_message">Selecciona que día de cada mes quieres empezar las cuentas:</string>
+    <string name="logo">家計簿</string>
+    <string name="next">Siguiente</string>
 
     <string-array name="menu">
-        <item>Panel</item>
         <item>Dashboard</item>
+        <item>Promesas</item>
+        <item>Meses</item>
+        <item>Configuración</item>
     </string-array>
     <string-array name="periods">
         <item>día/s</item>

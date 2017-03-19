@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.BaseFragment;
+import com.alavpa.spendify.ui.base.menu.BaseMenuView;
 import com.alavpa.spendify.ui.custom.LinearLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.MenuAdapter;
 
@@ -65,16 +65,6 @@ public class MenuFragment extends BaseFragment implements MenuView{
     }
 
     @Override
-    public void goToDashboard() {
-        navigator.openDashboard();
-    }
-
-    @Override
-    public void goToMain() {
-        navigator.openMain(new Amount());
-    }
-
-    @Override
     public void populateMenu(String[] menu) {
         if(adapter==null){
             adapter = new MenuAdapter(getActivity(), new MenuAdapter.OnMenuClick() {
@@ -89,5 +79,11 @@ public class MenuFragment extends BaseFragment implements MenuView{
             adapter.setMenu(menu);
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void hideMenu() {
+        BaseMenuView baseMenuView = (BaseMenuView) getActivity();
+        baseMenuView.hideMenu();
     }
 }

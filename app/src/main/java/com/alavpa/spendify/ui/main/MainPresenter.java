@@ -29,7 +29,8 @@ public class MainPresenter extends BasePresenter<MainView> {
         getView().setValue(amount.getAmount());
     }
 
-    public void goToDetails() {
+    public void goToDetails(double value) {
+        amount.setAmount(value);
         navigator.openDetails(amount);
     }
 

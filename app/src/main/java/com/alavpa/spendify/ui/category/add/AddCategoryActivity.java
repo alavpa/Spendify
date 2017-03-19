@@ -7,12 +7,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.HasComponent;
-import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.ui.Navigator;
-import com.alavpa.spendify.ui.base.BaseActivity;
+import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryColorAdapter;
 
@@ -26,8 +24,7 @@ import butterknife.OnClick;
  * Created by alavpa on 28/02/17.
  */
 
-public class AddCategoryActivity extends BaseActivity implements AddCategoryView,
-        HasComponent<ActivityComponent>{
+public class AddCategoryActivity extends BaseNoMenuActivity implements AddCategoryView{
 
     @BindView(R.id.chk_income)
     CheckBox chkIncome;
@@ -39,7 +36,6 @@ public class AddCategoryActivity extends BaseActivity implements AddCategoryView
     @Inject
     AddCategoryPresenter presenter;
 
-    ActivityComponent component;
     CategoryColorAdapter adapter;
 
     @Override
@@ -48,26 +44,25 @@ public class AddCategoryActivity extends BaseActivity implements AddCategoryView
         setContentView(R.layout.activity_add_category);
         ButterKnife.bind(this);
 
-        component = DaggerActivityComponent.builder()
+        DaggerActivityComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(new ActivityModule())
                 .baseModule(getBaseModule())
-                .build();
-        component.inject(this);
+                .build()
+                .inject(this);
 
-        presenter.attachView(this);
+        setPresenter(presenter);
 
         rvColors.setLayoutManager(new GridLayoutManager(this));
-
-        presenter.showColors();
 
         boolean income = getIntent().getBooleanExtra(Navigator.EXTRA_INCOME,false);
         chkIncome.setChecked(income);
     }
 
     @Override
-    public ActivityComponent getComponent() {
-        return component;
+    protected void onResume() {
+        super.onResume();
+        presenter.showColors();
     }
 
     @Override

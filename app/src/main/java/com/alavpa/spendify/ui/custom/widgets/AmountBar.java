@@ -33,11 +33,11 @@ public class AmountBar extends AmountView {
 
     @Override
     protected void drawParts(Canvas canvas) {
-        int width = getWidth();
-        int height = getHeight();
+        int width = getWidth() - SHADOW_DISTANCE;
+        int height = getHeight()-SHADOW_DISTANCE;
 
 
-        float offsetWidth = 0;
+        float offsetWidth = SHADOW_DISTANCE;
         for (AmountBarPart part : parts) {
 
             part.calculateX(offsetWidth, width);
@@ -45,6 +45,12 @@ public class AmountBar extends AmountView {
             offsetWidth = part.getEndX();
 
             paint.setColor(part.getColor());
+            canvas.drawRect(part.getStartX()- SHADOW_DISTANCE,
+                    part.getStartY() + SHADOW_DISTANCE,
+                    part.getEndX() - SHADOW_DISTANCE,
+                    part.getEndY() + SHADOW_DISTANCE,
+                    shadow);
+
             canvas.drawRect(part.getStartX(),
                     part.getStartY(),
                     part.getEndX(),

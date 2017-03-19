@@ -1,24 +1,17 @@
-package com.alavpa.spendify.ui.base.toolbar;
+package com.alavpa.spendify.ui.base.menu;
 
-import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.alavpa.spendify.Application;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.di.application.ApplicationComponent;
-import com.alavpa.spendify.di.base.BaseModule;
-import com.alavpa.spendify.di.base.DaggerBaseComponent;
+import com.alavpa.spendify.ui.base.BaseActivity;
 import com.alavpa.spendify.ui.menu.MenuFragment;
 
 /**
@@ -26,35 +19,20 @@ import com.alavpa.spendify.ui.menu.MenuFragment;
  */
 
 @PerActivity
-public class BaseToolbarActivity extends AppCompatActivity implements BaseToolbarView {
+public class BaseMenuActivity extends BaseActivity implements BaseMenuView {
 
     public Toolbar toolbar;
     public DrawerLayout drawerLayout;
     MenuFragment menuFragment;
-    int position;
     private ActionBarDrawerToggle toggle;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(R.layout.activity_base_toolbar);
         FrameLayout content = (FrameLayout)findViewById(R.id.content);
-        LayoutInflater.from(this).inflate(layoutResID,content,true);
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        DaggerBaseComponent.builder()
-                .applicationComponent(getApplicationComponent())
-                .baseModule(new BaseModule(this))
-                .build()
-                .inject(this);
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
         initMenu();
+
+        LayoutInflater.from(this).inflate(layoutResID,content,true);
     }
 
     public void initMenu(){
@@ -79,19 +57,7 @@ public class BaseToolbarActivity extends AppCompatActivity implements BaseToolba
 
     }
 
-    public ApplicationComponent getApplicationComponent(){
-        return ((Application)getApplication()).getApplicationComponent();
-    }
-
-    public BaseModule getBaseModule(){
-        return new BaseModule(this);
-    }
-
     @Override
-    public void showError(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
-    }
-
     public void hideMenu(){
         drawerLayout.closeDrawers();
     }

@@ -1,10 +1,14 @@
 package com.alavpa.spendify.ui.custom.adapters;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,6 +34,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
     OnAddCategoryClick onAddCategoryClick;
     Category selected = null;
     int[] backgrounds;
+    Drawable addDrawable;
 
     public CategoryAdapter(Context context,
                            List<Category> categories,
@@ -40,6 +45,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
         this.onAddCategoryClick = onAddCategoryClick;
         this.backgrounds = backgrounds;
         setCategories(categories);
+        addDrawable  = ContextCompat.getDrawable(context,R.drawable.ic_action_add);
+        int color = ContextCompat.getColor(context,R.color.colorAccent);
+        addDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
     }
     @Override
     public BaseCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -57,7 +66,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
     @Override
     public void onBindViewHolder(BaseCategoryViewHolder holder, int position) {
         Category category = categories.get(position);
-        holder.bind(category);
+        if(holder.getItemViewType()==VIEW_TYPE_ADD) {
+            holder.bind(addDrawable);
+        }else{
+            holder.bind(category);
+
+        }
     }
 
     @Override
@@ -86,14 +100,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
     }
 
     public abstract class BaseCategoryViewHolder extends RecyclerView.ViewHolder{
-
-
         public BaseCategoryViewHolder(View itemView) {
             super(itemView);
         }
-
-        public abstract void bind(Category category);
-
+        public void bind(Category category){}
+        public void bind(Drawable drawable){}
     }
     public class CategoryViewHolder extends BaseCategoryViewHolder{
 
@@ -107,7 +118,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
             ButterKnife.bind(this,itemView);
         }
 
-        @Override
         public void bind(Category category){
 
             tvName.setText(category.getName());
@@ -146,15 +156,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
 
     public class AddCategoryViewHolder extends BaseCategoryViewHolder{
 
+        @BindView(R.id.iv_add)
+        ImageView ivAdd;
         OnAddCategoryClick onAddCategoryClick;
 
         public AddCategoryViewHolder(View itemView, OnAddCategoryClick onAddCategoryClick) {
             super(itemView);
+            ButterKnife.bind(this,itemView);
             this.onAddCategoryClick = onAddCategoryClick;
         }
 
-        @Override
-        public void bind(Category category){
+        public void bind(Drawable drawable){
+            ivAdd.setImageDrawable(drawable);
             onClick();
         }
 

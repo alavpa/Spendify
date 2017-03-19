@@ -13,7 +13,7 @@ import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.ui.Navigator;
-import com.alavpa.spendify.ui.base.BaseActivity;
+import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.LinearLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.AmountAdapter;
 
@@ -27,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @PerActivity
-public class DashboardAmountsActivity extends BaseActivity implements DashboardAmountsView{
+public class DashboardAmountsActivity extends BaseNoMenuActivity implements DashboardAmountsView{
 
     @Inject
     DashboardAmountsPresenter presenter;
@@ -64,14 +64,19 @@ public class DashboardAmountsActivity extends BaseActivity implements DashboardA
                 .activityModule(new ActivityModule())
                 .build()
                 .inject(this);
-        initView();
-        presenter.attachView(this);
 
+        setPresenter(presenter);
+        initView();
 
         Sector sector = getIntent().getParcelableExtra(Navigator.EXTRA_SECTOR);
         presenter.setSector(sector);
-        presenter.initView();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.initView();
     }
 
     private void initView() {
@@ -91,8 +96,8 @@ public class DashboardAmountsActivity extends BaseActivity implements DashboardA
     }
 
     @Override
-    public void showCategoryColor(int color) {
-        flCategory.setBackgroundColor(color);
+    public void showCategoryColor(int colorResId) {
+        flCategory.setBackgroundResource(colorResId);
     }
 
     @Override

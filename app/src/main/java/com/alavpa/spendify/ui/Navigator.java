@@ -11,6 +11,7 @@ import com.alavpa.spendify.ui.dashboard.DashboardActivity;
 import com.alavpa.spendify.ui.dashboard.amounts.DashboardAmountsActivity;
 import com.alavpa.spendify.ui.dashboard.sectors.DashboardSectorsActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
+import com.alavpa.spendify.ui.init.day.SelectDayActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ public class Navigator {
     public static final String EXTRA_SECTOR = "EXTRA_SECTOR";
 
     public static final int REQUEST_CODE_ADD_CATEGORY = 1;
+    public static final int REQUEST_CODE_DETAILS = 2;
 
     @Inject
     public Navigator(Activity activity){
@@ -41,7 +43,7 @@ public class Navigator {
     public void openDetails(Amount amount){
         Intent intent = getIntent(DetailsActivity.class);
         intent.putExtra(EXTRA_AMOUNT,amount);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent,REQUEST_CODE_DETAILS);
     }
 
     public void openMain(Amount amount){
@@ -72,5 +74,10 @@ public class Navigator {
         Intent intent = getIntent(AddCategoryActivity.class);
         intent.putExtra(EXTRA_INCOME,income);
         activity.startActivityForResult(intent,REQUEST_CODE_ADD_CATEGORY);
+    }
+
+    public void openSelectDay() {
+        Intent intent = getIntent(SelectDayActivity.class);
+        activity.startActivity(intent);
     }
 }

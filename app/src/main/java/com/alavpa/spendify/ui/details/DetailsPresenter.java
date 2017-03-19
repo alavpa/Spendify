@@ -18,6 +18,8 @@ import javax.inject.Inject;
 
 import io.reactivex.observers.DisposableSingleObserver;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by alavpa on 14/02/17.
  */
@@ -128,7 +130,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         insertAmount.execute(new DisposableSingleObserver<Amount>() {
             @Override
             public void onSuccess(Amount amount) {
-                navigator.openMain(new Amount());
+                getView().setResult(RESULT_OK);
                 getView().finish();
             }
 
@@ -149,24 +151,6 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         getView().setDate(dateText.substring(0,1).toUpperCase()+dateText.substring(1));
     }
 
-    public void addCategory(Category category) {
-
-        insertCategory.setCategory(category);
-
-        insertCategory.execute(new DisposableSingleObserver<Category>() {
-            @Override
-            public void onSuccess(Category category) {
-                showCategories();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-        });
-
-    }
-
     public void fillAmountFromView(){
         amount.setDescription(getView().description());
         amount.setCategory(getView().category());
@@ -177,10 +161,6 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
             period.setTimes(getView().every()+1);
             period.setPeriod(getView().period());
         }
-    }
-    public void goToMain() {
-        fillAmountFromView();
-        navigator.openMain(new Amount());
     }
 
     public void showDatePickerDialog() {

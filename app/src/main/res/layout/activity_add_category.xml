@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/padding">
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
-    <CheckBox android:id="@+id/chk_income"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin"
-        android:text="@string/income"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/padding"
+            android:layout_weight="1">
 
-    <EditText
-        android:id="@+id/et_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:hint="@string/titulo"
-        android:inputType="text"
-        android:padding="@dimen/padding"
-        android:layout_marginBottom="@dimen/margin"/>
+        <CheckBox
+                android:id="@+id/chk_income"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin"
+                android:text="@string/income"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_colors"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginBottom="@dimen/margin"/>
+        <EditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:hint="@string/titulo"
+                android:inputType="text"
+                android:padding="@dimen/padding"
+                android:layout_marginBottom="@dimen/margin"/>
 
-    <TextView android:id="@+id/btn_ok"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="@dimen/text_size_big"
-        android:text="@android:string/ok"/>
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_colors"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/margin"/>
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_big"
+            style="@style/LinkStyle"
+            android:padding="@dimen/padding"
+            android:text="@android:string/ok"/>
 
 </LinearLayout>

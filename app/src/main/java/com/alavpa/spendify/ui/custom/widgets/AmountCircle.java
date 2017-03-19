@@ -16,6 +16,7 @@ import com.alavpa.spendify.ui.model.AmountBarPart;
 public class AmountCircle extends AmountView {
 
     final RectF oval = new RectF();
+    final RectF ovalShadow = new RectF();
 
     public AmountCircle(Context context) {
         super(context);
@@ -44,11 +45,21 @@ public class AmountCircle extends AmountView {
         int max = Math.max(width,height);
         int offset = (max-min)/2;
 
+        int r = min/2;
+        int cx;
+        int cy = height/2;
+
         if(width>=height) {
-            oval.set(offset, 0, min + offset, min);
+            oval.set(offset, 0, min + offset - SHADOW_DISTANCE, min -SHADOW_DISTANCE);
+            cx = width/2 - SHADOW_DISTANCE;
+            cy = height/2;
         }else{
-            oval.set(0, offset, min, min + offset);
+            oval.set(SHADOW_DISTANCE, offset, min, min + offset - SHADOW_DISTANCE);
+            cx = width/2;
+            cy = height/2 + SHADOW_DISTANCE;
         }
+
+        canvas.drawCircle(cx,cy,r,shadow);
 
         float angleOffset = 0;
         for(AmountBarPart amountBarPart : parts){

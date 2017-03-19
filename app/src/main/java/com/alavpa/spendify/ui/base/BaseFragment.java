@@ -2,7 +2,6 @@ package com.alavpa.spendify.ui.base;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
 import com.alavpa.spendify.di.HasComponent;
 import com.alavpa.spendify.di.PerActivity;
@@ -21,17 +20,22 @@ public class BaseFragment extends Fragment implements BaseView {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        parent = (BaseView)context;
+        parent = (BaseView) context;
     }
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
+        parent.showError(message);
     }
 
     @Override
     public void finish() {
         parent.finish();
+    }
+
+    @Override
+    public void setResult(int result) {
+        parent.setResult(result);
     }
 
     public ActivityComponent getComponent(){

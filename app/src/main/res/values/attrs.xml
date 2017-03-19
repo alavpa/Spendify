@@ -8,5 +8,8 @@
     </declare-styleable>
     <declare-styleable name="Keyboard">
         <attr name="decimals" format="integer"/>
+        <attr name="integers" format="integer"/>
+        <attr name="max" format="integer"/>
+        <attr name="min" format="integer"/>
     </declare-styleable>
 </resources>

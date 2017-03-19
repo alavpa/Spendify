@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:padding="@dimen/padding"
+            android:text="@string/select_day_message"
+            android:layout_marginBottom="@dimen/margin"/>
+
+    <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_40"
+            android:gravity="center"/>
+
+    <com.alavpa.spendify.ui.custom.keyboard.Keyboard
+            android:id="@+id/keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:integers="2"
+            app:decimals="0"
+            app:min="1"
+            app:max="28"
+            android:layout_weight="1"/>
+
+    <TextView
+            android:id="@+id/btn_apply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:textSize="@dimen/text_size_big"
+            android:gravity="center"
+            style="@style/LinkStyle"
+            android:padding="@dimen/padding"
+            android:text="@string/next"/>
+
+
+</LinearLayout>
