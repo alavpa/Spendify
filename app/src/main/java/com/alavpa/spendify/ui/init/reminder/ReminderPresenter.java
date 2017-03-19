@@ -70,7 +70,8 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
                         boolean notifyOfflimit,
                         boolean notifyPromises,
                         String time,
-                        Period period) {
+                        Period period,
+                        boolean save) {
 
         preferences.setNotifyEndOfMonth(notifyEndMonth);
         if(notifyEndMonth){
@@ -106,9 +107,12 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
             preferences.setNotifyPromisesPeriod(period);
         }
 
-        preferences.setInitialized(true);
-
-        navigator.openMain(new Amount());
+        if(save) {
+            getView().finish();
+        }else{
+            preferences.setInitialized(true);
+            navigator.openMain(new Amount());
+        }
     }
 
     public void showTimePickerDialog(String time) {

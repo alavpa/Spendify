@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
-import com.alavpa.spendify.ui.base.BaseActivity;
+import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
 
 import javax.inject.Inject;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SelectDayActivity extends BaseActivity implements SelectDayView {
+public class SelectDayMonthActivity extends BaseNoMenuActivity implements SelectDayView {
 
     @BindView(R.id.btn_apply)
     TextView btnApply;
@@ -47,10 +47,11 @@ public class SelectDayActivity extends BaseActivity implements SelectDayView {
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.next(keyboard.getValue(), false);
+                presenter.next(keyboard.getValue(), true);
             }
         });
 
+        btnApply.setText(R.string.save);
 
     }
 

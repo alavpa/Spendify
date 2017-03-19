@@ -23,6 +23,7 @@
     <string name="notify_offlimit">Activar las notificaciones cuando excedo del límite en algún gasto.</string>
     <string name="notify_end_month">Avísame al terminar el mes.</string>
     <string name="notify_promises">Recuérdame mis promesas.</string>
+    <string name="save">Guardar</string>
 
     <string-array name="menu">
         <item>Dashboard</item>

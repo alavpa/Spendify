@@ -12,7 +12,7 @@ import android.widget.TimePicker;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Period;
-import com.alavpa.spendify.ui.base.BaseActivity;
+import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.widgets.period.PeriodWidget;
 
 import java.util.Calendar;
@@ -23,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @PerActivity
-public class RemiderActivity extends BaseActivity implements ReminderView{
+public class NotificationsActivity extends BaseNoMenuActivity implements ReminderView{
 
     @BindView(R.id.chk_endmonth)
     CheckBox chkEndMonth;
@@ -87,7 +87,7 @@ public class RemiderActivity extends BaseActivity implements ReminderView{
                         chkPromises.isChecked(),
                         time,
                         period,
-                        false);
+                        true);
             }
         });
 
@@ -104,6 +104,8 @@ public class RemiderActivity extends BaseActivity implements ReminderView{
                 wPeriod.setVisibility((isChecked)?View.VISIBLE:View.GONE);
             }
         });
+
+        btnApply.setText(R.string.save);
     }
 
     @Override

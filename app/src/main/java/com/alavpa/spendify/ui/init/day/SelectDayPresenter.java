@@ -18,10 +18,15 @@ public class SelectDayPresenter extends BasePresenter<SelectDayView> {
         getView().setDay(day);
     }
 
-    public void next(double value) {
+    public void next(double value, boolean save) {
         int day = Double.valueOf(value).intValue();
         preferences.setInitialized(true);
         preferences.setMonthDay(day);
-        navigator.openStartCategories();
+
+        if(save){
+            getView().finish();
+        }else {
+            navigator.openStartCategories();
+        }
     }
 }

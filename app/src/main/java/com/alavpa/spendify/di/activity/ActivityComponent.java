@@ -9,8 +9,11 @@ import com.alavpa.spendify.ui.dashboard.amounts.DashboardAmountsActivity;
 import com.alavpa.spendify.ui.dashboard.sectors.DashboardSectorsActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
 import com.alavpa.spendify.ui.init.StartActivity;
+import com.alavpa.spendify.ui.init.categories.ManageCategoriesActivity;
 import com.alavpa.spendify.ui.init.categories.StartCategoriesActivity;
 import com.alavpa.spendify.ui.init.day.SelectDayActivity;
+import com.alavpa.spendify.ui.init.day.SelectDayMonthActivity;
+import com.alavpa.spendify.ui.init.reminder.NotificationsActivity;
 import com.alavpa.spendify.ui.init.reminder.RemiderActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 import com.alavpa.spendify.ui.menu.MenuFragment;
@@ -35,4 +38,8 @@ public interface ActivityComponent {
     void inject(StartActivity startActivity);
     void inject(StartCategoriesActivity startCategoriesActivity);
     void inject(RemiderActivity remiderActivity);
+    void inject(ManageCategoriesActivity manageCategoriesActivity);
+    void inject(SelectDayMonthActivity selectDayMonthActivity);
+
+    void inject(NotificationsActivity notificationsActivity);
 }

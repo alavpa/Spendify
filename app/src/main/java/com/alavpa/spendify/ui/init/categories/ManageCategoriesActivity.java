@@ -7,9 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Category;
-import com.alavpa.spendify.ui.base.BaseActivity;
+import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryAdapter;
 
@@ -20,8 +19,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-@PerActivity
-public class StartCategoriesActivity extends BaseActivity implements StartCategoriesView{
+public class ManageCategoriesActivity extends BaseNoMenuActivity implements StartCategoriesView{
 
     @BindView(R.id.rv_income)
     RecyclerView rvIncome;
@@ -51,9 +49,11 @@ public class StartCategoriesActivity extends BaseActivity implements StartCatego
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.onClickNext(false);
+                presenter.onClickNext(true);
             }
         });
+
+        btnApply.setText(R.string.save);
     }
 
     @Override

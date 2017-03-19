@@ -32,6 +32,10 @@
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="stateHidden"/>
 
+        <activity android:name=".ui.init.categories.ManageCategoriesActivity"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateHidden"/>
+
         <activity android:name=".ui.init.reminder.RemiderActivity"
                   android:noHistory="true"
                   android:screenOrientation="portrait"

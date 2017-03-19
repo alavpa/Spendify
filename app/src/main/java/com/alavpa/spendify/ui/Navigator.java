@@ -12,8 +12,10 @@ import com.alavpa.spendify.ui.dashboard.DashboardActivity;
 import com.alavpa.spendify.ui.dashboard.amounts.DashboardAmountsActivity;
 import com.alavpa.spendify.ui.dashboard.sectors.DashboardSectorsActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
+import com.alavpa.spendify.ui.init.categories.ManageCategoriesActivity;
 import com.alavpa.spendify.ui.init.categories.StartCategoriesActivity;
 import com.alavpa.spendify.ui.init.day.SelectDayActivity;
+import com.alavpa.spendify.ui.init.day.SelectDayMonthActivity;
 import com.alavpa.spendify.ui.init.reminder.RemiderActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 
@@ -85,10 +87,21 @@ public class Navigator {
         activity.startActivity(intent);
     }
 
+    public void OpenSelectDayMenu() {
+        Intent intent = getIntent(SelectDayMonthActivity.class);
+        activity.startActivity(intent);
+    }
+
     public void openStartCategories() {
         Intent intent = getIntent(StartCategoriesActivity.class);
         activity.startActivity(intent);
     }
+
+    public void openManageCategories() {
+        Intent intent = getIntent(ManageCategoriesActivity.class);
+        activity.startActivity(intent);
+    }
+
 
     public void openReminder(){
         Intent intent = getIntent(RemiderActivity.class);

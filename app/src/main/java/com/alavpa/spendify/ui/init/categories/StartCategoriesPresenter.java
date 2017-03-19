@@ -68,8 +68,12 @@ public class StartCategoriesPresenter extends BasePresenter<StartCategoriesView>
         navigator.openAddCategory(category);
     }
 
-    public void onClickNext() {
-        navigator.openReminder();
+    public void onClickNext(boolean save) {
+
+        if(!save){
+            navigator.openReminder();
+        }
+
         getView().finish();
     }
 }
