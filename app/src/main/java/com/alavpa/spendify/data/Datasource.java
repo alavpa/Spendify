@@ -27,4 +27,8 @@ public interface Datasource {
 
     List<AmountDb> getAmountsByCategoryId(long id, long from, long to);
 
+    Long getMaxDate();
+
+    Long getMinDate();
+
 }

@@ -2,7 +2,10 @@ package com.alavpa.spendify.ui.menu;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.ui.base.BasePresenter;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -12,6 +15,9 @@ import javax.inject.Inject;
 
 @PerActivity
 public class MenuPresenter extends BasePresenter<MenuView> {
+
+    @Inject
+    DateUtils dateUtils;
 
     String[] menu;
 
@@ -27,23 +33,24 @@ public class MenuPresenter extends BasePresenter<MenuView> {
 
     public void goTo(int position) {
         if(position == 0){
-            navigator.openDashboard();
+            Calendar from = dateUtils.calculateFrom(Calendar.getInstance().getTimeInMillis(),preferences.getMonthDay());
+            navigator.openDashboard(from.getTimeInMillis());
         }
 
-        if(position == 0){
+        if(position == 1){
             navigator.openMonths();
         }
 
         if(position == 2){
-            navigator.openStartCategories();
+            navigator.openManageCategories();
         }
 
         if(position == 3){
-            navigator.openSelectDay();
+            navigator.openSelectDayMonth();
         }
 
         if(position == 5){
-            navigator.openReminder();
+            navigator.openNotifications();
         }
 
         getView().hideMenu();

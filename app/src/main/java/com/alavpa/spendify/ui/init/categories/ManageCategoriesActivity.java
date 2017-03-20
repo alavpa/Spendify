@@ -49,11 +49,11 @@ public class ManageCategoriesActivity extends BaseNoMenuActivity implements Star
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.onClickNext(true);
+                presenter.onClickNext();
             }
         });
 
-        btnApply.setText(R.string.save);
+        btnApply.setVisibility(View.GONE);
     }
 
     @Override

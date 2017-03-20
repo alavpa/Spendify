@@ -30,4 +30,8 @@ public interface Repository {
     Single<List<Sector>> getSectorsBy(boolean income, long from, long to);
 
     Single<List<Amount>> getAmountsByCategoryId(long id, long from, long to);
+
+    Single<Long> getMaxDate();
+
+    Single<Long> getMinDate();
 }

@@ -41,6 +41,12 @@ public class MonthsActivity extends BaseNoMenuActivity implements MonthsView {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.initView();
+    }
+
+    @Override
     public void populateMonths(List<Long> months) {
         if(monthAdapter==null){
             monthAdapter = new MonthAdapter(this, months, new MonthAdapter.OnMonthClick() {

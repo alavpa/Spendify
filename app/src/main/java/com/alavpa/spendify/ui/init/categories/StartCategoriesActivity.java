@@ -51,7 +51,7 @@ public class StartCategoriesActivity extends BaseActivity implements StartCatego
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.onClickNext(false);
+                presenter.onClickNext();
             }
         });
     }

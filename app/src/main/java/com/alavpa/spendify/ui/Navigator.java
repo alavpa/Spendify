@@ -16,6 +16,7 @@ import com.alavpa.spendify.ui.init.categories.ManageCategoriesActivity;
 import com.alavpa.spendify.ui.init.categories.StartCategoriesActivity;
 import com.alavpa.spendify.ui.init.day.SelectDayActivity;
 import com.alavpa.spendify.ui.init.day.SelectDayMonthActivity;
+import com.alavpa.spendify.ui.init.reminder.NotificationsActivity;
 import com.alavpa.spendify.ui.init.reminder.RemiderActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 import com.alavpa.spendify.ui.months.MonthsActivity;
@@ -29,6 +30,7 @@ import javax.inject.Inject;
 public class Navigator {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
+    public static final String EXTRA_FROM = "EXTRA_FROM";
     private Activity activity;
 
     public static final String EXTRA_AMOUNT = "EXTRA_AMOUNT";
@@ -59,8 +61,9 @@ public class Navigator {
         activity.startActivity(intent);
     }
 
-    public void openDashboard() {
+    public void openDashboard(long month) {
         Intent intent = getIntent(DashboardActivity.class);
+        intent.putExtra(EXTRA_FROM,month);
         activity.startActivity(intent);
     }
 
@@ -110,6 +113,16 @@ public class Navigator {
 
     public void openReminder(){
         Intent intent = getIntent(RemiderActivity.class);
+        activity.startActivity(intent);
+    }
+
+    public void openSelectDayMonth() {
+        Intent intent = getIntent(SelectDayMonthActivity.class);
+        activity.startActivity(intent);
+    }
+
+    public void openNotifications() {
+        Intent intent = getIntent(NotificationsActivity.class);
         activity.startActivity(intent);
     }
 }

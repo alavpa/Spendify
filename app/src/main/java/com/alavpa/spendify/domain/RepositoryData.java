@@ -164,5 +164,26 @@ public class RepositoryData implements Repository {
                 });
     }
 
+    @Override
+    public Single<Long> getMaxDate() {
+
+        return Single.fromCallable(new Callable<Long>() {
+            @Override
+            public Long call() throws Exception {
+                return datasource.getMaxDate();
+            }
+        });
+    }
+
+    @Override
+    public Single<Long> getMinDate() {
+        return Single.fromCallable(new Callable<Long>() {
+            @Override
+            public Long call() throws Exception {
+                return datasource.getMinDate();
+            }
+        });
+    }
+
 
 }

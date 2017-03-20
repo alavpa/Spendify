@@ -28,6 +28,10 @@
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="stateHidden"/>
 
+        <activity android:name=".ui.init.day.SelectDayMonthActivity"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateHidden"/>
+
         <activity android:name=".ui.init.categories.StartCategoriesActivity"
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="stateHidden"/>
@@ -37,6 +41,11 @@
                   android:windowSoftInputMode="stateHidden"/>
 
         <activity android:name=".ui.init.reminder.RemiderActivity"
+                  android:noHistory="true"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:name=".ui.init.reminder.NotificationsActivity"
                   android:noHistory="true"
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="stateHidden"/>

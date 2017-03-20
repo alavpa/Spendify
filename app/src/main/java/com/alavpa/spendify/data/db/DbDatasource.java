@@ -263,6 +263,36 @@ public class DbDatasource implements Datasource {
         return list;
     }
 
+    @Override
+    public synchronized Long getMaxDate() {
+        Long date = null;
+
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT MAX(" + AmountDb.COL_DATE + ") FROM " + AmountDb.TABLE_NAME,null);
+        if(cursor.moveToFirst()){
+            date = cursor.getLong(0);
+        }
+        cursor.close();
+        db.close();
+
+        return date;
+    }
+
+    @Override
+    public synchronized Long getMinDate() {
+        Long date = null;
+
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT MIN(" + AmountDb.COL_DATE + ") FROM " + AmountDb.TABLE_NAME,null);
+        if(cursor.moveToFirst()){
+            date = cursor.getLong(0);
+        }
+        cursor.close();
+        db.close();
+
+        return date;
+    }
+
     private Cursor getAmountByCategoryId(SQLiteDatabase db, long id, long from, long to) {
         return db.query(AmountDb.TABLE_NAME,
                 null,

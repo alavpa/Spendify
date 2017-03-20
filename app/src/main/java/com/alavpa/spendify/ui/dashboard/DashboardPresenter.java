@@ -2,6 +2,7 @@ package com.alavpa.spendify.ui.dashboard;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.usecases.GetAmountsBy;
 import com.alavpa.spendify.domain.usecases.GetSumBy;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
@@ -34,6 +35,9 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
     Calendar to = Calendar.getInstance();
 
     @Inject
+    DateUtils dateUtils;
+
+    @Inject
     DecimalFormat decimalFormat;
 
     @Inject
@@ -48,9 +52,6 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
     }
 
     public void initView() {
-
-        from.set(2017,Calendar.JANUARY,1);
-        to.set(2017,Calendar.DECEMBER,31);
 
         getSumByIncome.setFrom(from.getTimeInMillis());
         getSumByIncome.setTo(to.getTimeInMillis());
@@ -120,6 +121,11 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
 
     public void openOutcomeDetails(String amount) {
         navigator.openDashboardSectors(false,amount);
+    }
+
+    public void setFrom(long from) {
+        this.from = dateUtils.calculateFrom(from, preferences.getMonthDay());
+        this.to = dateUtils.calculateTo(from,preferences.getMonthDay());
     }
 }
 

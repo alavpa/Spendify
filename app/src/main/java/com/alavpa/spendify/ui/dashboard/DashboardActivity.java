@@ -9,6 +9,7 @@ import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
+import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.widgets.AmountBar;
 import com.alavpa.spendify.ui.model.AmountBarPart;
@@ -69,6 +70,8 @@ public class DashboardActivity extends BaseNoMenuActivity implements DashboardVi
 
         setPresenter(presenter);
 
+        long from = getIntent().getLongExtra(Navigator.EXTRA_FROM, 0);
+        presenter.setFrom(from);
         initView();
     }
 
