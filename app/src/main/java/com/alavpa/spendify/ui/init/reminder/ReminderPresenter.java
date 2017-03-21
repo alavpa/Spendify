@@ -42,8 +42,6 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
 
         this.setAlarmEndMonth = setAlarmEndMonth;
         this.cancelAlarmEndMonth = cancelAlarmEndMonth;
-
-        addUseCases(setAlarmEndDay, cancelAlarmEndDay, setAlarmEndMonth, cancelAlarmEndMonth);
     }
 
     public void initViews() {

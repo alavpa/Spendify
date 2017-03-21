@@ -2,15 +2,10 @@ package com.alavpa.spendify.domain.usecases;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
-import com.alavpa.spendify.domain.usecases.base.UseCase;
-
-import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
-
-public class SetAlarmEndMonth extends UseCase<Object>{
+public class SetAlarmEndMonth{
 
     AlarmManager alarmManager;
     PrefsDatasource preferences;
@@ -22,15 +17,7 @@ public class SetAlarmEndMonth extends UseCase<Object>{
         this.preferences = preferences;
     }
 
-    @Override
-    public Single<Object> build() {
-        return Single.fromCallable(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-
-                alarmManager.setAlarmEndMonth(preferences.getMonthDay());
-                return new Object();
-            }
-        });
+    public void execute(){
+        alarmManager.setAlarmEndMonth(preferences.getMonthDay());
     }
 }

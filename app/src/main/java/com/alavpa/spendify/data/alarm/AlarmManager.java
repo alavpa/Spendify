@@ -4,6 +4,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.model.Period;
+
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -39,10 +42,7 @@ public class AlarmManager {
             alarm.add(Calendar.DATE,1);
         }
 
-        Intent intent = new Intent(ACTION_ALARM_ENDDAY);
-        intent.putExtra(EXTRA_ALARM_DATA,time.getTimeInMillis());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ALARM_ENDDAY,intent,PendingIntent.FLAG_ONE_SHOT);
-
+        PendingIntent pendingIntent = getPendingIntent(ACTION_ALARM_ENDDAY,REQUEST_ALARM_ENDDAY,alarm.getTimeInMillis());
         alarmManager.set(android.app.AlarmManager.RTC,time.getTimeInMillis(),pendingIntent);
     }
 
@@ -56,25 +56,37 @@ public class AlarmManager {
             alarm.add(Calendar.MONTH,1);
         }
 
-        Intent intent = new Intent(ACTION_ALARM_ENDMONTH);
-
-        intent.putExtra(EXTRA_ALARM_DATA,alarm.getTimeInMillis());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_ALARM_ENDMONTH,intent,PendingIntent.FLAG_ONE_SHOT);
-
+        PendingIntent pendingIntent = getPendingIntent(ACTION_ALARM_ENDMONTH,REQUEST_ALARM_ENDMONTH,alarm.getTimeInMillis());
         alarmManager.set(android.app.AlarmManager.RTC,alarm.getTimeInMillis(),pendingIntent);
     }
 
+    private PendingIntent getPendingIntent(String action, int request, long time){
+        Intent intent = new Intent(action);
+        intent.putExtra(EXTRA_ALARM_DATA,time);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, request,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        return pendingIntent;
+    }
+
     public void cancelAlarmEndDay() {
-        cancelAlarm(REQUEST_ALARM_ENDDAY);
+        cancelAlarm(ACTION_ALARM_ENDDAY, REQUEST_ALARM_ENDDAY);
     }
 
     public void cancelAlarmEndMonth() {
-        cancelAlarm(REQUEST_ALARM_ENDMONTH);
+        cancelAlarm(ACTION_ALARM_ENDMONTH, REQUEST_ALARM_ENDMONTH);
     }
 
-    public void cancelAlarm(int request) {
-        Intent intent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, request,intent,0);
+    public void cancelAlarm(String action, int request) {
+        Intent intent = new Intent(action);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, request,intent,PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
+    }
+
+    public void setAlarmPeriod(Period period) {
+
+    }
+
+    public void setAlarmAmount(Amount amount) {
+        
     }
 }
