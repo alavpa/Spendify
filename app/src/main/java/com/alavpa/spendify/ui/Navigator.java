@@ -67,16 +67,18 @@ public class Navigator {
         activity.startActivity(intent);
     }
 
-    public void openDashboardSectors(boolean income, String amount) {
+    public void openDashboardSectors(boolean income, String amount, long from) {
         Intent intent = getIntent(DashboardSectorsActivity.class);
         intent.putExtra(EXTRA_INCOME,income);
         intent.putExtra(EXTRA_AMOUNT,amount);
+        intent.putExtra(EXTRA_FROM,from);
         activity.startActivity(intent);
     }
 
-    public void openDashboardAmounts(Sector sector) {
+    public void openDashboardAmounts(Sector sector, long from) {
         Intent intent = getIntent(DashboardAmountsActivity.class);
         intent.putExtra(EXTRA_SECTOR,sector);
+        intent.putExtra(EXTRA_FROM,from);
         activity.startActivity(intent);
     }
 
@@ -88,11 +90,6 @@ public class Navigator {
 
     public void openSelectDay() {
         Intent intent = getIntent(SelectDayActivity.class);
-        activity.startActivity(intent);
-    }
-
-    public void OpenSelectDayMenu() {
-        Intent intent = getIntent(SelectDayMonthActivity.class);
         activity.startActivity(intent);
     }
 

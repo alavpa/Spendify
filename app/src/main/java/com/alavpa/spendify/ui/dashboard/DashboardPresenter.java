@@ -116,11 +116,11 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
     }
 
     public void openIncomeDetails(String amount) {
-        navigator.openDashboardSectors(true, amount);
+        navigator.openDashboardSectors(true, amount, from.getTimeInMillis());
     }
 
     public void openOutcomeDetails(String amount) {
-        navigator.openDashboardSectors(false,amount);
+        navigator.openDashboardSectors(false,amount, from.getTimeInMillis());
     }
 
     public void setFrom(long from) {

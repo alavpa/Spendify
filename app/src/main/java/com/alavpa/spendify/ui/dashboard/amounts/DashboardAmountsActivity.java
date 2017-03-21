@@ -71,6 +71,9 @@ public class DashboardAmountsActivity extends BaseNoMenuActivity implements Dash
         Sector sector = getIntent().getParcelableExtra(Navigator.EXTRA_SECTOR);
         presenter.setSector(sector);
 
+        long from = getIntent().getLongExtra(Navigator.EXTRA_FROM,0);
+        presenter.setFrom(from);
+
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.alavpa.spendify.ui.dashboard.sectors;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.domain.usecases.GetSectorsBy;
 import com.alavpa.spendify.domain.usecases.GetSumBy;
@@ -20,6 +21,9 @@ import io.reactivex.observers.DisposableSingleObserver;
 
 @PerActivity
 class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
+
+    @Inject
+    DateUtils dateUtils;
 
     private GetSumBy getSumBy;
 
@@ -52,9 +56,6 @@ class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
     }
 
     public void initView() {
-
-        from.set(2017,Calendar.JANUARY,1);
-        to.set(2017,Calendar.DECEMBER,31);
 
         getView().showAmount(amount);
         if(income){
@@ -113,6 +114,11 @@ class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
     }
 
     public void onClickSector(Sector sector) {
-        navigator.openDashboardAmounts(sector);
+        navigator.openDashboardAmounts(sector, from.getTimeInMillis());
+    }
+
+    public void setFrom(long from) {
+        this.from=dateUtils.calculateFrom(from,preferences.getMonthDay());
+        this.to=dateUtils.calculateTo(from,preferences.getMonthDay());
     }
 }

@@ -80,6 +80,9 @@ public class DashboardSectorsActivity extends BaseNoMenuActivity implements Dash
         String amount = getIntent().getStringExtra(Navigator.EXTRA_AMOUNT);
         presenter.setAmount(amount);
 
+        long from = getIntent().getLongExtra(Navigator.EXTRA_FROM,0);
+        presenter.setFrom(from);
+
     }
 
     @Override

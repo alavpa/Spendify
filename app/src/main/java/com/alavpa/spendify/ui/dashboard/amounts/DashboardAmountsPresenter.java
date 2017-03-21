@@ -1,5 +1,6 @@
 package com.alavpa.spendify.ui.dashboard.amounts;
 
+import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.domain.usecases.GetAmountsByCategory;
@@ -14,6 +15,9 @@ import javax.inject.Inject;
 import io.reactivex.observers.DisposableSingleObserver;
 
 public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsView>{
+
+    @Inject
+    DateUtils dateUtils;
 
     @Inject
     public DecimalFormat decimalFormat;
@@ -41,9 +45,6 @@ public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsVie
 
     public void initView() {
 
-        from.set(2017, Calendar.JANUARY,1);
-        to.set(2017,Calendar.DECEMBER,31);
-
         int color = resources.getCategoryColorsArray()[sector.getCategory().getColor()];
         getView().showCategoryColor(color);
         getView().showCategoryName(sector.getCategory().getName());
@@ -64,5 +65,10 @@ public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsVie
                 getView().showError(e.getMessage());
             }
         });
+    }
+
+    public void setFrom(long from) {
+        this.from=dateUtils.calculateFrom(from,preferences.getMonthDay());
+        this.to=dateUtils.calculateTo(from,preferences.getMonthDay());
     }
 }
