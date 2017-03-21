@@ -38,12 +38,9 @@ public class AlarmManager {
         alarm.set(Calendar.MINUTE,time.get(Calendar.MINUTE));
         alarm.set(Calendar.SECOND,0);
 
-        if(alarm.getTimeInMillis()<Calendar.getInstance().getTimeInMillis()){
-            alarm.add(Calendar.DATE,1);
-        }
-
         PendingIntent pendingIntent = getPendingIntent(ACTION_ALARM_ENDDAY,REQUEST_ALARM_ENDDAY,alarm.getTimeInMillis());
-        alarmManager.set(android.app.AlarmManager.RTC,time.getTimeInMillis(),pendingIntent);
+        //alarmManager.set(android.app.AlarmManager.RTC,alarm.getTimeInMillis(),pendingIntent);
+        alarmManager.setInexactRepeating(android.app.AlarmManager.RTC,alarm.getTimeInMillis(),60*1000,pendingIntent);
     }
 
     public void setAlarmEndMonth(int day){

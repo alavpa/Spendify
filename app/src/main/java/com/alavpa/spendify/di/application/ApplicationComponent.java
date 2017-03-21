@@ -5,6 +5,7 @@ import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.Repository;
+import com.alavpa.spendify.ui.receiver.AlarmReceiver;
 
 import java.text.SimpleDateFormat;
 
@@ -19,6 +20,8 @@ import dagger.Component;
 @Singleton
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
+
+    void inject(AlarmReceiver alarmReceiver);
 
     Repository repository();
     ResDatasource resDatasource();

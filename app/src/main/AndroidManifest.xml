@@ -1,78 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.alavpa.spendify">
+          package="com.alavpa.spendify">
 
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
-        android:name=".Application"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+            android:name=".Application"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
 
-        <activity android:name="com.alavpa.spendify.ui.main.MainActivity"
-                  android:screenOrientation="portrait"/>
+        <activity
+                android:name="com.alavpa.spendify.ui.main.MainActivity"
+                android:screenOrientation="portrait"
+                android:launchMode="singleTop"/>
 
-        <activity android:name=".ui.init.StartActivity"
+        <activity
+                android:name=".ui.init.StartActivity"
                 android:noHistory="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.init.day.SelectDayActivity"
-                  android:noHistory="true"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.init.day.SelectDayActivity"
+                android:noHistory="true"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:name=".ui.init.day.SelectDayMonthActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.init.day.SelectDayMonthActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"
+                android:parentActivityName=".ui.main.MainActivity"/>
 
-        <activity android:name=".ui.init.categories.StartCategoriesActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.init.categories.StartCategoriesActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:name=".ui.init.categories.ManageCategoriesActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.init.categories.ManageCategoriesActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"
+                android:parentActivityName=".ui.main.MainActivity"/>
 
-        <activity android:name=".ui.init.reminder.RemiderActivity"
-                  android:noHistory="true"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.init.reminder.RemiderActivity"
+                android:noHistory="true"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"
+                android:parentActivityName=".ui.main.MainActivity"/>
 
-        <activity android:name=".ui.init.reminder.NotificationsActivity"
-                  android:noHistory="true"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.init.reminder.NotificationsActivity"
+                android:noHistory="true"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"
+                android:parentActivityName=".ui.main.MainActivity"/>
 
-        <activity android:name=".ui.details.DetailsActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.details.DetailsActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:name=".ui.category.add.AddCategoryActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.category.add.AddCategoryActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:name=".ui.dashboard.DashboardActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.dashboard.DashboardActivity"
+                android:launchMode="singleTop"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"
+                android:parentActivityName=".ui.main.MainActivity"/>
 
-        <activity android:name=".ui.dashboard.sectors.DashboardSectorsActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.dashboard.sectors.DashboardSectorsActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"
+                android:parentActivityName=".ui.dashboard.DashboardActivity"/>
 
-        <activity android:name=".ui.dashboard.amounts.DashboardAmountsActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.dashboard.amounts.DashboardAmountsActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"
+                android:parentActivityName=".ui.dashboard.DashboardActivity"/>
 
-        <activity android:name=".ui.months.MonthsActivity"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+                android:name=".ui.months.MonthsActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"/>
 
         <receiver android:name=".ui.receiver.AlarmReceiver">
             <intent-filter>

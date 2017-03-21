@@ -21,8 +21,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
-
 public class MainActivity extends BaseMenuActivity implements MainView, HasComponent<ActivityComponent> {
 
     @BindView(R.id.tv_amount)
@@ -52,19 +50,7 @@ public class MainActivity extends BaseMenuActivity implements MainView, HasCompo
 
         setPresenter(presenter);
 
-//        keyboard.setOnPressKey(new Keyboard.OnPressKey() {
-//            @Override
-//            public void onPress(double value) {
-//                presenter.setValue(value);
-//            }
-//        });
-
         keyboard.setTextView(tvAmount);
-
-        Amount amount = getIntent().getParcelableExtra(EXTRA_AMOUNT);
-        if(amount!=null){
-            presenter.setAmount(amount);
-        }
     }
 
     @Override

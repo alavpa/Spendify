@@ -3,7 +3,6 @@ package com.alavpa.spendify.ui.base.nomenu;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.alavpa.spendify.R;
@@ -30,21 +29,5 @@ public class BaseNoMenuActivity extends BaseActivity implements BaseNoMenuView{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         LayoutInflater.from(this).inflate(layoutResID,content,true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home){
-            onClickHome();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClickHome() {
-        finish();
     }
 }

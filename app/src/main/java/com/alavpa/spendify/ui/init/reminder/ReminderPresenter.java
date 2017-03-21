@@ -1,7 +1,6 @@
 package com.alavpa.spendify.ui.init.reminder;
 
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.domain.usecases.CancelAlarmEndDay;
 import com.alavpa.spendify.domain.usecases.CancelAlarmEndMonth;
@@ -109,7 +108,7 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
             getView().finish();
         }else{
             preferences.setInitialized(true);
-            navigator.openMain(new Amount());
+            navigator.openMain();
         }
     }
 

@@ -22,14 +22,15 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
     int[] categories;
     Integer selected = null;
 
-    public CategoryColorAdapter(Context context, int[] categories){
+    public CategoryColorAdapter(Context context, int[] categories) {
         inflater = LayoutInflater.from(context);
         setCategoryColors(categories);
     }
+
     @Override
     public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = inflater.inflate(R.layout.item_category,parent,false);
+        View view = inflater.inflate(R.layout.item_category, parent, false);
         return new CategoryViewHolder(view);
     }
 
@@ -44,39 +45,35 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
         return categories.length;
     }
 
-    public Integer getSelected(){
+    public Integer getSelected() {
         return selected;
     }
 
-    public void setCategoryColors(int[] categories){
+    public void setCategoryColors(int[] categories) {
 
         this.categories = categories;
 
     }
 
-    public void setSelected(int category) {
-        if(category>0) {
-            this.selected = category;
-        }else {
-            this.selected = null;
-        }
+    public void setSelected(Integer category) {
+        this.selected = category;
     }
 
-    public class CategoryViewHolder extends RecyclerView.ViewHolder{
+    public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.fl_category)
         FrameLayout flCategory;
 
         public CategoryViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
-        public void bind(int color){
+        public void bind(int color) {
             flCategory.setBackgroundResource(color);
-            if(getSelected()!=null) {
+            if (getSelected() != null) {
                 itemView.setSelected(getAdapterPosition() == getSelected());
-            }else {
+            } else {
                 itemView.setSelected(false);
             }
             onClick();
@@ -87,10 +84,9 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
                 @Override
                 public void onClick(View v) {
 
-                    if(getSelected()!=null && getAdapterPosition()==getSelected()){
-                        setSelected(0);
-                    }
-                    else {
+                    if (getSelected() != null && getAdapterPosition() == getSelected()) {
+                        setSelected(null);
+                    } else {
                         setSelected(getAdapterPosition());
                     }
                     notifyDataSetChanged();

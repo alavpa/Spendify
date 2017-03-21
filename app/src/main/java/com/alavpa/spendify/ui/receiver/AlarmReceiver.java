@@ -1,11 +1,19 @@
 package com.alavpa.spendify.ui.receiver;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
+import com.alavpa.spendify.Application;
+import com.alavpa.spendify.R;
 import com.alavpa.spendify.data.alarm.AlarmManager;
-import com.alavpa.spendify.data.preferences.PrefsDatasource;
+import com.alavpa.spendify.data.resources.ResDatasource;
+import com.alavpa.spendify.di.application.ApplicationComponent;
+import com.alavpa.spendify.ui.IntentUtils;
 
 import java.util.Calendar;
 
@@ -13,36 +21,80 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class AlarmReceiver extends WakefulBroadcastReceiver{
+public class AlarmReceiver extends WakefulBroadcastReceiver {
+
+    public static final int NOTIFICATION_ENDDAY_ID = 1;
+    public static final int NOTIFICATION_ENDMONTH_ID = 2;
+
     @Inject
-    PrefsDatasource preferences;
+    ResDatasource resources;
 
     @Inject
     AlarmManager alarmManager;
 
+    @Inject
+    IntentUtils intentUtils;
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if(intent.getAction().equals(AlarmManager.ACTION_ALARM_ENDDAY)){
-            long time = intent.getLongExtra(AlarmManager.EXTRA_ALARM_DATA, 0);
-            rescheduleAlarmEndDay(time);
+        inject(context);
+        if (intent.getAction().equals(AlarmManager.ACTION_ALARM_ENDDAY)) {
+
+            String title = resources.getString(R.string.notification_title_endday);
+            String content = resources.getString(R.string.notification_content_endday);
+            Intent mainIntent = intentUtils.getMainIntent(context);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,
+                    NOTIFICATION_ENDDAY_ID,
+                    mainIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+
+            publish(context, NOTIFICATION_ENDDAY_ID, title, content, pendingIntent);
         }
 
-        if(intent.getAction().equals(AlarmManager.ACTION_ALARM_ENDMONTH)){
-            rescheduleAlarmEndMonth();
+        if (intent.getAction().equals(AlarmManager.ACTION_ALARM_ENDMONTH)) {
+
+            String title = resources.getString(R.string.notification_title_endmonth);
+            String content = resources.getString(R.string.notification_content_endmonth);
+            Intent dashboardIntent = intentUtils.getDashboardIntent(context, Calendar.getInstance().getTimeInMillis());
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,
+                    NOTIFICATION_ENDMONTH_ID,
+                    dashboardIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+
+            publish(context, NOTIFICATION_ENDMONTH_ID, title, content, pendingIntent);
+
         }
     }
 
-    private void rescheduleAlarmEndMonth() {
+    private void publish(Context context, int id, String title, String content, PendingIntent pendingIntent) {
 
-        alarmManager.setAlarmEndMonth(preferences.getMonthDay());
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setContentTitle(title);
+        builder.setContentText(content);
+        builder.setContentIntent(pendingIntent);
+        builder.setSmallIcon(R.drawable.ic_notification);
+        builder.setAutoCancel(true);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(content));
+        Notification notification = builder.build();
+        notify(context, id, notification);
     }
 
-    public void rescheduleAlarmEndDay(long time){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time);
-        calendar.add(Calendar.DATE,1);
+    private void notify(Context context, int id, Notification notification) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(id, notification);
 
-        alarmManager.setAlarmEndDay(calendar);
     }
+
+    public void inject(Context context) {
+        getApplicationComponent(context)
+                .inject(this);
+
+    }
+
+    public ApplicationComponent getApplicationComponent(Context context) {
+        return ((Application) context.getApplicationContext()).getApplicationComponent();
+    }
+
+
 }

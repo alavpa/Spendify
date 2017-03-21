@@ -70,5 +70,6 @@ public class StartCategoriesPresenter extends BasePresenter<StartCategoriesView>
 
     public void onClickNext() {
         navigator.openReminder();
+        getView().finish();
     }
 }

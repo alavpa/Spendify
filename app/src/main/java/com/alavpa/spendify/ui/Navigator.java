@@ -8,7 +8,6 @@ import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.ui.category.add.AddCategoryActivity;
-import com.alavpa.spendify.ui.dashboard.DashboardActivity;
 import com.alavpa.spendify.ui.dashboard.amounts.DashboardAmountsActivity;
 import com.alavpa.spendify.ui.dashboard.sectors.DashboardSectorsActivity;
 import com.alavpa.spendify.ui.details.DetailsActivity;
@@ -41,13 +40,16 @@ public class Navigator {
     public static final int REQUEST_CODE_DETAILS = 2;
 
     @Inject
+    IntentUtils intentUtils;
+
+    @Inject
     public Navigator(Activity activity){
         this.activity = activity;
     }
 
+
     private Intent getIntent(Class activityClass){
-        Intent intent = new Intent(activity, activityClass);
-        return intent;
+        return intentUtils.getIntent(activity,activityClass);
     }
     public void openDetails(Amount amount){
         Intent intent = getIntent(DetailsActivity.class);
@@ -55,15 +57,13 @@ public class Navigator {
         activity.startActivityForResult(intent,REQUEST_CODE_DETAILS);
     }
 
-    public void openMain(Amount amount){
+    public void openMain(){
         Intent intent = getIntent(MainActivity.class);
-        intent.putExtra(EXTRA_AMOUNT,amount);
         activity.startActivity(intent);
     }
 
     public void openDashboard(long month) {
-        Intent intent = getIntent(DashboardActivity.class);
-        intent.putExtra(EXTRA_FROM,month);
+        Intent intent = intentUtils.getDashboardIntent(activity,month);
         activity.startActivity(intent);
     }
 
