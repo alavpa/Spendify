@@ -34,4 +34,6 @@ public interface Repository {
     Single<Long> getMaxDate();
 
     Single<Long> getMinDate();
+
+    Single<Double> getSumByCategory(Category category, long from, long to);
 }

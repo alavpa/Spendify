@@ -130,4 +130,8 @@ public class Category implements Parcelable {
         CategoryDb categoryDb = datasource.updateCategory(toCategoryDb());
         return fromCategoryDb(categoryDb);
     }
+
+    public Double getLimit() {
+        return 200.0;
+    }
 }

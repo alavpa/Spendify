@@ -106,4 +106,34 @@ public class Period implements Parcelable {
             return new Period[size];
         }
     };
+
+    public long getNextDateInMillis(){
+
+        Calendar next = Calendar.getInstance();
+        next.setTimeInMillis(date);
+
+        next.add(getCalendarPeriod(),times);
+        while (next.getTimeInMillis()<System.currentTimeMillis()){
+            next.add(getCalendarPeriod(),times);
+        }
+        return next.getTimeInMillis();
+    }
+
+
+    public int getCalendarPeriod(){
+        switch (getPeriod()){
+            default:
+            case Period.PER_DAY:
+                 return Calendar.DATE;
+
+            case Period.PER_WEEK:
+                return Calendar.WEEK_OF_YEAR;
+
+            case Period.PER_MONTH:
+                return Calendar.MONTH;
+
+            case Period.PER_YEAR:
+                return Calendar.YEAR;
+        }
+    }
 }

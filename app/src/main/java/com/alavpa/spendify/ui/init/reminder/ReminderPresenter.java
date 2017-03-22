@@ -100,8 +100,11 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
             alarmManager.cancelAlarmEndDay();
         }
 
-        if (period != null) {
+        if (preferences.notifyPromises() && period != null) {
             preferences.setNotifyPromisesPeriod(period);
+            alarmManager.setAlarmPromises(period);
+        }else{
+            alarmManager.cancelAlarmPromises();
         }
 
         if(save) {

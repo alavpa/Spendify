@@ -185,5 +185,15 @@ public class RepositoryData implements Repository {
         });
     }
 
+    @Override
+    public Single<Double> getSumByCategory(final Category category, final long from, final long to) {
+        return Single.fromCallable(new Callable<Double>() {
+            @Override
+            public Double call() throws Exception {
+                return datasource.getSumByCategoryId(category.getId(), from, to);
+            }
+        });
+    }
+
 
 }

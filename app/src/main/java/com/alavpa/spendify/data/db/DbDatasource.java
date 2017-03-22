@@ -268,8 +268,8 @@ public class DbDatasource implements Datasource {
         Long date = null;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT MAX(" + AmountDb.COL_DATE + ") FROM " + AmountDb.TABLE_NAME,null);
-        if(cursor.moveToFirst()){
+        Cursor cursor = db.rawQuery("SELECT MAX(" + AmountDb.COL_DATE + ") FROM " + AmountDb.TABLE_NAME, null);
+        if (cursor.moveToFirst()) {
             date = cursor.getLong(0);
         }
         cursor.close();
@@ -283,14 +283,44 @@ public class DbDatasource implements Datasource {
         Long date = null;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT MIN(" + AmountDb.COL_DATE + ") FROM " + AmountDb.TABLE_NAME,null);
-        if(cursor.moveToFirst()){
+        Cursor cursor = db.rawQuery("SELECT MIN(" + AmountDb.COL_DATE + ") FROM " + AmountDb.TABLE_NAME, null);
+        if (cursor.moveToFirst()) {
             date = cursor.getLong(0);
         }
         cursor.close();
         db.close();
 
         return date;
+    }
+
+    @Override
+    public double getSumByCategoryId(long catId, long from, long to) {
+
+        double total = 0;
+
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT SUM(" + AmountDb.COL_AMOUNT + ") " +
+                        "FROM " + AmountDb.TABLE_NAME + " " +
+                        "WHERE " + AmountDb.COL_CATID + "=? AND " +
+                        AmountDb.COL_DATE + ">=? AND " +
+                        AmountDb.COL_DATE + "<=?",
+
+                new String[]{DbUtils.getParam(catId),
+                        DbUtils.getParam(from),
+                        DbUtils.getParam(to)},
+                null);
+
+        if (cursor.moveToFirst()) {
+            total = cursor.getDouble(0);
+        }
+
+        cursor.close();
+
+        db.close();
+
+        return total;
+
     }
 
     private Cursor getAmountByCategoryId(SQLiteDatabase db, long id, long from, long to) {

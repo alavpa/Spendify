@@ -31,4 +31,5 @@ public interface Datasource {
 
     Long getMinDate();
 
+    double getSumByCategoryId(long catId, long from, long to);
 }
