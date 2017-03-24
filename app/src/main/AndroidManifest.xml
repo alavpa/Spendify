@@ -53,8 +53,7 @@
                 android:name=".ui.init.reminder.RemiderActivity"
                 android:noHistory="true"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateHidden"
-                android:parentActivityName=".ui.main.MainActivity"/>
+                android:windowSoftInputMode="stateHidden"/>
 
         <activity
                 android:name=".ui.init.reminder.NotificationsActivity"
@@ -66,7 +65,8 @@
         <activity
                 android:name=".ui.details.DetailsActivity"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateHidden"/>
+                android:windowSoftInputMode="stateHidden"
+                android:parentActivityName=".ui.main.MainActivity"/>
 
         <activity
                 android:name=".ui.category.add.AddCategoryActivity"
@@ -90,7 +90,7 @@
                 android:name=".ui.dashboard.amounts.DashboardAmountsActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden"
-                android:parentActivityName=".ui.dashboard.DashboardActivity"/>
+                android:parentActivityName=".ui.dashboard.sectors.DashboardSectorsActivity"/>
 
         <activity
                 android:name=".ui.months.MonthsActivity"
@@ -101,6 +101,9 @@
             <intent-filter>
                 <action android:name="com.alavpa.spendify.data.alarm.ACTION_ALARM_ENDDAY"/>
                 <action android:name="com.alavpa.spendify.data.alarm.ACTION_ALARM_ENDMONTH"/>
+                <action android:name="com.alavpa.spendify.data.alarm.ACTION_AMOUNT"/>
+                <action android:name="com.alavpa.spendify.data.alarm.ACTION_OFFLIMIT"/>
+                <action android:name="com.alavpa.spendify.data.alarm.ACTION_PROMISES"/>
             </intent-filter>
         </receiver>
 

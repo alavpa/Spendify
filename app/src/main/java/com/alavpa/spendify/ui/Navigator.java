@@ -2,6 +2,7 @@ package com.alavpa.spendify.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Amount;
@@ -121,5 +122,9 @@ public class Navigator {
     public void openNotifications() {
         Intent intent = getIntent(NotificationsActivity.class);
         activity.startActivity(intent);
+    }
+
+    public void goToUp(){
+        NavUtils.navigateUpFromSameTask(activity);
     }
 }

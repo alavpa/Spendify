@@ -47,7 +47,8 @@ public class SelectDayMonthActivity extends BaseNoMenuActivity implements Select
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.next(keyboard.getValue(), true);
+                presenter.next(keyboard.getValue());
+                presenter.goToUp();
             }
         });
 

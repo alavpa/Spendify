@@ -86,8 +86,8 @@ public class NotificationsActivity extends BaseNoMenuActivity implements Reminde
                         chkOfflimit.isChecked(),
                         chkPromises.isChecked(),
                         time,
-                        period,
-                        true);
+                        period);
+                presenter.goToParent();
             }
         });
 

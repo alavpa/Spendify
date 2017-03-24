@@ -67,8 +67,7 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
                         boolean notifyOfflimit,
                         boolean notifyPromises,
                         String time,
-                        Period period,
-                        boolean save) {
+                        Period period) {
 
         preferences.setNotifyEndOfMonth(notifyEndMonth);
         if(notifyEndMonth){
@@ -106,13 +105,6 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
         }else{
             alarmManager.cancelAlarmPromises();
         }
-
-        if(save) {
-            getView().finish();
-        }else{
-            preferences.setInitialized(true);
-            navigator.openMain();
-        }
     }
 
     public void showTimePickerDialog(String time) {
@@ -128,5 +120,14 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
     public void setEndDayTime(Calendar calendar) {
         String date = simpleTimeFormat.format(calendar.getTime());
         getView().showEndOfDayTime(date);
+    }
+
+    public void goToNext(){
+        preferences.setInitialized(true);
+        navigator.openMain();
+    }
+
+    public void goToParent(){
+        navigator.goToUp();
     }
 }

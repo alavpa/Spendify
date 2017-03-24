@@ -47,7 +47,8 @@ public class SelectDayActivity extends BaseActivity implements SelectDayView {
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.next(keyboard.getValue(), false);
+                presenter.next(keyboard.getValue());
+                presenter.goToNext();
             }
         });
 

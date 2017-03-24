@@ -86,8 +86,9 @@ public class RemiderActivity extends BaseActivity implements ReminderView{
                         chkOfflimit.isChecked(),
                         chkPromises.isChecked(),
                         time,
-                        period,
-                        false);
+                        period);
+
+                presenter.goToNext();
             }
         });
 
