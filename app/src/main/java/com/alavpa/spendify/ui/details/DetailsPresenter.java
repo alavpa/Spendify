@@ -7,7 +7,6 @@ import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.domain.usecases.GetCategories;
 import com.alavpa.spendify.domain.usecases.InsertAmount;
-import com.alavpa.spendify.domain.usecases.InsertOrUpdateCategory;
 import com.alavpa.spendify.ui.base.BasePresenter;
 
 import java.text.DecimalFormat;
@@ -41,21 +40,16 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     private
     InsertAmount insertAmount;
 
-    private
-    InsertOrUpdateCategory insertOrUpdateCategory;
-
     @Inject
     public DetailsPresenter(GetCategories getCategories,
-                            InsertAmount insertAmount,
-                            InsertOrUpdateCategory insertOrUpdateCategory){
+                            InsertAmount insertAmount){
 
         this.amount = new Amount();
 
         this.getCategories = getCategories;
         this.insertAmount = insertAmount;
-        this.insertOrUpdateCategory = insertOrUpdateCategory;
 
-        addUseCases(getCategories, insertAmount, insertOrUpdateCategory);
+        addUseCases(getCategories, insertAmount);
     }
 
     public void initView(){
@@ -112,7 +106,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
             @Override
             public void onError(Throwable e) {
-
+                getView().showError(e.getMessage());
             }
         });
 
@@ -151,6 +145,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
         getView().setDate(dateText.substring(0,1).toUpperCase()+dateText.substring(1));
     }
 
+    @SuppressWarnings("WrongConstant")
     public void fillAmountFromView(){
         amount.setDescription(getView().description());
         amount.setCategory(getView().category());

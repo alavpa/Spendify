@@ -21,6 +21,7 @@ public class AmountDb {
     public static final String COL_PERIOD = "period";
     public static final String COL_TIMES = "period_times";
     public static final String COL_DATE = "amount_date";
+    public static final String COL_DELETED = "deleted";
 
     public static final String CREATE_TABLE = ""
             + "CREATE TABLE " + TABLE_NAME + "("
@@ -31,6 +32,7 @@ public class AmountDb {
             + COL_CATID + " INTEGER NOT NULL,"
             + COL_PERIOD + " INTEGER NOT NULL DEFAULT -1,"
             + COL_TIMES + " INTEGER NOT NULL DEFAULT 0,"
+            + COL_DELETED + " INTEGER NOT NULL DEFAULT 0,"
             + COL_DATE + " INTEGER NOT NULL"
             + ")";
 
@@ -42,7 +44,7 @@ public class AmountDb {
     private int period;
     private int times;
     private long date;
-
+    private boolean deleted;
 
     public long getId() {
         return id;
@@ -108,6 +110,14 @@ public class AmountDb {
         this.date = date;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     public AmountDb fromCursor(Cursor cursor){
         this.setId(DbUtils.getLong(cursor,COL_ID));
         this.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
@@ -116,6 +126,7 @@ public class AmountDb {
         this.setPeriod(DbUtils.getInt(cursor,COL_PERIOD));
         this.setTimes(DbUtils.getInt(cursor,COL_TIMES));
         this.setDate(DbUtils.getLong(cursor,COL_DATE));
+        this.setDeleted(DbUtils.getBoolean(cursor,COL_DELETED));
         return this;
     }
 

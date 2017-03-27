@@ -35,7 +35,11 @@ public class DbDatasource implements Datasource {
         List<CategoryDb> categories;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = getCategories(db, income);
+        Cursor cursor = db.query(CategoryDb.TABLE_NAME,
+                null,
+                DbUtils.operatorEqual(CategoryDb.COL_INCOME, income) + " AND " +
+                        DbUtils.operatorEqual(CategoryDb.COL_DELETED, false),
+                null, null, null, null);
         categories = getCategoryList(cursor);
         cursor.close();
         db.close();
@@ -185,7 +189,8 @@ public class DbDatasource implements Datasource {
                 null,
                 AmountDb.COL_DATE + ">=? AND " +
                         AmountDb.COL_DATE + "<=? AND " +
-                        AmountDb.COL_INCOME + "=?",
+                        AmountDb.COL_INCOME + "=? AND " +
+                        DbUtils.operatorEqual(AmountDb.COL_DELETED, false),
                 new String[]{DbUtils.getParam(from), DbUtils.getParam(to), DbUtils.getParam(income)},
                 AmountDb.COL_CATID,
                 null,
@@ -234,7 +239,8 @@ public class DbDatasource implements Datasource {
                             " FROM " + AmountDb.TABLE_NAME +
                             " WHERE " + AmountDb.COL_INCOME + "=? AND " +
                             AmountDb.COL_DATE + ">=? AND " +
-                            AmountDb.COL_DATE + "<=?" +
+                            AmountDb.COL_DATE + "<=? AND " +
+                            DbUtils.operatorEqual(AmountDb.COL_DELETED, false) +
                             " GROUP BY " + AmountDb.COL_CATID,
                     new String[]{DbUtils.getParam(income), DbUtils.getParam(from), DbUtils.getParam(to)});
 
@@ -268,7 +274,10 @@ public class DbDatasource implements Datasource {
         Long date = null;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT MAX(" + AmountDb.COL_DATE + ") FROM " + AmountDb.TABLE_NAME, null);
+        Cursor cursor = db.rawQuery("SELECT MAX(" + AmountDb.COL_DATE + ")" +
+                        " FROM " + AmountDb.TABLE_NAME +
+                        " WHERE " + DbUtils.operatorEqual(AmountDb.COL_DELETED, false),
+                null);
         if (cursor.moveToFirst()) {
             date = cursor.getLong(0);
         }
@@ -283,7 +292,10 @@ public class DbDatasource implements Datasource {
         Long date = null;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT MIN(" + AmountDb.COL_DATE + ") FROM " + AmountDb.TABLE_NAME, null);
+        Cursor cursor = db.rawQuery("SELECT MIN(" + AmountDb.COL_DATE + ")" +
+                        " FROM " + AmountDb.TABLE_NAME +
+                        " WHERE " + DbUtils.operatorEqual(AmountDb.COL_DELETED, false),
+                null);
         if (cursor.moveToFirst()) {
             date = cursor.getLong(0);
         }
@@ -304,7 +316,8 @@ public class DbDatasource implements Datasource {
                         "FROM " + AmountDb.TABLE_NAME + " " +
                         "WHERE " + AmountDb.COL_CATID + "=? AND " +
                         AmountDb.COL_DATE + ">=? AND " +
-                        AmountDb.COL_DATE + "<=?",
+                        AmountDb.COL_DATE + "<=? AND " +
+                        DbUtils.operatorEqual(AmountDb.COL_DELETED, false),
 
                 new String[]{DbUtils.getParam(catId),
                         DbUtils.getParam(from),
@@ -328,7 +341,8 @@ public class DbDatasource implements Datasource {
                 null,
                 AmountDb.COL_DATE + ">=? AND " +
                         AmountDb.COL_DATE + "<=? AND " +
-                        AmountDb.COL_CATID + "=?",
+                        AmountDb.COL_CATID + "=? AND " +
+                        DbUtils.operatorEqual(AmountDb.COL_DELETED, false),
                 new String[]{DbUtils.getParam(from), DbUtils.getParam(to), DbUtils.getParam(id)},
                 null,
                 null,

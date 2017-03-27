@@ -11,13 +11,6 @@
             android:padding="@dimen/padding"
             android:layout_weight="1">
 
-        <CheckBox
-                android:id="@+id/chk_income"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin"
-                android:text="@string/income"/>
-
         <EditText
                 android:id="@+id/et_name"
                 android:layout_width="match_parent"
@@ -28,12 +21,29 @@
                 android:padding="@dimen/padding"
                 android:layout_marginBottom="@dimen/margin"/>
 
+        <CheckBox
+                android:id="@+id/chk_limit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_marginBottom="@dimen/margin"
+                android:text="@string/limit"/>
+
+        <TextView
+                android:id="@+id/tv_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin"
+                android:visibility="gone"
+                android:layout_weight="0"
+                android:layout_gravity="center"
+                android:textSize="@dimen/text_size_40"/>
+
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_colors"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginBottom="@dimen/margin"/>
+                android:layout_weight="1"/>
     </LinearLayout>
 
     <TextView

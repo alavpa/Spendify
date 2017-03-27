@@ -291,4 +291,9 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
             presenter.showCategories();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

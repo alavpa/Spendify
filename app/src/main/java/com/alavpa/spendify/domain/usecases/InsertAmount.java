@@ -57,7 +57,7 @@ public class InsertAmount extends UseCase<Amount>{
                         }
 
                         if(prefsDatasource.notifyOfflimit()){
-                            if(amount.getCategory().getLimit()>sum){
+                            if(amount.getCategory().isOverLimit(sum)){
                                 alarmManager.setAlarmOfflimit(amount.getCategory());
                             }
                         }

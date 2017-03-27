@@ -31,13 +31,17 @@ public class Amount implements Parcelable {
     private
     Period period;
 
+    private
+    boolean deleted;
+
     protected Amount(Parcel in) {
         this.id = in.readLong();
-        this.income = in.readByte() != 0;
+        this.income = in.readByte() == 1;
         this.amount = in.readDouble();
         this.description = in.readString();
         this.category = in.readParcelable(Category.class.getClassLoader());
         this.period = in.readParcelable(Period.class.getClassLoader());
+        this.deleted = in.readByte()==1;
     }
 
     public Amount(){
@@ -47,6 +51,7 @@ public class Amount implements Parcelable {
         this.amount = 0.0f;
         this.category = null;
         period = new Period();
+        deleted = false;
     }
 
     public long getId() {
@@ -97,6 +102,14 @@ public class Amount implements Parcelable {
         this.period = period;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -110,6 +123,7 @@ public class Amount implements Parcelable {
         dest.writeString(this.description);
         dest.writeParcelable(this.category, flags);
         dest.writeParcelable(this.period, flags);
+        dest.writeByte(this.deleted?(byte)1:(byte)0);
     }
 
     public static final Parcelable.Creator<Amount> CREATOR = new Parcelable.Creator<Amount>() {
@@ -139,6 +153,7 @@ public class Amount implements Parcelable {
         amountDb.setPeriod(this.getPeriod().getPeriod());
         amountDb.setDate(this.getPeriod().getDate());
         amountDb.setTimes(this.getPeriod().getTimes());
+        amountDb.setDeleted(this.isDeleted());
 
         if(this.getCategory()!=null) {
             CategoryDb categoryDb = this.getCategory().toCategoryDb();
@@ -156,6 +171,8 @@ public class Amount implements Parcelable {
         setAmount(amountDb.getAmount());
         Period period = new Period(amountDb.getDate(),amountDb.getPeriod(), amountDb.getTimes());
         setPeriod(period);
+        setDeleted(amountDb.isDeleted());
+
         if(amountDb.getCategoryDb()!=null) {
             Category category = new Category().fromCategoryDb(amountDb.getCategoryDb());
             setCategory(category);

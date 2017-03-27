@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar"/>
+    <include android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
 
     <FrameLayout
         android:id="@+id/content"
         android:background="@color/background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"/>
 
-</LinearLayout>
+    <com.alavpa.spendify.ui.custom.keyboard.Keyboard
+            android:id="@+id/keyboard"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

@@ -17,12 +17,16 @@ public class CategoryDb {
     public static final String COL_INCOME = "income";
     public static final String COL_NAME = "name";
     public static final String COL_COLOR = "color";
+    public static final String COL_LIMIT = "top_limit";
+    public static final String COL_DELETED = "deleted";
 
     public static final String CREATE_TABLE = ""
             + "CREATE TABLE " + TABLE_NAME + "("
             + COL_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
             + COL_INCOME + " INTEGER NOT NULL DEFAULT 0,"
             + COL_COLOR + " INTEGER NOT NULL DEFAULT 0,"
+            + COL_LIMIT + " REAL NOT NULL DEFAULT 0,"
+            + COL_DELETED + " INTEGER NOT NULL DEFAULT 0,"
             + COL_NAME + " TEXT NOT NULL"
             + ")";
 
@@ -30,6 +34,8 @@ public class CategoryDb {
     private String name;
     private boolean income;
     private int color;
+    private double limit;
+    private boolean deleted;
 
     public long getId() {
         return id;
@@ -63,11 +69,29 @@ public class CategoryDb {
         this.color = color;
     }
 
+    public double getLimit() {
+        return limit;
+    }
+
+    public void setLimit(double limit) {
+        this.limit = limit;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     public CategoryDb fromCursor(Cursor cursor){
         this.setId(DbUtils.getLong(cursor,COL_ID));
         this.setIncome(DbUtils.getBoolean(cursor,COL_INCOME));
         this.setName(DbUtils.getString(cursor,COL_NAME));
+        this.setLimit(DbUtils.getDouble(cursor,COL_LIMIT));
         this.setColor(DbUtils.getInt(cursor,COL_COLOR));
+        this.setDeleted(DbUtils.getBoolean(cursor,COL_DELETED));
         return this;
     }
 
@@ -91,6 +115,11 @@ public class CategoryDb {
 
         public Builder color(int color){
             contentValues.put(COL_COLOR,color);
+            return this;
+        }
+
+        public Builder limit(double limit){
+            contentValues.put(COL_LIMIT,limit);
             return this;
         }
 

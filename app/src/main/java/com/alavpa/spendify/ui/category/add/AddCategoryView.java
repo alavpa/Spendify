@@ -12,9 +12,9 @@ public interface AddCategoryView extends BaseView {
     
     void onSendSuccess();
 
-    void showIncome(boolean income);
-
     void showName(String name);
 
     void setSelected(int color);
+
+    void showLimit(String limit);
 }

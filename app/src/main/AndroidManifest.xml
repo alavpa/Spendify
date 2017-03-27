@@ -3,6 +3,7 @@
           package="com.alavpa.spendify">
 
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
             android:name=".Application"
@@ -65,13 +66,13 @@
         <activity
                 android:name=".ui.details.DetailsActivity"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateHidden"
+                android:windowSoftInputMode="adjustPan"
                 android:parentActivityName=".ui.main.MainActivity"/>
 
         <activity
                 android:name=".ui.category.add.AddCategoryActivity"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateHidden"/>
+                android:windowSoftInputMode="adjustPan"/>
 
         <activity
                 android:name=".ui.dashboard.DashboardActivity"

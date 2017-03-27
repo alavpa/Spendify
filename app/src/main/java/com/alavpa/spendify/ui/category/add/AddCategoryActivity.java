@@ -3,8 +3,11 @@ package com.alavpa.spendify.ui.category.add;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.activity.ActivityModule;
@@ -27,8 +30,12 @@ import butterknife.OnClick;
 
 public class AddCategoryActivity extends BaseNoMenuActivity implements AddCategoryView{
 
-    @BindView(R.id.chk_income)
-    CheckBox chkIncome;
+    @BindView(R.id.tv_limit)
+    TextView tvLimit;
+
+    @BindView(R.id.chk_limit)
+    CheckBox chkLimit;
+
     @BindView(R.id.et_name)
     EditText etTitle;
     @BindView(R.id.rv_colors)
@@ -58,13 +65,24 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
 
         Category category = getIntent().getParcelableExtra(Navigator.EXTRA_CATEGORY);
         presenter.setCategory(category);
+
+        chkLimit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    tvLimit.setVisibility(View.VISIBLE);
+                }else{
+                    tvLimit.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         presenter.showColors();
-        presenter.showIncome();
+        presenter.showLimit();
         presenter.showName();
         presenter.showSelected();
     }
@@ -86,10 +104,6 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
         return etTitle.getText().toString();
     }
 
-    public boolean income() {
-        return chkIncome.isChecked();
-    }
-
     public int color() {
         return adapter.getSelected();
     }
@@ -98,11 +112,6 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
     public void onSendSuccess() {
         setResult(RESULT_OK);
         finish();
-    }
-
-    @Override
-    public void showIncome(boolean income) {
-        chkIncome.setChecked(income);
     }
 
     @Override
@@ -115,8 +124,21 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
         adapter.setSelected(color);
     }
 
+    @Override
+    public void showLimit(String limit) {
+        tvLimit.setText(limit);
+    }
+
     @OnClick(R.id.btn_ok)
     public void onSend(){
-        presenter.send(name(),income(),color());
+        if(chkLimit.isChecked()) {
+            presenter.send(name(), color(), limit());
+        }else{
+            presenter.send(name(), color());
+        }
+    }
+
+    private String limit() {
+        return tvLimit.getText().toString();
     }
 }

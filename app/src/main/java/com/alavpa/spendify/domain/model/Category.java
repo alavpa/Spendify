@@ -24,11 +24,19 @@ public class Category implements Parcelable {
     private
     int color;
 
+    private
+    double limit;
+
+    private
+    boolean deleted;
+
     protected Category(Parcel in) {
         this.id = in.readLong();
-        this.income = in.readByte() != 0;
+        this.income = in.readByte() == 1;
         this.name = in.readString();
         this.color = in.readInt();
+        this.limit = in.readDouble();
+        this.deleted = in.readByte() == 1;
     }
 
     public Category(){
@@ -36,13 +44,16 @@ public class Category implements Parcelable {
         this.income = false;
         this.name = "";
         this.color = 0;
+        this.limit = 0;
+        this.deleted = false;
     }
 
-    public Category(String name, boolean income, int color){
-        this.id = 0;
+    public Category(String name, boolean income, int color, double limit){
+        this();
         this.income = income;
         this.name = name;
         this.color = color;
+        this.limit = limit;
     }
 
     public long getId() {
@@ -77,6 +88,22 @@ public class Category implements Parcelable {
         this.color = color;
     }
 
+    public double getLimit() {
+        return limit;
+    }
+
+    public void setLimit(double limit) {
+        this.limit = limit;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -88,6 +115,8 @@ public class Category implements Parcelable {
         dest.writeByte(this.income ? (byte) 1 : (byte) 0);
         dest.writeString(this.name);
         dest.writeInt(color);
+        dest.writeDouble(limit);
+        dest.writeByte(this.deleted ? (byte) 1 : (byte) 0);
     }
 
     public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
@@ -112,7 +141,8 @@ public class Category implements Parcelable {
         this.setName(categoryDb.getName());
         this.setIncome(categoryDb.isIncome());
         this.setColor(categoryDb.getColor());
-
+        this.setLimit(categoryDb.getLimit());
+        this.setDeleted(categoryDb.isDeleted());
         return this;
     }
 
@@ -122,7 +152,8 @@ public class Category implements Parcelable {
         categoryDb.setName(this.getName());
         categoryDb.setIncome(this.isIncome());
         categoryDb.setColor(this.getColor());
-
+        categoryDb.setLimit(this.getLimit());
+        categoryDb.setDeleted(this.isDeleted());
         return categoryDb;
     }
 
@@ -131,7 +162,10 @@ public class Category implements Parcelable {
         return fromCategoryDb(categoryDb);
     }
 
-    public Double getLimit() {
-        return 200.0;
+    public boolean isOverLimit(double amount){
+        if(limit>0) {
+            return amount > limit;
+        }
+        return false;
     }
 }

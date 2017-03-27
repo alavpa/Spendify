@@ -89,7 +89,7 @@ public class PrefsDatasource {
     }
 
     public boolean notifyPromises() {
-        return sharedPreferences.getBoolean(KEY_PROMISES,true);
+        return sharedPreferences.getBoolean(KEY_PROMISES,false);
     }
 
     public void setNotifyPromises(boolean value){

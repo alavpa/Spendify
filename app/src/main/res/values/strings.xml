@@ -28,6 +28,7 @@
     <string name="notification_content_endday">Sientate tranquilamente y apunta si hoy has hecho algún gasto o ingreso. Sino, ¡Que pases un buen día!</string>
     <string name="notification_title_endmonth">Recuerda revisar tus cuentas de este mes</string>
     <string name="notification_content_endmonth">Está apunto de terminar este mes. Sientate, revisa tus movimientos y comprueba cuanto has conseguido ahorrar, sino, seguimos estando aquí para ayudarte.</string>
+    <string name="limit">Limitar</string>
 
     <string-array name="menu">
         <item>Dashboard</item>

@@ -28,10 +28,10 @@ public class InsertOrUpdateCategory extends UseCase<Category>{
 
     @Override
     public Single<Category> build() {
-        if(category.getId()<=0) {
-            return repository.insertCategory(category);
-        }else{
+        if(category.getId()>0) {
             return repository.updateCategory(category);
+        }else{
+            return repository.insertCategory(category);
         }
     }
 }
