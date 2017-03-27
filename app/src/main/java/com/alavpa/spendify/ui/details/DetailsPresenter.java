@@ -54,8 +54,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
     public void initView(){
 
-        String value = decimalFormat.format(this.amount.getAmount());
-        getView().setAmount(value);
+        getView().showAmount(this.amount.getAmount());
 
         getView().setDescription(amount.getDescription());
 
@@ -147,6 +146,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
     @SuppressWarnings("WrongConstant")
     public void fillAmountFromView(){
+        amount.setAmount(getView().amount());
         amount.setDescription(getView().description());
         amount.setCategory(getView().category());
 

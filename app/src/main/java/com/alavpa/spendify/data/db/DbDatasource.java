@@ -99,6 +99,7 @@ public class DbDatasource implements Datasource {
                 .name(categoryDb.getName())
                 .income(categoryDb.isIncome())
                 .color(categoryDb.getColor())
+                .limit(categoryDb.getLimit())
                 .build();
 
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -115,6 +116,8 @@ public class DbDatasource implements Datasource {
                 .name(categoryDb.getName())
                 .income(categoryDb.isIncome())
                 .color(categoryDb.getColor())
+                .limit(categoryDb.getLimit())
+                .deleted(categoryDb.isDeleted())
                 .build();
 
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();

@@ -2,11 +2,9 @@ package com.alavpa.spendify.ui.category.add;
 
 import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.domain.model.Category;
+import com.alavpa.spendify.domain.usecases.DeleteCategory;
 import com.alavpa.spendify.domain.usecases.InsertOrUpdateCategory;
 import com.alavpa.spendify.ui.base.BasePresenter;
-
-import java.text.DecimalFormat;
-import java.text.ParseException;
 
 import javax.inject.Inject;
 
@@ -19,21 +17,20 @@ import io.reactivex.observers.DisposableSingleObserver;
 @PerActivity
 public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
 
-    DecimalFormat decimalFormat;
     InsertOrUpdateCategory insertOrUpdateCategory;
+    DeleteCategory deleteCategory;
     private Category category;
 
     @Inject
-    public AddCategoryPresenter(InsertOrUpdateCategory insertOrUpdateCategory, DecimalFormat decimalFormat) {
+    public AddCategoryPresenter(InsertOrUpdateCategory insertOrUpdateCategory, DeleteCategory deleteCategory) {
         this.insertOrUpdateCategory = insertOrUpdateCategory;
-        this.decimalFormat = decimalFormat;
+        this.deleteCategory = deleteCategory;
 
-        addUseCases(insertOrUpdateCategory);
+        addUseCases(insertOrUpdateCategory, deleteCategory);
     }
 
     public void showLimit(){
-        String limit = decimalFormat.format(category.getLimit());
-        getView().showLimit(limit);
+        getView().showLimit(category.getLimit());
     }
     public void showColors() {
 
@@ -50,38 +47,52 @@ public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
         getView().setSelected(category.getColor());
     }
 
-    public void send(String name, int color, String limit) {
+    public void send(String name, int color, double limit) {
 
-        try {
-            double limitValue = decimalFormat.parse(limit).doubleValue();
-            category.setName(name);
-            category.setColor(color);
-            category.setLimit(limitValue);
+        category.setName(name);
+        category.setColor(color);
+        category.setLimit(limit);
 
-            insertOrUpdateCategory.setCategory(category);
-            insertOrUpdateCategory.execute(new DisposableSingleObserver<Category>() {
-                @Override
-                public void onSuccess(Category category) {
-                    getView().onSendSuccess();
-                }
+        insertOrUpdateCategory.setCategory(category);
+        insertOrUpdateCategory.execute(new DisposableSingleObserver<Category>() {
+            @Override
+            public void onSuccess(Category category) {
+                getView().onSendSuccess();
+            }
 
-                @Override
-                public void onError(Throwable e) {
-                    getView().showError(e.getMessage());
-                }
-            });
+            @Override
+            public void onError(Throwable e) {
+                getView().showError(e.getMessage());
+            }
+        });
 
-        } catch (ParseException e) {
-            getView().showError(e.getMessage());
-        }
 
     }
 
     public void send(String name, int color) {
-        send(name,color,"0");
+        send(name,color,0);
     }
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public void showDelete() {
+        getView().setDeletable(category.getId()>0);
+    }
+
+    public void deleteCategory() {
+        deleteCategory.setCategory(category);
+        deleteCategory.execute(new DisposableSingleObserver<Boolean>() {
+            @Override
+            public void onSuccess(Boolean aBoolean) {
+                getView().finish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getView().showError(e.getMessage());
+            }
+        });
     }
 }

@@ -72,7 +72,6 @@ public class MainActivity extends BaseMenuActivity implements MainView, HasCompo
     @Override
     public void setValue(double value) {
         keyboard.setValue(value);
-        tvAmount.setText(keyboard.getFormattedValue());
     }
 
     @OnClick(R.id.btn_income)

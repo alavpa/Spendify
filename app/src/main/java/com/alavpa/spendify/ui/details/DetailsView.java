@@ -13,8 +13,9 @@ public interface DetailsView extends BaseView {
 
     void populateCategories(List<Category> categories,int[] backgrouns);
 
-    void setAmount(String amount);
+    void showAmount(double amount);
 
+    double amount();
     String description();
     boolean repeat();
     int every();

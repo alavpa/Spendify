@@ -173,6 +173,11 @@ public class AmountDb {
             return this;
         }
 
+        public Builder deleted(boolean deleted){
+            contentValues.put(COL_DELETED,deleted);
+            return this;
+        }
+
         public ContentValues build(){
             return contentValues;
         }

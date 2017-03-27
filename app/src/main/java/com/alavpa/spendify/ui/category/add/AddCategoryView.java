@@ -16,5 +16,7 @@ public interface AddCategoryView extends BaseView {
 
     void setSelected(int color);
 
-    void showLimit(String limit);
+    void showLimit(double limit);
+
+    void setDeletable(boolean deletable);
 }

@@ -25,6 +25,7 @@ import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryAdapter;
 import com.alavpa.spendify.ui.custom.dialogs.DatePickerDialog;
+import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
 
 import java.util.List;
 
@@ -44,6 +45,9 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
 
     @Inject
     DetailsPresenter presenter;
+
+    @BindView(R.id.keyboard)
+    Keyboard keyboard;
 
     @BindView(R.id.tv_date)
     TextView tvDate;
@@ -106,6 +110,19 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
     }
 
     public void initView() {
+
+        keyboard.setTextView(tvAmount);
+
+        tvAmount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(keyboard.getVisibility()==View.VISIBLE){
+                    keyboard.setVisibility(View.GONE);
+                }else{
+                    keyboard.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         days = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
@@ -199,8 +216,13 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
     }
 
     @Override
-    public void setAmount(String amount) {
-        tvAmount.setText(amount);
+    public void showAmount(double amount) {
+        keyboard.setValue(amount);
+    }
+
+    @Override
+    public double amount() {
+        return keyboard.getValue();
     }
 
     @Override
@@ -294,6 +316,11 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
+        if(keyboard.getVisibility()==View.VISIBLE){
+           keyboard.setVisibility(View.GONE);
+        }else {
+            super.onBackPressed();
+        }
     }
 }
