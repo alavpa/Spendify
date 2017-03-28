@@ -1,6 +1,7 @@
 package com.alavpa.spendify.domain.usecases;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
+import com.alavpa.spendify.domain.model.EndDayAlarm;
 
 import java.util.Calendar;
 
@@ -22,7 +23,9 @@ public class SetAlarmEndDay{
     }
 
     public void execute(){
-        alarmManager.setAlarmEndDay(time);
+
+        new EndDayAlarm(time.getTimeInMillis())
+                .set(alarmManager);
     }
 
 }

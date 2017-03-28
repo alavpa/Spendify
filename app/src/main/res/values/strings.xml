@@ -30,6 +30,7 @@
     <string name="notification_content_endmonth">Está apunto de terminar este mes. Sientate, revisa tus movimientos y comprueba cuanto has conseguido ahorrar, sino, seguimos estando aquí para ayudarte.</string>
     <string name="limit">Limitar</string>
     <string name="delete">Borrar</string>
+    <string name="confirm_delete">¿Estás seguro que quieres borrar esta categoría?</string>
 
     <string-array name="menu">
         <item>Dashboard</item>

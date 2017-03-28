@@ -64,7 +64,7 @@ public class AlarmManager {
         setAlarm(ACTION_ALARM_ENDMONTH,REQUEST_ALARM_ENDMONTH,alarm.getTimeInMillis());
     }
 
-    private void setAlarm(String action, int request, long time){
+    public void setAlarm(String action, int request, long time){
         PendingIntent pendingIntent = getPendingIntent(action,request,time);
         setAlarm(pendingIntent,time);
     }

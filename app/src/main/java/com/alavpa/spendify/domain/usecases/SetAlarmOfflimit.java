@@ -1,26 +1,21 @@
 package com.alavpa.spendify.domain.usecases;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
-import com.alavpa.spendify.data.preferences.PrefsDatasource;
-import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.model.OfflimitAlarm;
 
 import javax.inject.Inject;
 
 public class SetAlarmOfflimit {
 
     AlarmManager alarmManager;
-    Amount amount;
-
-    public void setAmount(Amount amount) {
-        this.amount = amount;
-    }
 
     @Inject
-    public SetAlarmOfflimit(AlarmManager alarmManager, PrefsDatasource preferences){
+    public SetAlarmOfflimit(AlarmManager alarmManager){
         this.alarmManager = alarmManager;
     }
 
     public void execute(){
-        alarmManager.setAlarmAmount(amount);
+        new OfflimitAlarm()
+                .set(alarmManager);
     }
 }

@@ -19,6 +19,7 @@ import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryColorAdapter;
+import com.alavpa.spendify.ui.custom.dialogs.ConfirmDialog;
 import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
 
 import javax.inject.Inject;
@@ -53,6 +54,8 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
     CategoryColorAdapter adapter;
 
     boolean deletable;
+
+    ConfirmDialog confirmDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +102,18 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
         keyboard.setTextView(tvLimit);
 
         deletable = false;
+
+        confirmDialog = ConfirmDialog.getInstance(getString(R.string.confirm_delete), new ConfirmDialog.ConfirmDialogListener() {
+            @Override
+            public void onOk() {
+                presenter.deleteCategory();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     @Override
@@ -116,12 +131,12 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
 
-        if(item.getItemId()==R.id.ic_delete){
-            presenter.deleteCategory();
+        if (item.getItemId() == R.id.ic_delete) {
+            confirmDialog.show(getSupportFragmentManager(), ConfirmDialog.class.getSimpleName());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -134,6 +149,15 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
         presenter.showName();
         presenter.showSelected();
         presenter.showDelete();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(confirmDialog!=null){
+            confirmDialog.dismiss();
+            confirmDialog = null;
+        }
     }
 
     @Override
@@ -205,4 +229,6 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
             super.onBackPressed();
         }
     }
+
+
 }
