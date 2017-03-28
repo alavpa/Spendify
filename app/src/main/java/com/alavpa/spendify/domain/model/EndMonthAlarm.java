@@ -7,20 +7,25 @@ import com.alavpa.spendify.domain.model.base.AlarmRepeat;
 
 import java.util.Calendar;
 
-public class EndDayMonthAlarm extends AlarmRepeat{
+public class EndMonthAlarm extends AlarmRepeat{
 
-    public EndDayMonthAlarm(int time){
-        date = calculateDate(time);
+    public EndMonthAlarm(){
+
+    }
+
+    public EndMonthAlarm(int day){
+        date = calculateDate(Calendar.getInstance().getTimeInMillis(),day);
         period = new Period(date,Period.PER_MONTH,1);
     }
 
-    private long calculateDate(int time){
+    public long calculateDate(long currentTime, int day){
         Calendar alarmCalendar = Calendar.getInstance();
-        alarmCalendar.set(Calendar.DATE,time);
+        alarmCalendar.setTimeInMillis(currentTime);
+        alarmCalendar.set(Calendar.DATE,day);
         alarmCalendar.add(Calendar.DATE,-1);
 
         long date = alarmCalendar.getTimeInMillis();
-        while(date<System.currentTimeMillis()){
+        while(date<currentTime){
             alarmCalendar.add(Calendar.MONTH,1);
             date = alarmCalendar.getTimeInMillis();
         }
@@ -46,19 +51,19 @@ public class EndDayMonthAlarm extends AlarmRepeat{
         super.writeToParcel(dest, flags);
     }
 
-    protected EndDayMonthAlarm(Parcel in) {
+    protected EndMonthAlarm(Parcel in) {
         super(in);
     }
 
-    public static final Creator<EndDayMonthAlarm> CREATOR = new Creator<EndDayMonthAlarm>() {
+    public static final Creator<EndMonthAlarm> CREATOR = new Creator<EndMonthAlarm>() {
         @Override
-        public EndDayMonthAlarm createFromParcel(Parcel source) {
-            return new EndDayMonthAlarm(source);
+        public EndMonthAlarm createFromParcel(Parcel source) {
+            return new EndMonthAlarm(source);
         }
 
         @Override
-        public EndDayMonthAlarm[] newArray(int size) {
-            return new EndDayMonthAlarm[size];
+        public EndMonthAlarm[] newArray(int size) {
+            return new EndMonthAlarm[size];
         }
     };
 }

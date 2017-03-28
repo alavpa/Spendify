@@ -9,18 +9,24 @@ import java.util.Calendar;
 
 public class OfflimitAlarm extends Alarm {
 
-    Category category;
+    private Category category;
+    public OfflimitAlarm(){
+
+    }
     public OfflimitAlarm(Category category){
         this.category = category;
-        date = calculateDate();
+        date = calculateDate(Calendar.getInstance().getTimeInMillis());
     }
 
-    private long calculateDate(){
+    public long calculateDate(long time){
         Calendar timeCalendar = Calendar.getInstance();
+        timeCalendar.setTimeInMillis(time);
         timeCalendar.add(Calendar.MINUTE,5);
 
-        return date;
+        return timeCalendar.getTimeInMillis();
     }
+
+
 
     public Category getCategory() {
         return category;

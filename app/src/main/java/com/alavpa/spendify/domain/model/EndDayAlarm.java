@@ -7,23 +7,28 @@ import java.util.Calendar;
 
 public class EndDayAlarm extends AlarmRepeat{
 
+    public EndDayAlarm(){
+
+    }
+
     public EndDayAlarm(long time){
-        date = calculateDate(time);
+        date = calculateDate(Calendar.getInstance().getTimeInMillis(),time);
         period = new Period(date,Period.PER_DAY,1);
     }
 
-    private long calculateDate(long time){
+    public long calculateDate(long currentTime, long time){
         Calendar timeCalendar = Calendar.getInstance();
         timeCalendar.setTimeInMillis(time);
 
         Calendar alarmCalendar = Calendar.getInstance();
+        alarmCalendar.setTimeInMillis(currentTime);
 
         alarmCalendar.set(Calendar.HOUR_OF_DAY,timeCalendar.get(Calendar.HOUR_OF_DAY));
         alarmCalendar.set(Calendar.MINUTE,timeCalendar.get(Calendar.MINUTE));
         alarmCalendar.set(Calendar.SECOND,0);
 
         long date = alarmCalendar.getTimeInMillis();
-        while(date<System.currentTimeMillis()){
+        while(date<currentTime){
             alarmCalendar.add(Calendar.DATE,1);
             date = alarmCalendar.getTimeInMillis();
         }

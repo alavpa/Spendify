@@ -28,6 +28,10 @@ public class AlarmRepeat extends Alarm{
         return period;
     }
 
+    public void setPeriod(Period period) {
+        this.period = period;
+    }
+
     @Override
     public int describeContents() {
         return 0;

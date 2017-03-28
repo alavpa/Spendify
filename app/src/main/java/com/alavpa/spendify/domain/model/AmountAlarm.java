@@ -7,23 +7,25 @@ import com.alavpa.spendify.domain.model.base.AlarmRepeat;
 
 import java.util.Calendar;
 
-public class AmountPeriodicallyAlarm extends AlarmRepeat{
+public class AmountAlarm extends AlarmRepeat{
 
     private Amount amount;
 
-    public AmountPeriodicallyAlarm(Amount amount){
+    public AmountAlarm(){}
+
+    public AmountAlarm(Amount amount){
         this.amount = amount;
-        date = calculateDate(amount.getPeriod().getDate());
-        period = new Period(date,period.getPeriod(),period.getTimes());
+        date = calculateDate(Calendar.getInstance().getTimeInMillis(), amount.getPeriod().getDate());
+        period = new Period(date,amount.getPeriod().getPeriod(),amount.getPeriod().getTimes());
     }
 
-    private long calculateDate(long time){
+    public long calculateDate(long current, long time){
         Calendar alarmCalendar = Calendar.getInstance();
         alarmCalendar.setTimeInMillis(time);
 
         long date = alarmCalendar.getTimeInMillis();
-        while(date<System.currentTimeMillis()){
-            date = period.getNextDateInMillis();
+        while(date<current){
+            date = amount.getPeriod().getNextDateInMillis();
         }
 
         return date;
@@ -60,20 +62,20 @@ public class AmountPeriodicallyAlarm extends AlarmRepeat{
         dest.writeParcelable(this.amount, flags);
     }
 
-    protected AmountPeriodicallyAlarm(Parcel in) {
+    protected AmountAlarm(Parcel in) {
         super(in);
         this.amount = in.readParcelable(Amount.class.getClassLoader());
     }
 
-    public static final Creator<AmountPeriodicallyAlarm> CREATOR = new Creator<AmountPeriodicallyAlarm>() {
+    public static final Creator<AmountAlarm> CREATOR = new Creator<AmountAlarm>() {
         @Override
-        public AmountPeriodicallyAlarm createFromParcel(Parcel source) {
-            return new AmountPeriodicallyAlarm(source);
+        public AmountAlarm createFromParcel(Parcel source) {
+            return new AmountAlarm(source);
         }
 
         @Override
-        public AmountPeriodicallyAlarm[] newArray(int size) {
-            return new AmountPeriodicallyAlarm[size];
+        public AmountAlarm[] newArray(int size) {
+            return new AmountAlarm[size];
         }
     };
 }

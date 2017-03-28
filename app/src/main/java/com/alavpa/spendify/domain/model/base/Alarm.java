@@ -29,6 +29,10 @@ public class Alarm implements Parcelable {
         return date;
     }
 
+    public void setDate(long date) {
+        this.date = date;
+    }
+
     @Override
     public int describeContents() {
         return 0;
