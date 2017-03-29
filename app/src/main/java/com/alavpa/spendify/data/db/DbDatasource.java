@@ -93,6 +93,29 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
+    public AmountDb updateAmount(AmountDb amountDb) {
+        ContentValues contentValues = new AmountDb.Builder()
+                .amount(amountDb.getAmount())
+                .categoryId(amountDb.getCategoryDb().getId())
+                .date(amountDb.getDate())
+                .description(amountDb.getDescription())
+                .income(amountDb.isIncome())
+                .period(amountDb.getPeriod())
+                .times(amountDb.getTimes())
+                .deleted(amountDb.isDeleted())
+                .build();
+
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        db.update(AmountDb.TABLE_NAME,
+                contentValues,
+                AmountDb.COL_ID + "=?",
+                new String[]{String.valueOf(amountDb.getId())});
+        db.close();
+
+        return amountDb;
+    }
+
+    @Override
     public synchronized CategoryDb insertCategory(CategoryDb categoryDb) {
 
         ContentValues contentValues = new CategoryDb.Builder()
@@ -143,7 +166,8 @@ public class DbDatasource implements Datasource {
                         "FROM " + AmountDb.TABLE_NAME + " " +
                         "WHERE " + AmountDb.COL_INCOME + "=? AND " +
                         AmountDb.COL_DATE + ">=? AND " +
-                        AmountDb.COL_DATE + "<=?",
+                        AmountDb.COL_DATE + "<=? AND " +
+                        DbUtils.operatorEqual(CategoryDb.COL_DELETED, false),
 
                 new String[]{DbUtils.getParam(income),
                         DbUtils.getParam(from),
@@ -253,23 +277,85 @@ public class DbDatasource implements Datasource {
         } finally {
             db.endTransaction();
         }
+        db.close();
 
         return sectorDbs;
 
     }
 
     @Override
-    public List<AmountDb> getAmountsByCategoryId(long id, long from, long to) {
-        List<AmountDb> list;
+    public synchronized SectorDb getSector(long catId, long from, long to) {
+
+        SectorDb sectorDb = null;
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
-        Cursor cursor = getAmountByCategoryId(db, id, from, to);
-        list = getAmountList(cursor, null);
-        cursor.close();
+        db.beginTransaction();
+        try {
+            CategoryDb categoryDb = getCategory(db,catId);
 
+            Cursor cursor = db.rawQuery("SELECT SUM(" + AmountDb.COL_AMOUNT + ") , " + AmountDb.COL_CATID +
+                            " FROM " + AmountDb.TABLE_NAME +
+                            " WHERE " + AmountDb.COL_DATE + ">=? AND " +
+                            AmountDb.COL_DATE + "<=? AND " +
+                            AmountDb.COL_CATID + "=? AND " +
+                            DbUtils.operatorEqual(AmountDb.COL_DELETED, false) +
+                            " GROUP BY " + AmountDb.COL_CATID,
+                    new String[]{DbUtils.getParam(from), DbUtils.getParam(to),String.valueOf(catId)});
+
+            if(cursor.moveToFirst()) {
+                sectorDb = new SectorDb().fromCursor(cursor);
+                sectorDb.setCategoryDb(categoryDb);
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        db.close();
+
+        return sectorDb;
+
+    }
+
+    @Override
+    public synchronized List<AmountDb> getAmountsByCategoryId(long catId, long from, long to) {
+        List<AmountDb> list;
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        db.beginTransaction();
+        try {
+
+            CategoryDb categoryDb = getCategory(db,catId);
+            HashMap<Long,CategoryDb> categories = new HashMap<>();
+            categories.put(categoryDb.getId(),categoryDb);
+
+            Cursor cursor = getAmountByCategoryId(db, catId, from, to);
+            list = getAmountList(cursor, categories);
+            cursor.close();
+
+            db.setTransactionSuccessful();
+        }finally {
+            db.endTransaction();
+        }
         db.close();
 
         return list;
+    }
+
+    private CategoryDb getCategory(SQLiteDatabase db, long id){
+        CategoryDb categoryDb = null;
+        Cursor cursor = db.query(CategoryDb.TABLE_NAME,
+                null,
+                CategoryDb.COL_ID+"=?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            categoryDb = new CategoryDb().fromCursor(cursor);
+        }
+        cursor.close();
+        return categoryDb;
     }
 
     @Override

@@ -1,24 +1,27 @@
 package com.alavpa.spendify.domain.usecases;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
-import com.alavpa.spendify.data.preferences.PrefsDatasource;
-import com.alavpa.spendify.domain.model.EndMonthAlarm;
+import com.alavpa.spendify.domain.model.AlarmEndMonth;
 
 import javax.inject.Inject;
 
 public class SetAlarmEndMonth{
 
+    private
     AlarmManager alarmManager;
-    PrefsDatasource preferences;
 
+    private AlarmEndMonth alarmEndMonth;
+
+    public void setAlarmEndMonth(AlarmEndMonth alarmEndMonth) {
+        this.alarmEndMonth = alarmEndMonth;
+    }
 
     @Inject
-    public SetAlarmEndMonth(AlarmManager alarmManager, PrefsDatasource preferences){
+    public SetAlarmEndMonth(AlarmManager alarmManager){
         this.alarmManager = alarmManager;
-        this.preferences = preferences;
     }
 
     public void execute(){
-        new EndMonthAlarm(preferences.getMonthDay()).set(alarmManager);
+        alarmEndMonth.set(alarmManager);
     }
 }

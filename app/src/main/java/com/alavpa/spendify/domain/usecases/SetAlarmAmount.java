@@ -2,18 +2,20 @@ package com.alavpa.spendify.domain.usecases;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
-import com.alavpa.spendify.domain.model.Amount;
-import com.alavpa.spendify.domain.model.AmountAlarm;
+import com.alavpa.spendify.domain.model.AlarmAmount;
 
 import javax.inject.Inject;
 
 public class SetAlarmAmount {
 
+    private
     AlarmManager alarmManager;
-    Amount amount;
 
-    public void setAmount(Amount amount) {
-        this.amount = amount;
+    private
+    AlarmAmount alarmAmount;
+
+    public void setAlarmAmount(AlarmAmount alarmAmount) {
+        this.alarmAmount = alarmAmount;
     }
 
     @Inject
@@ -22,7 +24,6 @@ public class SetAlarmAmount {
     }
 
     public void execute(){
-        new AmountAlarm(amount)
-                .set(alarmManager);
+        alarmAmount.set(alarmManager);
     }
 }

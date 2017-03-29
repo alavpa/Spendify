@@ -7,13 +7,13 @@ import com.alavpa.spendify.domain.model.base.Alarm;
 
 import java.util.Calendar;
 
-public class OfflimitAlarm extends Alarm {
+public class AlarmOfflimit extends Alarm {
 
     private Category category;
-    public OfflimitAlarm(){
+    public AlarmOfflimit(){
 
     }
-    public OfflimitAlarm(Category category){
+    public AlarmOfflimit(Category category){
         this.category = category;
         date = calculateDate(Calendar.getInstance().getTimeInMillis());
     }
@@ -60,20 +60,20 @@ public class OfflimitAlarm extends Alarm {
         dest.writeParcelable(this.category, flags);
     }
 
-    protected OfflimitAlarm(Parcel in) {
+    protected AlarmOfflimit(Parcel in) {
         super(in);
         this.category = in.readParcelable(Category.class.getClassLoader());
     }
 
-    public static final Creator<OfflimitAlarm> CREATOR = new Creator<OfflimitAlarm>() {
+    public static final Creator<AlarmOfflimit> CREATOR = new Creator<AlarmOfflimit>() {
         @Override
-        public OfflimitAlarm createFromParcel(Parcel source) {
-            return new OfflimitAlarm(source);
+        public AlarmOfflimit createFromParcel(Parcel source) {
+            return new AlarmOfflimit(source);
         }
 
         @Override
-        public OfflimitAlarm[] newArray(int size) {
-            return new OfflimitAlarm[size];
+        public AlarmOfflimit[] newArray(int size) {
+            return new AlarmOfflimit[size];
         }
     };
 }

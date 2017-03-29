@@ -87,14 +87,14 @@ public class DashboardActivity extends BaseNoMenuActivity implements DashboardVi
         barIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.openIncomeDetails(tvIncome.getText().toString());
+                presenter.openSectors(true);
             }
         });
 
         barOutcome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.openOutcomeDetails(tvOutcome.getText().toString());
+                presenter.openSectors(false);
             }
         });
     }

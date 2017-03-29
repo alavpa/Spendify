@@ -27,8 +27,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MonthVH>{
     OnMonthClick onMonthClick;
 
     public void setMonths(List<Long> months) {
-        this.months = months;
-        monthNames = new ArrayList<>();
+        this.months.clear();
+        this.months.addAll(months);
+
+        this.monthNames.clear();
         for(long month : months){
             calendar.setTimeInMillis(month);
             String name = simpleDateFormat.format(calendar.getTime());
@@ -41,7 +43,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MonthVH>{
     }
 
     public MonthAdapter(Context context, List<Long> months, OnMonthClick onMonthClick){
-        this.months = months;
+        this.months = new ArrayList<>();
+        this.monthNames = new ArrayList<>();
+
         this.onMonthClick = onMonthClick;
         simpleDateFormat = new SimpleDateFormat("MMMM yyyy");
 

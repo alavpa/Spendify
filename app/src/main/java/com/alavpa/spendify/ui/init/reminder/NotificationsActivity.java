@@ -11,9 +11,7 @@ import android.widget.TimePicker;
 
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
-import com.alavpa.spendify.ui.custom.widgets.period.PeriodWidget;
 
 import java.util.Calendar;
 
@@ -34,14 +32,8 @@ public class NotificationsActivity extends BaseNoMenuActivity implements Reminde
     @BindView(R.id.chk_offlimit)
     CheckBox chkOfflimit;
 
-    @BindView(R.id.chk_promises)
-    CheckBox chkPromises;
-
     @BindView(R.id.tv_endday)
     TextView tvEndDay;
-
-    @BindView(R.id.w_period)
-    PeriodWidget wPeriod;
 
     @BindView(R.id.btn_apply)
     TextView btnApply;
@@ -71,22 +63,15 @@ public class NotificationsActivity extends BaseNoMenuActivity implements Reminde
             public void onClick(View view) {
 
                 String time = null;
-                Period period = null;
 
                 if(chkEndDay.isChecked()){
                     time = tvEndDay.getText().toString();
                 }
 
-                if(chkPromises.isChecked()){
-                    period = wPeriod.getPeriod();
-                }
-
                 presenter.onApply(chkEndDay.isChecked(),
                         chkEndMonth.isChecked(),
                         chkOfflimit.isChecked(),
-                        chkPromises.isChecked(),
-                        time,
-                        period);
+                        time);
                 presenter.goToParent();
             }
         });
@@ -95,13 +80,6 @@ public class NotificationsActivity extends BaseNoMenuActivity implements Reminde
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 tvEndDay.setVisibility((isChecked)?View.VISIBLE:View.GONE);
-            }
-        });
-
-        chkPromises.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                wPeriod.setVisibility((isChecked)?View.VISIBLE:View.GONE);
             }
         });
 
@@ -142,20 +120,8 @@ public class NotificationsActivity extends BaseNoMenuActivity implements Reminde
     }
 
     @Override
-    public void showPromises(boolean enabled) {
-        chkPromises.setChecked(enabled);
-    }
-
-    @Override
     public void showEndOfDayTime(String time) {
         tvEndDay.setText(time);
-    }
-
-
-
-    @Override
-    public void showPromisesPeriod(Period period){
-        wPeriod.setPeriod(period);
     }
 
     @Override

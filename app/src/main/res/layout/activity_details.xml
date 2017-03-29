@@ -46,32 +46,12 @@
                 android:text="@string/repeat"
                 android:layout_marginBottom="@dimen/margin"/>
 
-        <LinearLayout
-                android:id="@+id/ll_repeat"
+        <com.alavpa.spendify.ui.custom.widgets.period.PeriodWidget
+                android:id="@+id/w_period"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:visibility="gone"
-                android:layout_marginBottom="@dimen/margin">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/every"
-                    android:layout_marginRight="@dimen/margin"/>
-
-            <Spinner
-                    android:id="@+id/sp_times"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/margin"/>
-
-            <Spinner
-                    android:id="@+id/sp_period"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/periods"/>
-        </LinearLayout>
+                android:layout_marginBottom="@dimen/margin"/>
 
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_categories"

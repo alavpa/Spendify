@@ -1,7 +1,8 @@
 package com.alavpa.spendify.ui.init.reminder;
 
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.domain.model.Period;
+import com.alavpa.spendify.domain.model.AlarmEndDay;
+import com.alavpa.spendify.domain.model.AlarmEndMonth;
 import com.alavpa.spendify.domain.usecases.CancelAlarmEndDay;
 import com.alavpa.spendify.domain.usecases.CancelAlarmEndMonth;
 import com.alavpa.spendify.domain.usecases.SetAlarmEndDay;
@@ -20,15 +21,21 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
 
 
     @Inject
-    SimpleDateFormat simpleDateFormat;
+    public SimpleDateFormat simpleDateFormat;
 
+    private
     SetAlarmEndDay setAlarmEndDay;
+    private
     CancelAlarmEndDay cancelAlarmEndDay;
 
+    private
     SetAlarmEndMonth setAlarmEndMonth;
+    private
     CancelAlarmEndMonth cancelAlarmEndMonth;
 
+    private
     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm");
+    private
     Calendar calendar = Calendar.getInstance();
 
     @Inject
@@ -36,11 +43,13 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
                              CancelAlarmEndDay cancelAlarmEndDay,
                              SetAlarmEndMonth setAlarmEndMonth,
                              CancelAlarmEndMonth cancelAlarmEndMonth) {
+
         this.setAlarmEndDay = setAlarmEndDay;
         this.cancelAlarmEndDay = cancelAlarmEndDay;
 
         this.setAlarmEndMonth = setAlarmEndMonth;
         this.cancelAlarmEndMonth = cancelAlarmEndMonth;
+
     }
 
     public void initViews() {
@@ -48,8 +57,6 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
         showEndOfDayTime();
         getView().showEndOfMonth(preferences.notifyEndOfMonth());
         getView().showOfflimit(preferences.notifyOfflimit());
-        getView().showPromises(preferences.notifyPromises());
-        showPromisesPeriod();
     }
 
     private void showEndOfDayTime() {
@@ -57,53 +64,57 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
         setEndDayTime(time);
     }
 
-    private void showPromisesPeriod() {
-        Period period = preferences.getNotifyPromisesPeriod();
-        getView().showPromisesPeriod(period);
-    }
-
     public void onApply(boolean notifyEndDay,
                         boolean notifyEndMonth,
                         boolean notifyOfflimit,
-                        boolean notifyPromises,
-                        String time,
-                        Period period) {
+                        String time) {
 
+        configureEndMonth(notifyEndMonth);
+
+        configureOfflimit(notifyOfflimit);
+
+        configureEndOfDay(notifyEndDay, time);
+    }
+
+    private void configureEndOfDay(boolean notifyEndDay, String time) {
+
+        try {
+
+            if(time!=null) {
+                Date timeEndDay = simpleTimeFormat.parse(time);
+                calendar.setTime(timeEndDay);
+                preferences.setEndOfDayTime(calendar);
+                preferences.setNotifyEndOfDay(notifyEndDay);
+
+                AlarmEndDay alarmEndDay = new AlarmEndDay(calendar.getTimeInMillis());
+                if (notifyEndDay) {
+                    setAlarmEndDay.setAlarmEndDay(alarmEndDay);
+                    setAlarmEndDay.execute();
+                } else {
+                    cancelAlarmEndDay.setAlarmEndDay(alarmEndDay);
+                    cancelAlarmEndDay.execute();
+                }
+            }
+
+        } catch (ParseException e) {
+            getView().showError(e.getMessage());
+        }
+    }
+
+    private void configureOfflimit(boolean notifyOfflimit) {
+        preferences.setNotifyOfflimit(notifyOfflimit);
+    }
+
+    private void configureEndMonth(boolean notifyEndMonth) {
         preferences.setNotifyEndOfMonth(notifyEndMonth);
+
+        AlarmEndMonth alarmEndMonth = new AlarmEndMonth(preferences.getMonthDay());
+        setAlarmEndMonth.setAlarmEndMonth(alarmEndMonth);
+
         if(notifyEndMonth){
             setAlarmEndMonth.execute();
         }else{
             cancelAlarmEndMonth.execute();
-        }
-
-        preferences.setNotifyOfflimit(notifyOfflimit);
-        preferences.setNotifyPromises(notifyPromises);
-
-        preferences.setNotifyEndOfDay(notifyEndDay);
-        if (notifyEndDay && time != null) {
-            try {
-
-                Date timeEndDay = simpleTimeFormat.parse(time);
-                calendar.setTime(timeEndDay);
-
-                preferences.setEndOfDayTime(calendar);
-
-                setAlarmEndDay.setTime(calendar);
-                setAlarmEndDay.execute();
-
-            } catch (ParseException e) {
-                getView().showError(e.getMessage());
-                return;
-            }
-        }else{
-            alarmManager.cancelAlarmEndDay();
-        }
-
-        if (preferences.notifyPromises() && period != null) {
-            preferences.setNotifyPromisesPeriod(period);
-            alarmManager.setAlarmPromises(period);
-        }else{
-            alarmManager.cancelAlarmPromises();
         }
     }
 

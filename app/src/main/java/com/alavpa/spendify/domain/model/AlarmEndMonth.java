@@ -7,13 +7,13 @@ import com.alavpa.spendify.domain.model.base.AlarmRepeat;
 
 import java.util.Calendar;
 
-public class EndMonthAlarm extends AlarmRepeat{
+public class AlarmEndMonth extends AlarmRepeat{
 
-    public EndMonthAlarm(){
+    public AlarmEndMonth(){
 
     }
 
-    public EndMonthAlarm(int day){
+    public AlarmEndMonth(int day){
         date = calculateDate(Calendar.getInstance().getTimeInMillis(),day);
         period = new Period(date,Period.PER_MONTH,1);
     }
@@ -51,19 +51,19 @@ public class EndMonthAlarm extends AlarmRepeat{
         super.writeToParcel(dest, flags);
     }
 
-    protected EndMonthAlarm(Parcel in) {
+    protected AlarmEndMonth(Parcel in) {
         super(in);
     }
 
-    public static final Creator<EndMonthAlarm> CREATOR = new Creator<EndMonthAlarm>() {
+    public static final Creator<AlarmEndMonth> CREATOR = new Creator<AlarmEndMonth>() {
         @Override
-        public EndMonthAlarm createFromParcel(Parcel source) {
-            return new EndMonthAlarm(source);
+        public AlarmEndMonth createFromParcel(Parcel source) {
+            return new AlarmEndMonth(source);
         }
 
         @Override
-        public EndMonthAlarm[] newArray(int size) {
-            return new EndMonthAlarm[size];
+        public AlarmEndMonth[] newArray(int size) {
+            return new AlarmEndMonth[size];
         }
     };
 }

@@ -19,6 +19,8 @@ public interface Datasource {
 
     AmountDb insertAmount(AmountDb amountDb);
 
+    AmountDb updateAmount(AmountDb amountDb);
+
     double getSumBy(boolean income, long from, long to);
 
     List<AmountDb> getAmountBy(boolean income, long from, long to);
@@ -32,4 +34,6 @@ public interface Datasource {
     Long getMinDate();
 
     double getSumByCategoryId(long catId, long from, long to);
+
+    SectorDb getSector(long catId, long from, long to);
 }

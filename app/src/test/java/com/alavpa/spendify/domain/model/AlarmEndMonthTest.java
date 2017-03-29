@@ -5,10 +5,10 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
-public class EndMonthAlarmTest {
+public class AlarmEndMonthTest {
     @Test
     public void calculateDate() throws Exception {
-        EndMonthAlarm endMonthAlarm = new EndMonthAlarm();
+        AlarmEndMonth alarmEndMonth = new AlarmEndMonth();
 
         Calendar calendar = Calendar.getInstance();
         Calendar expectedCalendarPost = Calendar.getInstance();
@@ -29,8 +29,8 @@ public class EndMonthAlarmTest {
         expectedCalendarPre.set(Calendar.MONTH,3);
         expectedCalendarPre.set(Calendar.YEAR,2017);
 
-        long calculatedPost = endMonthAlarm.calculateDate(calendar.getTimeInMillis(),15);
-        long calculatedPre = endMonthAlarm.calculateDate(calendar.getTimeInMillis(),10);
+        long calculatedPost = alarmEndMonth.calculateDate(calendar.getTimeInMillis(),15);
+        long calculatedPre = alarmEndMonth.calculateDate(calendar.getTimeInMillis(),10);
 
         Assert.assertEquals("Post", expectedCalendarPost.getTimeInMillis(),calculatedPost);
         Assert.assertEquals("Pre",expectedCalendarPre.getTimeInMillis(),calculatedPre);
@@ -39,7 +39,7 @@ public class EndMonthAlarmTest {
 
     @Test
     public void getNextAlarm(){
-        EndMonthAlarm endMonthAlarm = new EndMonthAlarm();
+        AlarmEndMonth alarmEndMonth = new AlarmEndMonth();
 
         Calendar calendar = Calendar.getInstance();
         Calendar nextCalendar = Calendar.getInstance();
@@ -53,11 +53,11 @@ public class EndMonthAlarmTest {
         nextCalendar.set(Calendar.MONTH,4);
         nextCalendar.set(Calendar.YEAR,2017);
 
-        long date = endMonthAlarm.calculateDate(calendar.getTimeInMillis(),5);
-        endMonthAlarm.setDate(date);
-        endMonthAlarm.setPeriod(new Period(date,Period.PER_MONTH,1));
+        long date = alarmEndMonth.calculateDate(calendar.getTimeInMillis(),5);
+        alarmEndMonth.setDate(date);
+        alarmEndMonth.setPeriod(new Period(date,Period.PER_MONTH,1));
 
-        long next = endMonthAlarm.getNextAlarm().getDate();
+        long next = alarmEndMonth.getNextAlarm().getDate();
 
         Assert.assertEquals(nextCalendar.getTimeInMillis(),next);
 

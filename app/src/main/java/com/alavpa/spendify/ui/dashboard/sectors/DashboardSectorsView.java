@@ -18,5 +18,5 @@ public interface DashboardSectorsView extends BaseView{
 
     void showAmount(String amount);
 
-    void populateDetails(List<Sector> details, int[] categoryColorsArray);
+    void populateDetails(List<Sector> details, List<Integer> categoryColorsArray);
 }

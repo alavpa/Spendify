@@ -9,6 +9,8 @@ import android.widget.FrameLayout;
 
 import com.alavpa.spendify.R;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -19,12 +21,12 @@ import butterknife.ButterKnife;
 public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdapter.CategoryViewHolder> {
 
     LayoutInflater inflater;
-    int[] categories;
+    List<Integer> categories;
     Integer selected = null;
 
-    public CategoryColorAdapter(Context context, int[] categories) {
+    public CategoryColorAdapter(Context context, List<Integer> categories) {
         inflater = LayoutInflater.from(context);
-        setCategoryColors(categories);
+        this.categories = categories;
     }
 
     @Override
@@ -36,22 +38,22 @@ public class CategoryColorAdapter extends RecyclerView.Adapter<CategoryColorAdap
 
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
-        int category = categories[position];
+        int category = categories.get(position);
         holder.bind(category);
     }
 
     @Override
     public int getItemCount() {
-        return categories.length;
+        return categories.size();
     }
 
     public Integer getSelected() {
         return selected;
     }
 
-    public void setCategoryColors(int[] categories) {
-
-        this.categories = categories;
+    public void setCategoryColors(List<Integer> categories) {
+        this.categories.clear();
+        this.categories.addAll(categories);
 
     }
 

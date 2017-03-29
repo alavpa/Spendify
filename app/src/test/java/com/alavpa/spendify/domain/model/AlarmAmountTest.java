@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
-public class AmountAlarmTest {
+public class AlarmAmountTest {
     @Test
     public void calculateDate() throws Exception {
 
@@ -39,17 +39,17 @@ public class AmountAlarmTest {
         Amount amount = new Amount();
         amount.setPeriod(period);
 
-        AmountAlarm amountAlarm = new AmountAlarm();
-        amountAlarm.setAmount(amount);
+        AlarmAmount alarmAmount = new AlarmAmount();
+        alarmAmount.setAmount(amount);
 
-        long date = amountAlarm.calculateDate(current.getTimeInMillis(),amount.getPeriod().getDate());
+        long date = alarmAmount.calculateDate(current.getTimeInMillis(),amount.getPeriod().getDate());
 
         Assert.assertEquals(expected.getTimeInMillis(),date);
 
         current.set(Calendar.DATE,21);
         expected.set(Calendar.MONTH,6);
 
-        date = amountAlarm.calculateDate(current.getTimeInMillis(),amount.getPeriod().getDate());
+        date = alarmAmount.calculateDate(current.getTimeInMillis(),amount.getPeriod().getDate());
 
         Assert.assertEquals(expected.getTimeInMillis(),date);
 
@@ -62,8 +62,8 @@ public class AmountAlarmTest {
 
         int expected = AlarmManager.REQUEST_ALARM_AMOUNT + (int)amount.getId();
 
-        AmountAlarm amountAlarm = new AmountAlarm(amount);
-        Assert.assertEquals(expected,amountAlarm.getRequest());
+        AlarmAmount alarmAmount = new AlarmAmount(amount);
+        Assert.assertEquals(expected, alarmAmount.getRequest());
     }
 
     @Test
@@ -96,16 +96,16 @@ public class AmountAlarmTest {
         Amount amount = new Amount();
         amount.setPeriod(period);
 
-        AmountAlarm amountAlarm = new AmountAlarm();
-        amountAlarm.setAmount(amount);
+        AlarmAmount alarmAmount = new AlarmAmount();
+        alarmAmount.setAmount(amount);
 
-        long date = amountAlarm.calculateDate(current.getTimeInMillis(),amount.getPeriod().getDate());
+        long date = alarmAmount.calculateDate(current.getTimeInMillis(),amount.getPeriod().getDate());
         Period periodAlarm = new Period(date,amount.getPeriod().getPeriod(),amount.getPeriod().getTimes());
 
-        amountAlarm.setDate(date);
-        amountAlarm.setPeriod(periodAlarm);
+        alarmAmount.setDate(date);
+        alarmAmount.setPeriod(periodAlarm);
 
-        Assert.assertEquals(expected.getTimeInMillis(),amountAlarm.getNextAlarm().getDate());
+        Assert.assertEquals(expected.getTimeInMillis(), alarmAmount.getNextAlarm().getDate());
     }
 
 }

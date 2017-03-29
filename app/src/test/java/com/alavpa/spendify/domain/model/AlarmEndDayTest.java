@@ -5,12 +5,12 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
-public class EndDayAlarmTest {
+public class AlarmEndDayTest {
 
     @Test
     public void calculateDate() throws Exception {
 
-        EndDayAlarm endDayAlarm = new EndDayAlarm();
+        AlarmEndDay alarmEndDay = new AlarmEndDay();
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DATE,5);
@@ -35,14 +35,14 @@ public class EndDayAlarmTest {
         time.set(Calendar.MINUTE,0);
         time.set(Calendar.SECOND,0);
 
-        long date = endDayAlarm.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
+        long date = alarmEndDay.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
 
         Assert.assertEquals(expected.getTimeInMillis(),date);
 
         calendar.set(Calendar.HOUR_OF_DAY,18);
         expected.set(Calendar.DATE,5);
 
-        date = endDayAlarm.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
+        date = alarmEndDay.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
         Assert.assertEquals(expected.getTimeInMillis(),date);
 
     }
@@ -50,7 +50,7 @@ public class EndDayAlarmTest {
     @Test
     public void getNextAlarm() throws Exception {
 
-        EndDayAlarm endDayAlarm = new EndDayAlarm();
+        AlarmEndDay alarmEndDay = new AlarmEndDay();
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DATE,5);
@@ -75,11 +75,11 @@ public class EndDayAlarmTest {
         time.set(Calendar.MINUTE,0);
         time.set(Calendar.SECOND,0);
 
-        long date = endDayAlarm.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
-        endDayAlarm.setDate(date);
-        endDayAlarm.setPeriod(new Period(date,Period.PER_DAY,1));
+        long date = alarmEndDay.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
+        alarmEndDay.setDate(date);
+        alarmEndDay.setPeriod(new Period(date,Period.PER_DAY,1));
 
-        Assert.assertEquals(expected.getTimeInMillis(),endDayAlarm.getNextAlarm().getDate());
+        Assert.assertEquals(expected.getTimeInMillis(), alarmEndDay.getNextAlarm().getDate());
 
     }
 

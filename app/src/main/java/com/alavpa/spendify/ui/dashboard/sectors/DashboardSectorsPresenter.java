@@ -10,6 +10,7 @@ import com.alavpa.spendify.domain.usecases.base.UseCase;
 import com.alavpa.spendify.ui.base.BasePresenter;
 import com.alavpa.spendify.ui.model.AmountBarPart;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -23,46 +24,60 @@ import io.reactivex.observers.DisposableSingleObserver;
 class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
 
     @Inject
-    DateUtils dateUtils;
+    public DateUtils dateUtils;
+
+    @Inject
+    public DecimalFormat decimalFormat;
 
     private GetSumBy getSumBy;
 
     private GetSectorsBy getSectorsBy;
 
-    private
-    boolean income;
+    private GetSumBy getSumByAmount;
 
     private
-    String amount;
+    boolean income;
 
     Calendar from = Calendar.getInstance();
     Calendar to = Calendar.getInstance();
 
 
     @Inject
-    public DashboardSectorsPresenter(GetSumBy getSumBy, GetSectorsBy getSectorsBy){
+    public DashboardSectorsPresenter(GetSumBy getSumBy, GetSectorsBy getSectorsBy, GetSumBy getSumByAmount) {
         this.getSumBy = getSumBy;
         this.getSectorsBy = getSectorsBy;
+        this.getSumByAmount = getSumByAmount;
 
-        addUseCases(getSumBy, getSectorsBy);
+        addUseCases(getSumBy, getSectorsBy, getSumByAmount);
     }
 
     public void setIncome(boolean income) {
         this.income = income;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
     public void initView() {
 
-        getView().showAmount(amount);
-        if(income){
+        if (income) {
             getView().showTitle(resources.getString(R.string.income));
-        }else{
+        } else {
             getView().showTitle(resources.getString(R.string.outcome));
         }
+
+        getSumByAmount.setIncome(income);
+        getSumByAmount.setFrom(from.getTimeInMillis());
+        getSumByAmount.setTo(to.getTimeInMillis());
+
+        getSumByAmount.execute(new DisposableSingleObserver<Double>() {
+            @Override
+            public void onSuccess(Double amount) {
+                getView().showAmount(decimalFormat.format(amount));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getView().showError(e.getMessage());
+            }
+        });
 
         getSumBy.setIncome(income);
         getSumBy.setFrom(from.getTimeInMillis());
@@ -75,13 +90,17 @@ class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
         UseCase<List<AmountBarPart>> useCase = new UseCase<List<AmountBarPart>>() {
             @Override
             public Single<List<AmountBarPart>> build() {
-                return Single.zip(getSumBy.build(), getSectorsBy.build(), new BiFunction<Double, List<Sector>, List<AmountBarPart>>() {
-                    @Override
-                    public List<AmountBarPart> apply(Double total, List<Sector> sectors) throws Exception {
-                        List<AmountBarPart> amountBarPartList = AmountBarPart.getParts(resources,sectors,total);
-                        return amountBarPartList;
-                    }
-                });
+                return Single.zip(getSumBy.build(),
+                        getSectorsBy.build(),
+                        new BiFunction<Double, List<Sector>, List<AmountBarPart>>() {
+
+                            @Override
+                            public List<AmountBarPart> apply(Double total, List<Sector> sectors) throws Exception {
+                                List<AmountBarPart> amountBarPartList = AmountBarPart.getParts(resources, sectors,
+                                        total);
+                                return amountBarPartList;
+                            }
+                        });
             }
         };
 
@@ -102,7 +121,7 @@ class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
         getSectorsBy.execute(new DisposableSingleObserver<List<Sector>>() {
             @Override
             public void onSuccess(List<Sector> sectors) {
-                getView().populateDetails(sectors,resources.getCategoryColorsArray());
+                getView().populateDetails(sectors, resources.getCategoryColorsArray());
             }
 
             @Override
@@ -118,7 +137,7 @@ class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
     }
 
     public void setFrom(long from) {
-        this.from=dateUtils.calculateFrom(from,preferences.getMonthDay());
-        this.to=dateUtils.calculateTo(from,preferences.getMonthDay());
+        this.from = dateUtils.calculateFrom(from, preferences.getMonthDay());
+        this.to = dateUtils.calculateTo(from, preferences.getMonthDay());
     }
 }

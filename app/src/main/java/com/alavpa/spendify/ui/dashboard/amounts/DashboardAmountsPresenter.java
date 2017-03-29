@@ -2,8 +2,10 @@ package com.alavpa.spendify.ui.dashboard.amounts;
 
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.domain.usecases.GetAmountsByCategory;
+import com.alavpa.spendify.domain.usecases.GetSector;
 import com.alavpa.spendify.ui.base.BasePresenter;
 
 import java.text.DecimalFormat;
@@ -25,34 +27,50 @@ public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsVie
     private
     GetAmountsByCategory getAmountsByCategory;
 
-    private
-    Sector sector;
+    private GetSector getSector;
+
+    private Category category;
 
 
     Calendar from = Calendar.getInstance();
     Calendar to = Calendar.getInstance();
 
-    public void setSector(Sector sector) {
-        this.sector = sector;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Inject
-    public DashboardAmountsPresenter(GetAmountsByCategory getAmountsByCategory){
+    public DashboardAmountsPresenter(GetAmountsByCategory getAmountsByCategory, GetSector getSector){
         this.getAmountsByCategory = getAmountsByCategory;
-        addUseCases(getAmountsByCategory);
+        this.getSector = getSector;
+        addUseCases(getAmountsByCategory, getSector);
 
     }
 
     public void initView() {
 
-        int color = resources.getCategoryColorsArray()[sector.getCategory().getColor()];
-        getView().showCategoryColor(color);
-        getView().showCategoryName(sector.getCategory().getName());
-        getView().showCategoryAmount(decimalFormat.format(sector.getAmount()));
+        getSector.setCategory(category);
+        getSector.setFrom(from.getTimeInMillis());
+        getSector.setTo(to.getTimeInMillis());
+        getSector.execute(new DisposableSingleObserver<Sector>() {
+            @Override
+            public void onSuccess(Sector sector) {
+                List<Integer> colors = resources.getCategoryColorsArray();
+                int color = colors.get(sector.getCategory().getColor());
+                getView().showCategoryColor(color);
+                getView().showCategoryName(sector.getCategory().getName());
+                getView().showCategoryAmount(decimalFormat.format(sector.getAmount()));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getView().showError(e.getMessage());
+            }
+        });
 
         getAmountsByCategory.setFrom(from.getTimeInMillis());
         getAmountsByCategory.setTo(to.getTimeInMillis());
-        getAmountsByCategory.setCategory(sector.getCategory());
+        getAmountsByCategory.setCategory(category);
 
         getAmountsByCategory.execute(new DisposableSingleObserver<List<Amount>>() {
             @Override
@@ -70,5 +88,9 @@ public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsVie
     public void setFrom(long from) {
         this.from=dateUtils.calculateFrom(from,preferences.getMonthDay());
         this.to=dateUtils.calculateTo(from,preferences.getMonthDay());
+    }
+
+    public void onClickAmount(Amount amount) {
+        navigator.openDetails(amount);
     }
 }

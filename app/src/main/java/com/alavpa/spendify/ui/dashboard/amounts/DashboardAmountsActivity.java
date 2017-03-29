@@ -69,7 +69,7 @@ public class DashboardAmountsActivity extends BaseNoMenuActivity implements Dash
         initView();
 
         Sector sector = getIntent().getParcelableExtra(Navigator.EXTRA_SECTOR);
-        presenter.setSector(sector);
+        presenter.setCategory(sector.getCategory());
 
         long from = getIntent().getLongExtra(Navigator.EXTRA_FROM,0);
         presenter.setFrom(from);
@@ -92,9 +92,18 @@ public class DashboardAmountsActivity extends BaseNoMenuActivity implements Dash
             amountAdapter = new AmountAdapter(this,
                     amounts,
                     decimalFormat,
-                    simpleDateFormat);
+                    simpleDateFormat,
+                    new AmountAdapter.OnClickAmount() {
+                        @Override
+                        public void onClick(Amount amount) {
+                            presenter.onClickAmount(amount);
+                        }
+                    });
 
             rvDetails.setAdapter(amountAdapter);
+        }else{
+            amountAdapter.setAmounts(amounts);
+            amountAdapter.notifyDataSetChanged();
         }
     }
 

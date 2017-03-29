@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import com.alavpa.spendify.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,8 +58,8 @@ public class ResDatasource {
         return list;
     }
 
-    public int[] getCategoryBackgroundsArray(){
-        return new int[]{R.drawable.bkg_category1,
+    public List<Integer> getCategoryBackgroundsArray(){
+        return Arrays.asList(R.drawable.bkg_category1,
                 R.drawable.bkg_category2,
                 R.drawable.bkg_category3,
                 R.drawable.bkg_category4,
@@ -66,11 +67,11 @@ public class ResDatasource {
                 R.drawable.bkg_category6,
                 R.drawable.bkg_category7,
                 R.drawable.bkg_category8,
-                R.drawable.bkg_category9};
+                R.drawable.bkg_category9);
     }
 
-    public int[] getCategoryColorsArray(){
-        return new int[]{R.color.red,
+    public List<Integer> getCategoryColorsArray(){
+        return Arrays.asList(R.color.red,
                 R.color.pink,
                 R.color.purple,
                 R.color.deep_purple,
@@ -78,6 +79,6 @@ public class ResDatasource {
                 R.color.blue,
                 R.color.light_blue,
                 R.color.cyan,
-                R.color.teal};
+                R.color.teal);
     }
 }

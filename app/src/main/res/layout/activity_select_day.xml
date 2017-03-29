@@ -25,12 +25,12 @@
     <com.alavpa.spendify.ui.custom.keyboard.Keyboard
             android:id="@+id/keyboard"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
             app:integers="2"
             app:decimals="0"
             app:min="1"
-            app:max="28"
-            android:layout_weight="1"/>
+            app:max="28"/>
 
     <TextView
             android:id="@+id/btn_apply"

@@ -85,6 +85,17 @@ public class RepositoryData implements Repository {
     }
 
     @Override
+    public Single<Amount> updateAmount(Amount amount) {
+        return Single.just(amount)
+                .map(new Function<Amount, Amount>() {
+                    @Override
+                    public Amount apply(Amount amount) throws Exception {
+                        return amount.update(datasource);
+                    }
+                });
+    }
+
+    @Override
     public Single<Double> getSumBy(final boolean income, final long from, final long to) {
         return Single.fromCallable(new Callable<Double>() {
             @Override
@@ -191,6 +202,17 @@ public class RepositoryData implements Repository {
             @Override
             public Double call() throws Exception {
                 return datasource.getSumByCategoryId(category.getId(), from, to);
+            }
+        });
+    }
+
+    @Override
+    public Single<Sector> getSector(final Category category, final long from, final long to) {
+        return Single.fromCallable(new Callable<Sector>() {
+            @Override
+            public Sector call() throws Exception {
+                SectorDb sectorDb = datasource.getSector(category.getId(),from, to);
+                return new Sector().fromSectorDb(sectorDb);
             }
         });
     }

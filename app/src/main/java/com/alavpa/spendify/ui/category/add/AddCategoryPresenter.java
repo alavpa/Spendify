@@ -6,6 +6,8 @@ import com.alavpa.spendify.domain.usecases.DeleteCategory;
 import com.alavpa.spendify.domain.usecases.InsertOrUpdateCategory;
 import com.alavpa.spendify.ui.base.BasePresenter;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.observers.DisposableSingleObserver;
@@ -34,7 +36,7 @@ public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
     }
     public void showColors() {
 
-        int[] colors = resources.getCategoryBackgroundsArray();
+        List<Integer> colors = resources.getCategoryBackgroundsArray();
 
         getView().populateColors(colors, category.getColor());
     }
@@ -85,8 +87,10 @@ public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
         deleteCategory.setCategory(category);
         deleteCategory.execute(new DisposableSingleObserver<Boolean>() {
             @Override
-            public void onSuccess(Boolean aBoolean) {
-                getView().finish();
+            public void onSuccess(Boolean success) {
+                if(success) {
+                    getView().finish();
+                }
             }
 
             @Override

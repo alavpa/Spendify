@@ -21,10 +21,15 @@ public class SectorAdapter extends RecyclerView.Adapter<SectorAdapter.SectorVH> 
 
     List<Sector> sectors;
     LayoutInflater inflater;
-    int[] colors;
+    List<Integer> colors;
     DecimalFormat decimalFormat;
 
     OnClickSector onClickSector;
+
+    public void setSectors(List<Sector> sectors) {
+        this.sectors.clear();
+        this.sectors.addAll(sectors);
+    }
 
     public interface OnClickSector{
         void onClick(Sector sector);
@@ -32,7 +37,7 @@ public class SectorAdapter extends RecyclerView.Adapter<SectorAdapter.SectorVH> 
 
     public SectorAdapter(Context context,
                          List<Sector> sectors,
-                         int[] colors,
+                         List<Integer> colors,
                          DecimalFormat decimalFormat,
                          OnClickSector onClickSector){
 
@@ -61,7 +66,7 @@ public class SectorAdapter extends RecyclerView.Adapter<SectorAdapter.SectorVH> 
 
     public static class SectorVH extends RecyclerView.ViewHolder{
 
-        int[] colors;
+        List<Integer> colors;
 
         @BindView(R.id.tv_amount)
         TextView tvAmount;
@@ -74,7 +79,7 @@ public class SectorAdapter extends RecyclerView.Adapter<SectorAdapter.SectorVH> 
 
         OnClickSector onClickSector;
 
-        public SectorVH(View itemView, int[] colors, OnClickSector onClickSector) {
+        public SectorVH(View itemView, List<Integer> colors, OnClickSector onClickSector) {
             super(itemView);
             ButterKnife.bind(this,itemView);
             this.colors = colors;
@@ -83,7 +88,7 @@ public class SectorAdapter extends RecyclerView.Adapter<SectorAdapter.SectorVH> 
 
         public void bind(DecimalFormat decimalFormat, final Sector sector){
 
-            flCategory.setBackgroundResource(colors[sector.getCategory().getColor()]);
+            flCategory.setBackgroundResource(colors.get(sector.getCategory().getColor()));
             tvCategory.setText(sector.getCategory().getName());
             tvAmount.setText(decimalFormat.format(sector.getAmount()));
 

@@ -1,17 +1,19 @@
 package com.alavpa.spendify.domain.usecases;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
-import com.alavpa.spendify.domain.model.Category;
+import com.alavpa.spendify.domain.model.AlarmOfflimit;
 
 import javax.inject.Inject;
 
 public class CancelAlarmOfflimit {
 
+    private
     AlarmManager alarmManager;
-    Category category;
 
-    public void setCategory(Category category) {
-        this.category = category;
+    private AlarmOfflimit alarmOfflimit;
+
+    public void setAlarmOfflimit(AlarmOfflimit alarmOfflimit) {
+        this.alarmOfflimit = alarmOfflimit;
     }
 
     @Inject
@@ -20,7 +22,7 @@ public class CancelAlarmOfflimit {
     }
 
     public void execute(){
-        alarmManager.cancelAlarmOfflimit(category);
+        alarmOfflimit.cancel(alarmManager);
     }
 
 }

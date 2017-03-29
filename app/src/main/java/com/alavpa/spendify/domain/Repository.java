@@ -23,6 +23,8 @@ public interface Repository {
 
     Single<Amount> insertAmount(Amount amount);
 
+    Single<Amount> updateAmount(Amount amount);
+
     Single<Double> getSumBy(boolean income, long from, long to);
 
     Single<List<Amount>> getAmountBy(boolean income, long from, long to);
@@ -36,4 +38,6 @@ public interface Repository {
     Single<Long> getMinDate();
 
     Single<Double> getSumByCategory(Category category, long from, long to);
+
+    Single<Sector> getSector(Category category, long from, long to);
 }

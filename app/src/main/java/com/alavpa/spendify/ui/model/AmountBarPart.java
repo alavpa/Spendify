@@ -71,7 +71,8 @@ public class AmountBarPart{
 
         for (Sector sector : sectors){
 
-            int rgb = resDatasource.getColor(resDatasource.getCategoryColorsArray()[sector.getCategory().getColor()]);
+            List<Integer> colors = resDatasource.getCategoryColorsArray();
+            int rgb = resDatasource.getColor(colors.get(sector.getCategory().getColor()));
             Double percent = Double.valueOf(sector.getAmount()/total);
             parts.add(new AmountBarPart(percent.floatValue(),rgb));
         }

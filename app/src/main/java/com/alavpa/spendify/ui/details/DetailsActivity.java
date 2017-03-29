@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
@@ -24,8 +22,10 @@ import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.GridLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.CategoryAdapter;
+import com.alavpa.spendify.ui.custom.dialogs.ConfirmDialog;
 import com.alavpa.spendify.ui.custom.dialogs.DatePickerDialog;
 import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
+import com.alavpa.spendify.ui.custom.widgets.period.PeriodWidget;
 
 import java.util.List;
 
@@ -44,43 +44,40 @@ import static com.alavpa.spendify.ui.Navigator.EXTRA_AMOUNT;
 public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
 
     @Inject
-    DetailsPresenter presenter;
+    public DetailsPresenter presenter;
 
-    @BindView(R.id.keyboard)
-    Keyboard keyboard;
+    @BindView(R.id.hidden_keyboard)
+    public Keyboard hiddenKeyboard;
 
     @BindView(R.id.tv_date)
-    TextView tvDate;
+    public TextView tvDate;
 
     @BindView(R.id.chk_repeat)
-    CheckBox chkRepeat;
-
-    @BindView(R.id.ll_repeat)
-    LinearLayout llRepeat;
+    public CheckBox chkRepeat;
 
     @BindView(R.id.tv_amount)
-    TextView tvAmount;
+    public TextView tvAmount;
 
     @BindView(R.id.rv_categories)
-    RecyclerView rvCategories;
+    public RecyclerView rvCategories;
 
     @BindView(R.id.et_description)
-    EditText etDescription;
+    public EditText etDescription;
 
-    @BindView(R.id.sp_times)
-    Spinner spTimes;
+    @BindView(R.id.w_period)
+    PeriodWidget wPeriod;
 
-    @BindView(R.id.sp_period)
-    Spinner spPeriod;
-
+    private
     CategoryAdapter categoryAdapter;
 
-    ArrayAdapter<String> days;
-    ArrayAdapter<String> weeks;
-    ArrayAdapter<String> months;
-    ArrayAdapter<String> years;
-
+    private
     DatePickerDialog datePickerDialog;
+
+    private
+    boolean deletable;
+
+    private
+    ConfirmDialog confirmDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,6 +101,29 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.ic_delete);
+        item.setVisible(deletable);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.ic_delete) {
+            confirmDialog.show(getSupportFragmentManager(), ConfirmDialog.class.getSimpleName());
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         presenter.initView();
@@ -111,67 +131,35 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
 
     public void initView() {
 
-        keyboard.setTextView(tvAmount);
+        hiddenKeyboard.setTextView(tvAmount);
 
         tvAmount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(keyboard.getVisibility()==View.VISIBLE){
-                    keyboard.setVisibility(View.GONE);
+                if(hiddenKeyboard.getVisibility()==View.VISIBLE){
+                    hiddenKeyboard.setVisibility(View.GONE);
                 }else{
-                    keyboard.setVisibility(View.VISIBLE);
+                    hiddenKeyboard.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        days = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.days));
-        days.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        weeks = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.weeks));
-        weeks.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        deletable = false;
 
-        months = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.months));
-        months.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        years = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.years));
-        years.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spPeriod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        confirmDialog = ConfirmDialog.getInstance(getString(R.string.confirm_delete_amount), new ConfirmDialog
+                .ConfirmDialogListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case Period.PER_DAY:
-                        spTimes.setAdapter(days);
-                        break;
-                    case Period.PER_WEEK:
-                        spTimes.setAdapter(weeks);
-                        break;
-                    case Period.PER_MONTH:
-                        spTimes.setAdapter(months);
-                        break;
-                    case Period.PER_YEAR:
-                        spTimes.setAdapter(years);
-                        break;
-                }
-
-                presenter.setPeriod(position);
+            public void onOk() {
+                presenter.deleteAmount();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onCancel() {
 
             }
         });
 
-        spPeriod.setSelection(Period.PER_DAY);
 
         rvCategories.setLayoutManager(new GridLayoutManager(this));
 
@@ -179,9 +167,9 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    llRepeat.setVisibility(View.VISIBLE);
+                    wPeriod.setVisibility(View.VISIBLE);
                 } else {
-                    llRepeat.setVisibility(View.GONE);
+                    wPeriod.setVisibility(View.GONE);
                 }
             }
         });
@@ -189,7 +177,7 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
     }
 
     @Override
-    public void populateCategories(List<Category> categories, int[] backgrouns) {
+    public void populateCategories(List<Category> categories, List<Integer> backgrouns) {
         if (categoryAdapter == null) {
             categoryAdapter = new CategoryAdapter(this,
                     categories,
@@ -217,12 +205,12 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
 
     @Override
     public void showAmount(double amount) {
-        keyboard.setValue(amount);
+        hiddenKeyboard.setValue(amount);
     }
 
     @Override
     public double amount() {
-        return keyboard.getValue();
+        return hiddenKeyboard.getValue();
     }
 
     @Override
@@ -236,13 +224,8 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
     }
 
     @Override
-    public int every() {
-        return spTimes.getSelectedItemPosition();
-    }
-
-    @Override
-    public int period() {
-        return spPeriod.getSelectedItemPosition();
+    public Period period() {
+        return wPeriod.getPeriod();
     }
 
     @Override
@@ -272,13 +255,8 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
     }
 
     @Override
-    public void setTimes(int times) {
-        spTimes.setSelection(times);
-    }
-
-    @Override
-    public void setPeriod(int period) {
-        spPeriod.setSelection(period);
+    public void setPeriod(Period period) {
+        wPeriod.setPeriod(period);
     }
 
     @Override
@@ -317,10 +295,15 @@ public class DetailsActivity extends BaseNoMenuActivity implements DetailsView {
     @Override
     public void onBackPressed() {
 
-        if(keyboard.getVisibility()==View.VISIBLE){
-           keyboard.setVisibility(View.GONE);
+        if(hiddenKeyboard.getVisibility()==View.VISIBLE){
+           hiddenKeyboard.setVisibility(View.GONE);
         }else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void setDeletable(boolean deletable) {
+        this.deletable = deletable;
     }
 }

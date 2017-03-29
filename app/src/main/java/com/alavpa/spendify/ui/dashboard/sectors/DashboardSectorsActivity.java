@@ -77,9 +77,6 @@ public class DashboardSectorsActivity extends BaseNoMenuActivity implements Dash
         boolean income = getIntent().getBooleanExtra(Navigator.EXTRA_INCOME,false);
         presenter.setIncome(income);
 
-        String amount = getIntent().getStringExtra(Navigator.EXTRA_AMOUNT);
-        presenter.setAmount(amount);
-
         long from = getIntent().getLongExtra(Navigator.EXTRA_FROM,0);
         presenter.setFrom(from);
 
@@ -113,7 +110,7 @@ public class DashboardSectorsActivity extends BaseNoMenuActivity implements Dash
     }
 
     @Override
-    public void populateDetails(List<Sector> sectors, int[] colors){
+    public void populateDetails(List<Sector> sectors, List<Integer> colors){
         if(detailsAdapter==null){
             detailsAdapter = new SectorAdapter(this,
                     sectors,
@@ -127,6 +124,9 @@ public class DashboardSectorsActivity extends BaseNoMenuActivity implements Dash
                     });
 
             rvDetails.setAdapter(detailsAdapter);
+        }else{
+            detailsAdapter.setSectors(sectors);
+            detailsAdapter.notifyDataSetChanged();
         }
     }
 }

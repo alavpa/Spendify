@@ -64,7 +64,7 @@ public class StartCategoriesActivity extends BaseActivity implements StartCatego
     }
 
     @Override
-    public void populateCategoriesIncome(List<Category> categories, int[] colors) {
+    public void populateCategoriesIncome(List<Category> categories, List<Integer> colors) {
         if(adapterIncome==null){
             adapterIncome = new CategoryAdapter(this, categories, colors, false, new CategoryAdapter.OnCategoryClick() {
                 @Override
@@ -86,7 +86,7 @@ public class StartCategoriesActivity extends BaseActivity implements StartCatego
     }
 
     @Override
-    public void populateCategoriesOutcome(final List<Category> categories, int[] colors) {
+    public void populateCategoriesOutcome(final List<Category> categories, List<Integer> colors) {
 
         if(adapterOutcome==null){
             adapterOutcome = new CategoryAdapter(this, categories, colors,false, new CategoryAdapter.OnCategoryClick() {

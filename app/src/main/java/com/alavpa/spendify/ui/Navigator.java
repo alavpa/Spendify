@@ -68,10 +68,9 @@ public class Navigator {
         activity.startActivity(intent);
     }
 
-    public void openDashboardSectors(boolean income, String amount, long from) {
+    public void openDashboardSectors(boolean income, long from) {
         Intent intent = getIntent(DashboardSectorsActivity.class);
         intent.putExtra(EXTRA_INCOME,income);
-        intent.putExtra(EXTRA_AMOUNT,amount);
         intent.putExtra(EXTRA_FROM,from);
         activity.startActivity(intent);
     }

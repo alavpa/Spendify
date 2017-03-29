@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.domain.model.Category;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,13 +33,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
     List<Category> categories;
     OnCategoryClick onCategoryClick;
     Category selected = null;
-    int[] backgrounds;
+    List<Integer> backgrounds;
     Drawable addDrawable;
     boolean selectable;
 
     public CategoryAdapter(Context context,
                            List<Category> categories,
-                           int[] backgrounds,
+                           List<Integer> backgrounds,
                            boolean selectable,
                            OnCategoryClick onCategoryClick) {
 
@@ -48,7 +47,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
         this.onCategoryClick = onCategoryClick;
         this.backgrounds = backgrounds;
         this.selectable = selectable;
-        setCategories(categories);
+        this.categories = categories;
         addDrawable = ContextCompat.getDrawable(context, R.drawable.ic_action_add);
         int color = ContextCompat.getColor(context, R.color.colorAccent);
         addDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
@@ -99,7 +98,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
 
     public void setCategories(List<Category> categories) {
 
-        this.categories = new ArrayList<>(categories);
+        this.categories.clear();
+        this.categories.addAll(categories);
         this.categories.add(null);
 
     }
@@ -138,7 +138,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
         public void bind(Category category) {
 
             tvName.setText(category.getName());
-            itemView.setBackgroundResource(backgrounds[category.getColor()]);
+            itemView.setBackgroundResource(backgrounds.get(category.getColor()));
 
             if (getSelected() != null) {
                 boolean selected = category.getId() == getSelected().getId();

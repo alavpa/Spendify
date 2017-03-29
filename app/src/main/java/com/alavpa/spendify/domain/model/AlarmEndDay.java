@@ -5,13 +5,13 @@ import com.alavpa.spendify.domain.model.base.AlarmRepeat;
 
 import java.util.Calendar;
 
-public class EndDayAlarm extends AlarmRepeat{
+public class AlarmEndDay extends AlarmRepeat{
 
-    public EndDayAlarm(){
+    public AlarmEndDay(){
 
     }
 
-    public EndDayAlarm(long time){
+    public AlarmEndDay(long time){
         date = calculateDate(Calendar.getInstance().getTimeInMillis(),time);
         period = new Period(date,Period.PER_DAY,1);
     }

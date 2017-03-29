@@ -7,15 +7,15 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
-public class OfflimitAlarmTest {
+public class AlarmOfflimitTest {
 
     @Test
     public void checkDate() {
 
-        OfflimitAlarm offlimitAlarm = new OfflimitAlarm();
+        AlarmOfflimit alarmOfflimit = new AlarmOfflimit();
 
         Calendar calendar = Calendar.getInstance();
-        long calculated = offlimitAlarm.calculateDate(calendar.getTimeInMillis());
+        long calculated = alarmOfflimit.calculateDate(calendar.getTimeInMillis());
         calendar.add(Calendar.MINUTE,5);
         Assert.assertEquals(calendar.getTimeInMillis(),calculated);
 
@@ -25,10 +25,10 @@ public class OfflimitAlarmTest {
     public void checkRequest(){
         Category category = new Category();
         category.setId(1);
-        OfflimitAlarm offlimitAlarm = new OfflimitAlarm(category);
+        AlarmOfflimit alarmOfflimit = new AlarmOfflimit(category);
 
         int expected = AlarmManager.REQUEST_ALARM_OFFLIMIT + 1;
-        int actual = offlimitAlarm.getRequest();
+        int actual = alarmOfflimit.getRequest();
         Assert.assertEquals(expected,actual);
     }
 }

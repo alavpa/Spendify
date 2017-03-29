@@ -180,4 +180,9 @@ public class Amount implements Parcelable {
 
         return this;
     }
+
+    public Amount update(Datasource datasource) {
+        AmountDb amountDb = datasource.updateAmount(toAmountDb());
+        return fromAmountDb(amountDb);
+    }
 }

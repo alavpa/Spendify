@@ -7,13 +7,13 @@ import com.alavpa.spendify.domain.model.base.AlarmRepeat;
 
 import java.util.Calendar;
 
-public class AmountAlarm extends AlarmRepeat{
+public class AlarmAmount extends AlarmRepeat{
 
     private Amount amount;
 
-    public AmountAlarm(){}
+    public AlarmAmount(){}
 
-    public AmountAlarm(Amount amount){
+    public AlarmAmount(Amount amount){
         this.amount = amount;
         date = calculateDate(Calendar.getInstance().getTimeInMillis(), amount.getPeriod().getDate());
         period = new Period(date,amount.getPeriod().getPeriod(),amount.getPeriod().getTimes());
@@ -62,20 +62,20 @@ public class AmountAlarm extends AlarmRepeat{
         dest.writeParcelable(this.amount, flags);
     }
 
-    protected AmountAlarm(Parcel in) {
+    protected AlarmAmount(Parcel in) {
         super(in);
         this.amount = in.readParcelable(Amount.class.getClassLoader());
     }
 
-    public static final Creator<AmountAlarm> CREATOR = new Creator<AmountAlarm>() {
+    public static final Creator<AlarmAmount> CREATOR = new Creator<AlarmAmount>() {
         @Override
-        public AmountAlarm createFromParcel(Parcel source) {
-            return new AmountAlarm(source);
+        public AlarmAmount createFromParcel(Parcel source) {
+            return new AlarmAmount(source);
         }
 
         @Override
-        public AmountAlarm[] newArray(int size) {
-            return new AmountAlarm[size];
+        public AlarmAmount[] newArray(int size) {
+            return new AlarmAmount[size];
         }
     };
 }

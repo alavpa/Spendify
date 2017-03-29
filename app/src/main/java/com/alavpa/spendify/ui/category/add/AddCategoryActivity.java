@@ -22,6 +22,10 @@ import com.alavpa.spendify.ui.custom.adapters.CategoryColorAdapter;
 import com.alavpa.spendify.ui.custom.dialogs.ConfirmDialog;
 import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -34,27 +38,30 @@ import butterknife.OnClick;
 
 public class AddCategoryActivity extends BaseNoMenuActivity implements AddCategoryView {
 
-    @BindView(R.id.keyboard)
-    Keyboard keyboard;
+    @BindView(R.id.hidden_keyboard)
+    public Keyboard hiddenKeyboard;
 
     @BindView(R.id.tv_limit)
-    TextView tvLimit;
+    public TextView tvLimit;
 
     @BindView(R.id.chk_limit)
-    CheckBox chkLimit;
+    public CheckBox chkLimit;
 
     @BindView(R.id.et_name)
-    EditText etTitle;
+    public EditText etTitle;
     @BindView(R.id.rv_colors)
-    RecyclerView rvColors;
+    public RecyclerView rvColors;
 
     @Inject
-    AddCategoryPresenter presenter;
+    public AddCategoryPresenter presenter;
 
+    private
     CategoryColorAdapter adapter;
 
+    private
     boolean deletable;
 
+    private
     ConfirmDialog confirmDialog;
 
     @Override
@@ -84,6 +91,7 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
                     tvLimit.setVisibility(View.VISIBLE);
                 } else {
                     tvLimit.setVisibility(View.GONE);
+                    hiddenKeyboard.setVisibility(View.GONE);
                 }
             }
         });
@@ -91,19 +99,19 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
         tvLimit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (keyboard.getVisibility() == View.GONE) {
-                    keyboard.setVisibility(View.VISIBLE);
+                if (hiddenKeyboard.getVisibility() == View.GONE) {
+                    hiddenKeyboard.setVisibility(View.VISIBLE);
                 } else {
-                    keyboard.setVisibility(View.GONE);
+                    hiddenKeyboard.setVisibility(View.GONE);
                 }
             }
         });
 
-        keyboard.setTextView(tvLimit);
+        hiddenKeyboard.setTextView(tvLimit);
 
         deletable = false;
 
-        confirmDialog = ConfirmDialog.getInstance(getString(R.string.confirm_delete), new ConfirmDialog.ConfirmDialogListener() {
+        confirmDialog = ConfirmDialog.getInstance(getString(R.string.confirm_delete_category), new ConfirmDialog.ConfirmDialogListener() {
             @Override
             public void onOk() {
                 presenter.deleteCategory();
@@ -152,16 +160,7 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(confirmDialog!=null){
-            confirmDialog.dismiss();
-            confirmDialog = null;
-        }
-    }
-
-    @Override
-    public void populateColors(int[] colors, int selected) {
+    public void populateColors(List<Integer> colors, int selected) {
         if (adapter == null) {
             adapter = new CategoryColorAdapter(this, colors);
             adapter.setSelected(selected);
@@ -200,7 +199,7 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
     @Override
     public void showLimit(double limit) {
         chkLimit.setChecked(limit > 0);
-        keyboard.setValue(limit);
+        hiddenKeyboard.setValue(limit);
     }
 
     @Override
@@ -218,13 +217,13 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
     }
 
     private double limit() {
-        return keyboard.getValue();
+        return hiddenKeyboard.getValue();
     }
 
     @Override
     public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE) {
-            keyboard.setVisibility(View.GONE);
+        if (hiddenKeyboard.getVisibility() == View.VISIBLE) {
+            hiddenKeyboard.setVisibility(View.GONE);
         } else {
             super.onBackPressed();
         }

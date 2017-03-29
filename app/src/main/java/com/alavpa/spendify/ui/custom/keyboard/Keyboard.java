@@ -123,11 +123,19 @@ public class Keyboard extends FrameLayout {
 
     public void setValue(double value) {
         this.value = value;
+        setIntegerPart(value);
+        setDecimalPart(value);
         textView.setText(getFormattedValue());
     }
 
-    public int getDecimals() {
-        return decimals;
+    public void setIntegerPart(double value){
+        integerPart = String.valueOf((int)value);
+    }
+
+    public void setDecimalPart(double value){
+        int integerValue = (int)value;
+        int decimalValue = (int)((value-integerValue)*100);
+        decimalPart = String.valueOf(decimalValue);
     }
 
     public void setDecimals(int decimals) {

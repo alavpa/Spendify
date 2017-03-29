@@ -53,23 +53,6 @@
                     android:gravity="top"
                     android:layout_marginBottom="@dimen/margin"/>
 
-            <CheckBox
-                    android:id="@+id/chk_promises"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:text="@string/notify_promises"
-                    android:gravity="top"
-                    android:visibility="gone"
-                    android:layout_marginBottom="@dimen/margin"/>
-
-            <com.alavpa.spendify.ui.custom.widgets.period.PeriodWidget
-                    android:id="@+id/w_period"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:visibility="gone"/>
-
         </LinearLayout>
     </ScrollView>
 

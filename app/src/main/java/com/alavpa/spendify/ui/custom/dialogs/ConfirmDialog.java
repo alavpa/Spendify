@@ -78,7 +78,6 @@ public class ConfirmDialog extends DialogFragment {
 
     @OnClick(R.id.btn_cancel)
     public void onCancel(View view){
-        confirmDialogListener.onOk();
         dismiss();
     }
 }
