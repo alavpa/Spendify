@@ -13,6 +13,8 @@ import com.alavpa.spendify.R;
 import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.di.application.ApplicationComponent;
+import com.alavpa.spendify.domain.model.AlarmOfflimit;
+import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.ui.IntentUtils;
 
 import java.util.Calendar;
@@ -25,6 +27,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     public static final int NOTIFICATION_ENDDAY_ID = 1;
     public static final int NOTIFICATION_ENDMONTH_ID = 2;
+    public static final int NOTIFICATION_OFFLIMIT_BASE = 1000;
 
     @Inject
     ResDatasource resources;
@@ -65,6 +68,32 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
             publish(context, NOTIFICATION_ENDMONTH_ID, title, content, pendingIntent);
 
         }
+
+        if (intent.getAction().equals(AlarmManager.ACTION_ALARM_AMOUNT)) {
+
+            //TODO: Insert amount from intent
+
+        }
+
+        if (intent.getAction().equals(AlarmManager.ACTION_ALARM_OFFLIMIT)) {
+
+            AlarmOfflimit alarmOfflimit = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
+
+            Category category = alarmOfflimit.getCategory();
+            int notificationId = NOTIFICATION_OFFLIMIT_BASE + (int)category.getId();
+
+            String title = resources.getString(R.string.notification_title_offlimit,category.getName());
+            String content = resources.getString(R.string.notification_content_offlimit, category.getLimit(),
+                    category.getName());
+            Intent dashboardIntent = intentUtils.getDashboardIntent(context, Calendar.getInstance().getTimeInMillis());
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,
+                    notificationId,
+                    dashboardIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+
+            publish(context, notificationId, title, content, pendingIntent);
+
+        }
     }
 
     private void publish(Context context, int id, String title, String content, PendingIntent pendingIntent) {
@@ -73,7 +102,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         builder.setContentTitle(title);
         builder.setContentText(content);
         builder.setContentIntent(pendingIntent);
-        builder.setSmallIcon(R.drawable.ic_notification);
+        builder.setSmallIcon(R.drawable.ic_notification_b);
         builder.setAutoCancel(true);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(content));
         Notification notification = builder.build();

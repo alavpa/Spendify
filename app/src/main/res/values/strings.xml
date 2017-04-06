@@ -32,13 +32,14 @@
     <string name="delete">Borrar</string>
     <string name="confirm_delete_category">¿Estás seguro que quieres borrar esta categoría?</string>
     <string name="confirm_delete_amount">¿Estás seguro que quieres borrar esta cantidad?</string>
+    <string name="notification_title_offlimit">Te has pasado del límite en %1$s.</string>
+    <string name="notification_content_offlimit">Has rebasado el límite de %1$f en la categoría de %2$s</string>
 
     <string-array name="menu">
         <item>Dashboard</item>
         <item>Meses</item>
         <item>Categorías</item>
         <item>Inicio de mes</item>
-        <item>Promesas</item>
         <item>Notificaciones</item>
 
     </string-array>

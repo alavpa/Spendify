@@ -2,12 +2,10 @@ package com.alavpa.spendify.data.resources;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
 import com.alavpa.spendify.R;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +26,10 @@ public class ResDatasource {
         this.context = context;
     }
 
+    public String getString(int stringResId, Object... objects){
+        return context.getString(stringResId,objects);
+    }
+
     public String getString(int stringResId){
         return context.getString(stringResId);
     }
@@ -40,22 +42,9 @@ public class ResDatasource {
         return ContextCompat.getColor(context,colorResId);
     }
 
-    public int[] getArrayInt(int intArrayResId){
-        return context.getResources().getIntArray(intArrayResId);
-    }
 
     public TypedArray getTypedArray(int intArrayResId){
         return context.getResources().obtainTypedArray(intArrayResId);
-    }
-
-    public List<Drawable> getDrawableArray(int intArrayResId){
-        List<Drawable> list = new ArrayList<>();
-        TypedArray typedArray = getTypedArray(intArrayResId);
-        for(int i=0;i<typedArray.length();i++){
-            list.add(typedArray.getDrawable(i));
-        }
-        typedArray.recycle();
-        return list;
     }
 
     public List<Integer> getCategoryBackgroundsArray(){

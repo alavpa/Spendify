@@ -18,7 +18,7 @@ public class Alarm implements Parcelable {
     }
 
     public void setAlarm(AlarmManager alarmManager, String action, int request){
-        alarmManager.setAlarm(action,request,date);
+        alarmManager.setAlarm(action,request,date,this);
     }
 
     public void cancelAlarm(AlarmManager alarmManager, String action, int request){
