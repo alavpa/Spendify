@@ -14,7 +14,7 @@ public class Sector implements Parcelable{
 
     public Sector(){
         amount = 0.0;
-        category = null;
+        category = new Category();
     }
 
     protected Sector(Parcel in) {
@@ -51,9 +51,12 @@ public class Sector implements Parcelable{
     }
 
     public Sector fromSectorDb(SectorDb sectorDb){
-        this.amount = sectorDb.getAmount();
-        this.category = new Category().fromCategoryDb(sectorDb.getCategoryDb());
-        return this;
+        if(sectorDb!=null) {
+            this.amount = sectorDb.getAmount();
+            this.category = new Category().fromCategoryDb(sectorDb.getCategoryDb());
+            return this;
+        }
+        return null;
     }
 
     @Override

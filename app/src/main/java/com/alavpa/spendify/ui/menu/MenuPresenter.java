@@ -16,6 +16,12 @@ import javax.inject.Inject;
 @PerActivity
 public class MenuPresenter extends BasePresenter<MenuView> {
 
+    private static final int POSITION_DASHBOARD = 0;
+    private static final int POSITION_MONTHS = 1;
+    private static final int POSITION_CATEGORIES = 2;
+    private static final int POSITION_DAY = 3;
+    private static final int POSITION_NOTIFICATIONS = 4;
+
     @Inject
     DateUtils dateUtils;
 
@@ -32,24 +38,24 @@ public class MenuPresenter extends BasePresenter<MenuView> {
     }
 
     public void goTo(int position) {
-        if(position == 0){
+        if(position == POSITION_DASHBOARD){
             Calendar from = dateUtils.calculateFrom(Calendar.getInstance().getTimeInMillis(),preferences.getMonthDay());
             navigator.openDashboard(from.getTimeInMillis());
         }
 
-        if(position == 1){
+        if(position == POSITION_MONTHS){
             navigator.openMonths();
         }
 
-        if(position == 2){
+        if(position == POSITION_CATEGORIES){
             navigator.openManageCategories();
         }
 
-        if(position == 3){
+        if(position == POSITION_DAY){
             navigator.openSelectDayMonth();
         }
 
-        if(position == 5){
+        if(position == POSITION_NOTIFICATIONS){
             navigator.openNotifications();
         }
 

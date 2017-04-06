@@ -24,8 +24,11 @@ public class AlarmAmount extends AlarmRepeat{
         alarmCalendar.setTimeInMillis(time);
 
         long date = alarmCalendar.getTimeInMillis();
-        while(date<current){
-            date = amount.getPeriod().getNextDateInMillis();
+
+        if(amount.getPeriod().getPeriod() != Period.NO_PERIOD) {
+            while (date < current) {
+                date = amount.getPeriod().getNextDateInMillis();
+            }
         }
 
         return date;

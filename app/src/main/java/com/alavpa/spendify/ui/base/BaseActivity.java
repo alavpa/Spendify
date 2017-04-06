@@ -3,6 +3,7 @@ package com.alavpa.spendify.ui.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.alavpa.spendify.Application;
@@ -56,6 +57,7 @@ public class BaseActivity extends AppCompatActivity implements BaseView{
 
     @Override
     public void showError(String message) {
+        Log.e(getClass().getSimpleName(),message);
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
     }
 

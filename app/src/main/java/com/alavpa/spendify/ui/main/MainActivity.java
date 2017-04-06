@@ -65,6 +65,7 @@ public class MainActivity extends BaseMenuActivity implements MainView, HasCompo
         if(requestCode == Navigator.REQUEST_CODE_DETAILS){
             if(resultCode == RESULT_OK){
                 presenter.setAmount(new Amount());
+                keyboard.clear();
             }
         }
     }

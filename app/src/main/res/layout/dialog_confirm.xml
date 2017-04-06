@@ -23,6 +23,7 @@
                 android:layout_weight="1"
                 android:padding="@dimen/padding"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_big"
                 android:text="@android:string/cancel"/>
 
         <TextView
@@ -32,6 +33,7 @@
                 android:layout_weight="1"
                 android:padding="@dimen/padding"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_big"
                 android:text="@android:string/ok"/>
     </LinearLayout>
 

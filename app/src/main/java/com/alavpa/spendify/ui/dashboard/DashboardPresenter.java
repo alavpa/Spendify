@@ -84,7 +84,8 @@ public class DashboardPresenter extends BasePresenter<DashboardView>{
 
                 getView().showTotalIncome(decimalFormat.format(total[0]));
                 getView().showTotalOutcome(decimalFormat.format(total[1]));
-                getView().showTotal(decimalFormat.format(total[0]-total[1]));
+                double totalValue = total[0]-total[1];
+                getView().showTotal(decimalFormat.format(totalValue),totalValue<0);
             }
 
             @Override

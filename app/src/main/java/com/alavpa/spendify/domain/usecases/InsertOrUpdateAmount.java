@@ -4,6 +4,8 @@ import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.Repository;
+import com.alavpa.spendify.domain.model.AlarmAmount;
+import com.alavpa.spendify.domain.model.AlarmOfflimit;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
@@ -69,15 +71,19 @@ public class InsertOrUpdateAmount extends UseCase<Amount>{
         return new BiFunction<Amount, Double, Amount>() {
             @Override
             public Amount apply(Amount amount, Double sum) throws Exception {
-                if(amount.getPeriod().getPeriod()== Period.NO_PERIOD){
-                    alarmManager.cancelAlarmAmount(amount);
+
+                AlarmAmount alarmAmount = new AlarmAmount(amount);
+                if(amount.getPeriod().getPeriod()== Period.NO_PERIOD ||
+                        amount.isDeleted()){
+                    alarmAmount.cancel(alarmManager);
                 }else{
-                    alarmManager.setAlarmAmount(amount);
+                    alarmAmount.set(alarmManager);
                 }
 
+                AlarmOfflimit alarmOfflimit = new AlarmOfflimit(amount.getCategory());
                 if(prefsDatasource.notifyOfflimit()){
                     if(amount.getCategory().isOverLimit(sum)){
-                        alarmManager.setAlarmOfflimit(amount.getCategory());
+                        alarmOfflimit.set(alarmManager);
                     }
                 }
 

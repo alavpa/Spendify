@@ -19,5 +19,5 @@ public interface DashboardView extends BaseView{
 
     void showTotalIncome(String totalIncome);
 
-    void showTotal(String total);
+    void showTotal(String total, boolean negative);
 }

@@ -21,4 +21,6 @@ public interface AddCategoryView extends BaseView {
     void showLimit(double limit);
 
     void setDeletable(boolean deletable);
+
+    void hasLimit(boolean has);
 }

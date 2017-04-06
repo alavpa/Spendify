@@ -22,8 +22,6 @@ import com.alavpa.spendify.ui.custom.adapters.CategoryColorAdapter;
 import com.alavpa.spendify.ui.custom.dialogs.ConfirmDialog;
 import com.alavpa.spendify.ui.custom.keyboard.Keyboard;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -152,11 +150,7 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.showColors();
-        presenter.showLimit();
-        presenter.showName();
-        presenter.showSelected();
-        presenter.showDelete();
+        presenter.initView();
     }
 
     @Override
@@ -226,6 +220,15 @@ public class AddCategoryActivity extends BaseNoMenuActivity implements AddCatego
             hiddenKeyboard.setVisibility(View.GONE);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void hasLimit(boolean has){
+        if(has){
+            chkLimit.setVisibility(View.VISIBLE);
+        }else{
+            chkLimit.setVisibility(View.GONE);
         }
     }
 

@@ -96,8 +96,9 @@ class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
 
                             @Override
                             public List<AmountBarPart> apply(Double total, List<Sector> sectors) throws Exception {
-                                List<AmountBarPart> amountBarPartList = AmountBarPart.getParts(resources, sectors,
-                                        total);
+                                List<AmountBarPart> amountBarPartList =
+                                        AmountBarPart.getParts(resources, sectors, total);
+
                                 return amountBarPartList;
                             }
                         });
@@ -107,7 +108,11 @@ class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
         useCase.execute(new DisposableSingleObserver<List<AmountBarPart>>() {
             @Override
             public void onSuccess(List<AmountBarPart> amountBarParts) {
-                getView().showDetails(amountBarParts);
+                if (amountBarParts.isEmpty()) {
+                    getView().finish();
+                } else {
+                    getView().showDetails(amountBarParts);
+                }
             }
 
             @Override

@@ -19,8 +19,8 @@ import io.reactivex.observers.DisposableSingleObserver;
 @PerActivity
 public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
 
-    InsertOrUpdateCategory insertOrUpdateCategory;
-    DeleteCategory deleteCategory;
+    private InsertOrUpdateCategory insertOrUpdateCategory;
+    private DeleteCategory deleteCategory;
     private Category category;
 
     @Inject
@@ -83,6 +83,14 @@ public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
         getView().setDeletable(category.getId()>0);
     }
 
+    public void hasLimit(){
+        if(category.isIncome()){
+            getView().hasLimit(false);
+        }else{
+            getView().hasLimit(true);
+        }
+    }
+
     public void deleteCategory() {
         deleteCategory.setCategory(category);
         deleteCategory.execute(new DisposableSingleObserver<Boolean>() {
@@ -99,4 +107,14 @@ public class AddCategoryPresenter extends BasePresenter<AddCategoryView> {
             }
         });
     }
+
+    public void initView() {
+        showColors();
+        showLimit();
+        showName();
+        showSelected();
+        showDelete();
+        hasLimit();
+    }
+
 }

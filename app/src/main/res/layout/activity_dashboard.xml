@@ -87,7 +87,7 @@
             android:layout_weight="0"
             android:orientation="horizontal">
 
-        <TextView
+        <TextView android:id="@+id/tv_total_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
@@ -98,7 +98,7 @@
                   android:layout_height="wrap_content"
                   android:gravity="right"
                   android:layout_weight="1"/>
-        <TextView
+        <TextView android:id="@+id/tv_total_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"

@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 import io.reactivex.observers.DisposableSingleObserver;
 
-public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsView>{
+public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsView> {
 
     @Inject
     DateUtils dateUtils;
@@ -40,7 +40,7 @@ public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsVie
     }
 
     @Inject
-    public DashboardAmountsPresenter(GetAmountsByCategory getAmountsByCategory, GetSector getSector){
+    public DashboardAmountsPresenter(GetAmountsByCategory getAmountsByCategory, GetSector getSector) {
         this.getAmountsByCategory = getAmountsByCategory;
         this.getSector = getSector;
         addUseCases(getAmountsByCategory, getSector);
@@ -75,7 +75,11 @@ public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsVie
         getAmountsByCategory.execute(new DisposableSingleObserver<List<Amount>>() {
             @Override
             public void onSuccess(List<Amount> amounts) {
-                getView().populateDetails(amounts);
+                if (amounts.isEmpty()) {
+                    getView().finish();
+                } else {
+                    getView().populateDetails(amounts);
+                }
             }
 
             @Override
@@ -86,8 +90,8 @@ public class DashboardAmountsPresenter extends BasePresenter<DashboardAmountsVie
     }
 
     public void setFrom(long from) {
-        this.from=dateUtils.calculateFrom(from,preferences.getMonthDay());
-        this.to=dateUtils.calculateTo(from,preferences.getMonthDay());
+        this.from = dateUtils.calculateFrom(from, preferences.getMonthDay());
+        this.to = dateUtils.calculateTo(from, preferences.getMonthDay());
     }
 
     public void onClickAmount(Amount amount) {

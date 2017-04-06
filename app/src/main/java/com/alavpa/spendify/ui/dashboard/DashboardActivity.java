@@ -2,6 +2,7 @@ package com.alavpa.spendify.ui.dashboard;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -53,6 +54,12 @@ public class DashboardActivity extends BaseNoMenuActivity implements DashboardVi
 
     @BindView(R.id.tv_total)
     TextView tvTotal;
+
+    @BindView(R.id.tv_total_label)
+    TextView tvTotalLabel;
+
+    @BindView(R.id.tv_total_currency)
+    TextView tvTotalCurrency;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,7 +129,18 @@ public class DashboardActivity extends BaseNoMenuActivity implements DashboardVi
     }
 
     @Override
-    public void showTotal(String total) {
+    public void showTotal(String total, boolean negative) {
+
+        if(negative){
+            tvTotal.setTextColor(ContextCompat.getColor(this,R.color.red));
+            tvTotalCurrency.setTextColor(ContextCompat.getColor(this,R.color.red));
+            tvTotalLabel.setTextColor(ContextCompat.getColor(this,R.color.red));
+        }else{
+            tvTotal.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
+            tvTotalLabel.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
+            tvTotalLabel.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
+        }
+
         tvTotal.setText(total);
     }
 

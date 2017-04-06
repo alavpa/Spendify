@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.domain.model.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,7 +48,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.BaseCa
         this.onCategoryClick = onCategoryClick;
         this.backgrounds = backgrounds;
         this.selectable = selectable;
-        this.categories = categories;
+        this.categories = new ArrayList<>();
+        setCategories(categories);
         addDrawable = ContextCompat.getDrawable(context, R.drawable.ic_action_add);
         int color = ContextCompat.getColor(context, R.color.colorAccent);
         addDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);

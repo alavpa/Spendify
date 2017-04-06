@@ -286,7 +286,7 @@ public class DbDatasource implements Datasource {
     @Override
     public synchronized SectorDb getSector(long catId, long from, long to) {
 
-        SectorDb sectorDb = null;
+        SectorDb sectorDb = new SectorDb();
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 
         db.beginTransaction();
@@ -342,7 +342,7 @@ public class DbDatasource implements Datasource {
     }
 
     private CategoryDb getCategory(SQLiteDatabase db, long id){
-        CategoryDb categoryDb = null;
+        CategoryDb categoryDb = new CategoryDb();
         Cursor cursor = db.query(CategoryDb.TABLE_NAME,
                 null,
                 CategoryDb.COL_ID+"=?",
@@ -360,7 +360,7 @@ public class DbDatasource implements Datasource {
 
     @Override
     public synchronized Long getMaxDate() {
-        Long date = null;
+        Long date = 0L;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT MAX(" + AmountDb.COL_DATE + ")" +
@@ -378,7 +378,7 @@ public class DbDatasource implements Datasource {
 
     @Override
     public synchronized Long getMinDate() {
-        Long date = null;
+        Long date = 0L;
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT MIN(" + AmountDb.COL_DATE + ")" +

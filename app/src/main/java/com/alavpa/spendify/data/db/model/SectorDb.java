@@ -9,6 +9,11 @@ public class SectorDb {
     private
     CategoryDb categoryDb;
 
+    public SectorDb(){
+        amount = 0;
+        categoryDb = new CategoryDb();
+    }
+
     public double getAmount() {
         return amount;
     }

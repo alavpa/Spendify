@@ -82,7 +82,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
 
             @Override
             public void onError(Throwable e) {
-
+                getView().showError(e.getMessage());
             }
         });
 
