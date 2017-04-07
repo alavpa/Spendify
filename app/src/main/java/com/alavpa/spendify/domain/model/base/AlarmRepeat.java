@@ -12,17 +12,6 @@ public class AlarmRepeat extends Alarm{
     public AlarmRepeat(){
 
     }
-    public AlarmRepeat(long date, Period period){
-        super(date);
-        this.period = period;
-    }
-
-    public AlarmRepeat getNextAlarm(){
-        period.setDate(date);
-        long next = period.getNextDateInMillis();
-
-        return new AlarmRepeat(next,period);
-    }
 
     public Period getPeriod() {
         return period;

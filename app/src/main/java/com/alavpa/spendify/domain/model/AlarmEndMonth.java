@@ -9,6 +9,8 @@ import java.util.Calendar;
 
 public class AlarmEndMonth extends AlarmRepeat{
 
+    public static final int NOTIFICATION_ENDMONTH_ID = 2;
+
     public AlarmEndMonth(){
 
     }
@@ -31,6 +33,13 @@ public class AlarmEndMonth extends AlarmRepeat{
         }
 
         return date;
+    }
+
+    public AlarmEndMonth getNextAlarm() {
+        AlarmEndMonth alarmEndMonth = new AlarmEndMonth();
+        alarmEndMonth.setDate(period.getNextDateInMillis());
+        period = new Period(date,Period.PER_MONTH,1);
+        return alarmEndMonth;
     }
 
     public void set(AlarmManager alarmManager){

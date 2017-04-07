@@ -81,4 +81,11 @@ public class AlarmAmount extends AlarmRepeat{
             return new AlarmAmount[size];
         }
     };
+
+    public AlarmAmount getNextAlarm() {
+        AlarmAmount alarmAmount = new AlarmAmount(amount);
+        alarmAmount.setDate(period.getNextDateInMillis());
+        alarmAmount.setPeriod(new Period(date,period.getPeriod(),period.getTimes()));
+        return alarmAmount;
+    }
 }

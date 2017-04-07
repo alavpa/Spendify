@@ -107,18 +107,18 @@ public class Period implements Parcelable {
         }
     };
 
+    public Period getNextPeriod(){
+
+        return new Period(getNextDateInMillis(),period,times);
+    }
+
     public long getNextDateInMillis(){
 
         Calendar next = Calendar.getInstance();
         next.setTimeInMillis(date);
-
         next.add(getCalendarPeriod(),times);
-        while (next.getTimeInMillis()<System.currentTimeMillis()){
-            next.add(getCalendarPeriod(),times);
-        }
         return next.getTimeInMillis();
     }
-
 
     public int getCalendarPeriod(){
         switch (getPeriod()){

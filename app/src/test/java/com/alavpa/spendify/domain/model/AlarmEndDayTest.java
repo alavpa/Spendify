@@ -59,6 +59,7 @@ public class AlarmEndDayTest {
         calendar.set(Calendar.HOUR_OF_DAY,21);
         calendar.set(Calendar.MINUTE,30);
         calendar.set(Calendar.SECOND,53);
+        calendar.set(Calendar.MILLISECOND,0);
 
         Calendar expected = Calendar.getInstance();
         expected.setTimeInMillis(calendar.getTimeInMillis());
@@ -68,12 +69,14 @@ public class AlarmEndDayTest {
         expected.set(Calendar.HOUR_OF_DAY,20);
         expected.set(Calendar.MINUTE,0);
         expected.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
 
         Calendar time = Calendar.getInstance();
         time.setTimeInMillis(0);
         time.set(Calendar.HOUR_OF_DAY,20);
         time.set(Calendar.MINUTE,0);
         time.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
 
         long date = alarmEndDay.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
         alarmEndDay.setDate(date);

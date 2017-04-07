@@ -185,4 +185,16 @@ public class Amount implements Parcelable {
         AmountDb amountDb = datasource.updateAmount(toAmountDb());
         return fromAmountDb(amountDb);
     }
+
+    public Amount getNextAmount(){
+        Amount amount = new Amount();
+        amount.setAmount(this.amount);
+        amount.setPeriod(period.getNextPeriod());
+        amount.setCategory(this.category);
+        amount.setDeleted(this.deleted);
+        amount.setIncome(this.income);
+        amount.setDescription(this.description);
+
+        return amount;
+    }
 }

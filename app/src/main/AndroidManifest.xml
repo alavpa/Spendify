@@ -98,7 +98,7 @@
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden"/>
 
-        <receiver android:name=".ui.receiver.AlarmReceiver">
+        <receiver android:name=".ui.receiver.alarm.AlarmReceiver">
             <intent-filter>
                 <action android:name="com.alavpa.spendify.data.alarm.ACTION_ALARM_ENDDAY"/>
                 <action android:name="com.alavpa.spendify.data.alarm.ACTION_ALARM_ENDMONTH"/>

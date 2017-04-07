@@ -5,7 +5,7 @@ import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.Repository;
-import com.alavpa.spendify.ui.receiver.AlarmReceiver;
+import com.alavpa.spendify.ui.receiver.alarm.AlarmReceiver;
 
 import java.text.SimpleDateFormat;
 

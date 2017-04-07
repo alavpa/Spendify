@@ -7,6 +7,8 @@ import java.util.Calendar;
 
 public class AlarmEndDay extends AlarmRepeat{
 
+    public static final int NOTIFICATION_ENDDAY_ID = 1;
+
     public AlarmEndDay(){
 
     }
@@ -42,5 +44,12 @@ public class AlarmEndDay extends AlarmRepeat{
 
     public void cancel(AlarmManager alarmManager){
         cancelAlarm(alarmManager,AlarmManager.ACTION_ALARM_ENDDAY,AlarmManager.REQUEST_ALARM_ENDDAY);
+    }
+
+    public AlarmEndDay getNextAlarm() {
+        AlarmEndDay alarmEndDay = new AlarmEndDay();
+        alarmEndDay.setDate(period.getNextDateInMillis());
+        alarmEndDay.setPeriod(new Period(date,period.getPeriod(),period.getTimes()));
+        return alarmEndDay;
     }
 }

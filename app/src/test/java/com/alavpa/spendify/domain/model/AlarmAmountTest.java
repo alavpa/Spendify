@@ -75,6 +75,7 @@ public class AlarmAmountTest {
         current.set(Calendar.HOUR_OF_DAY,23);
         current.set(Calendar.MINUTE,30);
         current.set(Calendar.SECOND,53);
+        current.set(Calendar.MILLISECOND,0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DATE,18);
@@ -83,6 +84,7 @@ public class AlarmAmountTest {
         calendar.set(Calendar.HOUR_OF_DAY,21);
         calendar.set(Calendar.MINUTE,30);
         calendar.set(Calendar.SECOND,53);
+        calendar.set(Calendar.MILLISECOND,0);
 
         Calendar expected = Calendar.getInstance();
         expected.set(Calendar.DATE,18);
@@ -91,6 +93,7 @@ public class AlarmAmountTest {
         expected.set(Calendar.HOUR_OF_DAY,21);
         expected.set(Calendar.MINUTE,30);
         expected.set(Calendar.SECOND,53);
+        expected.set(Calendar.MILLISECOND,0);
 
         Period period = new Period(calendar.getTimeInMillis(),Period.PER_MONTH,1);
         Amount amount = new Amount();
