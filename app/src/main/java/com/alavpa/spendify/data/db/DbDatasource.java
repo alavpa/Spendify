@@ -54,6 +54,13 @@ public class DbDatasource implements Datasource {
                 null, null, null, null);
     }
 
+    private Cursor getCategories(SQLiteDatabase db) {
+        return db.query(CategoryDb.TABLE_NAME,
+                null,
+                null,
+                null, null, null, null);
+    }
+
     private List<CategoryDb> getCategoryList(Cursor cursor) {
         List<CategoryDb> categories = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -291,7 +298,7 @@ public class DbDatasource implements Datasource {
 
         db.beginTransaction();
         try {
-            CategoryDb categoryDb = getCategory(db,catId);
+            CategoryDb categoryDb = getCategory(db, catId);
 
             Cursor cursor = db.rawQuery("SELECT SUM(" + AmountDb.COL_AMOUNT + ") , " + AmountDb.COL_CATID +
                             " FROM " + AmountDb.TABLE_NAME +
@@ -300,9 +307,9 @@ public class DbDatasource implements Datasource {
                             AmountDb.COL_CATID + "=? AND " +
                             DbUtils.operatorEqual(AmountDb.COL_DELETED, false) +
                             " GROUP BY " + AmountDb.COL_CATID,
-                    new String[]{DbUtils.getParam(from), DbUtils.getParam(to),String.valueOf(catId)});
+                    new String[]{DbUtils.getParam(from), DbUtils.getParam(to), String.valueOf(catId)});
 
-            if(cursor.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 sectorDb = new SectorDb().fromCursor(cursor);
                 sectorDb.setCategoryDb(categoryDb);
             }
@@ -318,22 +325,43 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
+    public synchronized List<AmountDb> getRepeatAmounts() {
+
+        List<AmountDb> amounts = new ArrayList<>();
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        db.beginTransaction();
+        try {
+            Cursor cursorCat = getCategories(db);
+            Map<Long, CategoryDb> categoryDbMap = getCategoryMap(cursorCat);
+
+            amounts = getAmountList(getRepeatAmounts(db),categoryDbMap);
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        db.close();
+        return amounts;
+    }
+
+    @Override
     public synchronized List<AmountDb> getAmountsByCategoryId(long catId, long from, long to) {
         List<AmountDb> list;
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
         db.beginTransaction();
         try {
 
-            CategoryDb categoryDb = getCategory(db,catId);
-            HashMap<Long,CategoryDb> categories = new HashMap<>();
-            categories.put(categoryDb.getId(),categoryDb);
+            CategoryDb categoryDb = getCategory(db, catId);
+            HashMap<Long, CategoryDb> categories = new HashMap<>();
+            categories.put(categoryDb.getId(), categoryDb);
 
             Cursor cursor = getAmountByCategoryId(db, catId, from, to);
             list = getAmountList(cursor, categories);
             cursor.close();
 
             db.setTransactionSuccessful();
-        }finally {
+        } finally {
             db.endTransaction();
         }
         db.close();
@@ -341,17 +369,17 @@ public class DbDatasource implements Datasource {
         return list;
     }
 
-    private CategoryDb getCategory(SQLiteDatabase db, long id){
+    private CategoryDb getCategory(SQLiteDatabase db, long id) {
         CategoryDb categoryDb = new CategoryDb();
         Cursor cursor = db.query(CategoryDb.TABLE_NAME,
                 null,
-                CategoryDb.COL_ID+"=?",
+                CategoryDb.COL_ID + "=?",
                 new String[]{String.valueOf(id)},
                 null,
                 null,
                 null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             categoryDb = new CategoryDb().fromCursor(cursor);
         }
         cursor.close();
@@ -433,6 +461,17 @@ public class DbDatasource implements Datasource {
                         AmountDb.COL_CATID + "=? AND " +
                         DbUtils.operatorEqual(AmountDb.COL_DELETED, false),
                 new String[]{DbUtils.getParam(from), DbUtils.getParam(to), DbUtils.getParam(id)},
+                null,
+                null,
+                null);
+    }
+
+    private Cursor getRepeatAmounts(SQLiteDatabase db) {
+        return db.query(AmountDb.TABLE_NAME,
+                null,
+                AmountDb.COL_PERIOD + ">=0 AND " +
+                        DbUtils.operatorEqual(AmountDb.COL_DELETED, false),
+                null,
                 null,
                 null,
                 null);

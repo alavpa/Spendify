@@ -40,4 +40,6 @@ public interface Repository {
     Single<Double> getSumByCategory(Category category, long from, long to);
 
     Single<Sector> getSector(Category category, long from, long to);
+
+    Single<List<Amount>> getRepeatAmounts();
 }

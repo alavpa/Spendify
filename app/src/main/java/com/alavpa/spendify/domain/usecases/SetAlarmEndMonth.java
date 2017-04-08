@@ -10,10 +10,10 @@ public class SetAlarmEndMonth{
     private
     AlarmManager alarmManager;
 
-    private AlarmEndMonth alarmEndMonth;
+    private int day;
 
-    public void setAlarmEndMonth(AlarmEndMonth alarmEndMonth) {
-        this.alarmEndMonth = alarmEndMonth;
+    public void setDay(int day) {
+        this.day = day;
     }
 
     @Inject
@@ -22,6 +22,11 @@ public class SetAlarmEndMonth{
     }
 
     public void execute(){
+        AlarmEndMonth alarmEndMonth = new AlarmEndMonth(day);
+        execute(alarmEndMonth);
+    }
+
+    public void execute(AlarmEndMonth alarmEndMonth){
         alarmEndMonth.set(alarmManager);
     }
 }

@@ -28,7 +28,7 @@ public class RepositoryData implements Repository {
     Datasource datasource;
 
     @Inject
-    public RepositoryData(Datasource datasource){
+    public RepositoryData(Datasource datasource) {
         this.datasource = datasource;
     }
 
@@ -100,7 +100,7 @@ public class RepositoryData implements Repository {
         return Single.fromCallable(new Callable<Double>() {
             @Override
             public Double call() throws Exception {
-                return datasource.getSumBy(income, from,to);
+                return datasource.getSumBy(income, from, to);
             }
         });
     }
@@ -110,7 +110,7 @@ public class RepositoryData implements Repository {
         return Single.fromCallable(new Callable<List<AmountDb>>() {
             @Override
             public List<AmountDb> call() throws Exception {
-                return datasource.getAmountBy(income,from,to);
+                return datasource.getAmountBy(income, from, to);
             }
         })
                 .flatMap(new Function<List<AmountDb>, SingleSource<List<Amount>>>() {
@@ -134,7 +134,7 @@ public class RepositoryData implements Repository {
         return Single.fromCallable(new Callable<List<SectorDb>>() {
             @Override
             public List<SectorDb> call() throws Exception {
-                return datasource.getSectors(income,from,to);
+                return datasource.getSectors(income, from, to);
             }
         })
                 .flatMap(new Function<List<SectorDb>, SingleSource<List<Sector>>>() {
@@ -211,10 +211,33 @@ public class RepositoryData implements Repository {
         return Single.fromCallable(new Callable<Sector>() {
             @Override
             public Sector call() throws Exception {
-                SectorDb sectorDb = datasource.getSector(category.getId(),from, to);
+                SectorDb sectorDb = datasource.getSector(category.getId(), from, to);
                 return new Sector().fromSectorDb(sectorDb);
             }
         });
+    }
+
+    @Override
+    public Single<List<Amount>> getRepeatAmounts() {
+        return Single.fromCallable(new Callable<List<AmountDb>>() {
+            @Override
+            public List<AmountDb> call() throws Exception {
+                return datasource.getRepeatAmounts();
+            }
+        })
+                .flatMap(new Function<List<AmountDb>, SingleSource<? extends List<Amount>>>() {
+                    @Override
+                    public SingleSource<? extends List<Amount>> apply(List<AmountDb> amountDbs) throws Exception {
+                        return Observable.fromIterable(amountDbs)
+                                .map(new Function<AmountDb, Amount>() {
+                                    @Override
+                                    public Amount apply(AmountDb amountDb) throws Exception {
+                                        return new Amount().fromAmountDb(amountDb);
+                                    }
+                                })
+                                .toList();
+                    }
+                });
     }
 
 

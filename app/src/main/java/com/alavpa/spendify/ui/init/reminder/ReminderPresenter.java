@@ -1,8 +1,6 @@
 package com.alavpa.spendify.ui.init.reminder;
 
 import com.alavpa.spendify.di.PerActivity;
-import com.alavpa.spendify.domain.model.AlarmEndDay;
-import com.alavpa.spendify.domain.model.AlarmEndMonth;
 import com.alavpa.spendify.domain.usecases.CancelAlarmEndDay;
 import com.alavpa.spendify.domain.usecases.CancelAlarmEndMonth;
 import com.alavpa.spendify.domain.usecases.SetAlarmEndDay;
@@ -86,12 +84,10 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
                 preferences.setEndOfDayTime(calendar);
                 preferences.setNotifyEndOfDay(notifyEndDay);
 
-                AlarmEndDay alarmEndDay = new AlarmEndDay(calendar.getTimeInMillis());
                 if (notifyEndDay) {
-                    setAlarmEndDay.setAlarmEndDay(alarmEndDay);
+                    setAlarmEndDay.setTime(calendar.getTimeInMillis());
                     setAlarmEndDay.execute();
                 } else {
-                    cancelAlarmEndDay.setAlarmEndDay(alarmEndDay);
                     cancelAlarmEndDay.execute();
                 }
             }
@@ -108,8 +104,7 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
     private void configureEndMonth(boolean notifyEndMonth) {
         preferences.setNotifyEndOfMonth(notifyEndMonth);
 
-        AlarmEndMonth alarmEndMonth = new AlarmEndMonth(preferences.getMonthDay());
-        setAlarmEndMonth.setAlarmEndMonth(alarmEndMonth);
+        setAlarmEndMonth.setDay(preferences.getMonthDay());
 
         if(notifyEndMonth){
             setAlarmEndMonth.execute();

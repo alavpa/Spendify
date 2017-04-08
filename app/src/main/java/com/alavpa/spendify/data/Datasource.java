@@ -36,4 +36,6 @@ public interface Datasource {
     double getSumByCategoryId(long catId, long from, long to);
 
     SectorDb getSector(long catId, long from, long to);
+
+    List<AmountDb> getRepeatAmounts();
 }

@@ -10,10 +10,10 @@ public class SetAlarmEndDay{
     private
     AlarmManager alarmManager;
 
-    private AlarmEndDay alarmEndDay;
+    private long time;
 
-    public void setAlarmEndDay(AlarmEndDay alarmEndDay) {
-        this.alarmEndDay = alarmEndDay;
+    public void setTime(long time) {
+        this.time = time;
     }
 
     @Inject
@@ -21,10 +21,12 @@ public class SetAlarmEndDay{
         this.alarmManager = alarmManager;
     }
 
-
-
     public void execute(){
+        AlarmEndDay alarmEndDay = new AlarmEndDay(time);
+        execute(alarmEndDay);
+    }
 
+    public void execute(AlarmEndDay alarmEndDay){
         alarmEndDay.set(alarmManager);
     }
 

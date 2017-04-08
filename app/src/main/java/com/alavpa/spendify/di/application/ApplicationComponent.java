@@ -6,6 +6,7 @@ import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.Repository;
 import com.alavpa.spendify.ui.receiver.alarm.AlarmReceiver;
+import com.alavpa.spendify.ui.receiver.boot.BootReceiver;
 
 import java.text.SimpleDateFormat;
 
@@ -29,4 +30,6 @@ public interface ApplicationComponent {
     SimpleDateFormat simpleDateFormat();
     AlarmManager alarmManager();
     DateUtils dateUtils();
+
+    void inject(BootReceiver bootReceiver);
 }

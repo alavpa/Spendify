@@ -52,15 +52,14 @@ public class AlarmPresenter {
         this.sendOfflimitNotification = sendOfflimitNotification;
         this.setAlarmEndDay = setAlarmEndDay;
         this.setAlarmEndMonth = setAlarmEndMonth;
+        this.insertOrUpdateAmount = insertOrUpdateAmount;
     }
 
     public void onReceiveAlarmEndDay(AlarmEndDay alarmEndDay) {
         if(preferences.notifyEndOfDay()) {
 
             sendEndDayNotification.execute();
-
-            setAlarmEndDay.setAlarmEndDay(alarmEndDay.getNextAlarm());
-            setAlarmEndDay.execute();
+            setAlarmEndDay.execute(alarmEndDay.getNextAlarm());
         }
     }
 
@@ -71,8 +70,7 @@ public class AlarmPresenter {
             sendEndMonthNotification.setFrom(from);
             sendEndMonthNotification.execute();
 
-            setAlarmEndMonth.setAlarmEndMonth(alarmEndMonth.getNextAlarm());
-            setAlarmEndMonth.execute();
+            setAlarmEndMonth.execute(alarmEndMonth.getNextAlarm());
         }
     }
 

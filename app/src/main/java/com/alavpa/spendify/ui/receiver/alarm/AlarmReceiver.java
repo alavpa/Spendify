@@ -2,22 +2,20 @@ package com.alavpa.spendify.ui.receiver.alarm;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.WakefulBroadcastReceiver;
 
-import com.alavpa.spendify.Application;
 import com.alavpa.spendify.data.alarm.AlarmManager;
-import com.alavpa.spendify.di.application.ApplicationComponent;
 import com.alavpa.spendify.domain.model.AlarmAmount;
 import com.alavpa.spendify.domain.model.AlarmEndDay;
 import com.alavpa.spendify.domain.model.AlarmEndMonth;
 import com.alavpa.spendify.domain.model.AlarmOfflimit;
 import com.alavpa.spendify.ui.IntentUtils;
+import com.alavpa.spendify.ui.receiver.BaseReceiver;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class AlarmReceiver extends WakefulBroadcastReceiver {
+public class AlarmReceiver extends BaseReceiver {
 
     @Inject
     public AlarmPresenter presenter;
@@ -28,7 +26,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        inject(context);
+        getApplicationComponent(context).inject(this);
         if (intent.getAction().equals(AlarmManager.ACTION_ALARM_ENDDAY)) {
 
             AlarmEndDay alarmEndDay = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
@@ -56,16 +54,5 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
             presenter.onReceiveAlarmOfflimit(alarmOfflimit);
         }
     }
-
-    public void inject(Context context) {
-        getApplicationComponent(context)
-                .inject(this);
-
-    }
-
-    public ApplicationComponent getApplicationComponent(Context context) {
-        return ((Application) context.getApplicationContext()).getApplicationComponent();
-    }
-
 
 }
