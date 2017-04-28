@@ -1,21 +1,41 @@
 package com.alavpa.spendify.domain.model;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.domain.model.base.Alarm;
 
 import java.util.Calendar;
 
-public class AlarmOfflimit extends Alarm {
+public class AlarmOfflimit extends Alarm implements Parcelable {
 
+    public static final Creator<AlarmOfflimit> CREATOR = new Creator<AlarmOfflimit>() {
+        @Override
+        public AlarmOfflimit createFromParcel(Parcel source) {
+            return new AlarmOfflimit(source);
+        }
+
+        @Override
+        public AlarmOfflimit[] newArray(int size) {
+            return new AlarmOfflimit[size];
+        }
+    };
     private Category category;
+
     public AlarmOfflimit(){
 
     }
+
+
     public AlarmOfflimit(Category category){
         this.category = category;
         date = calculateDate(Calendar.getInstance().getTimeInMillis());
+    }
+
+    protected AlarmOfflimit(Parcel in) {
+        super(in);
+        this.category = in.readParcelable(Category.class.getClassLoader());
     }
 
     public long calculateDate(long time){
@@ -25,8 +45,6 @@ public class AlarmOfflimit extends Alarm {
 
         return timeCalendar.getTimeInMillis();
     }
-
-
 
     public Category getCategory() {
         return category;
@@ -40,15 +58,6 @@ public class AlarmOfflimit extends Alarm {
         return AlarmManager.REQUEST_ALARM_OFFLIMIT + (int)category.getId();
     }
 
-    public void set(AlarmManager alarmManager){
-        setAlarm(alarmManager,AlarmManager.ACTION_ALARM_OFFLIMIT, getRequest());
-    }
-
-    public void cancel(AlarmManager alarmManager){
-        cancelAlarm(alarmManager,AlarmManager.ACTION_ALARM_OFFLIMIT,getRequest());
-    }
-
-
     @Override
     public int describeContents() {
         return 0;
@@ -59,21 +68,4 @@ public class AlarmOfflimit extends Alarm {
         super.writeToParcel(dest, flags);
         dest.writeParcelable(this.category, flags);
     }
-
-    protected AlarmOfflimit(Parcel in) {
-        super(in);
-        this.category = in.readParcelable(Category.class.getClassLoader());
-    }
-
-    public static final Creator<AlarmOfflimit> CREATOR = new Creator<AlarmOfflimit>() {
-        @Override
-        public AlarmOfflimit createFromParcel(Parcel source) {
-            return new AlarmOfflimit(source);
-        }
-
-        @Override
-        public AlarmOfflimit[] newArray(int size) {
-            return new AlarmOfflimit[size];
-        }
-    };
 }

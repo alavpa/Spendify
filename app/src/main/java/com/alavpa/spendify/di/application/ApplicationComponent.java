@@ -1,8 +1,11 @@
 package com.alavpa.spendify.di.application;
 
+import android.content.Context;
+
 import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.data.resources.ResDatasource;
+import com.alavpa.spendify.di.qualifiers.ApplicationContext;
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.Repository;
 import com.alavpa.spendify.ui.receiver.alarm.AlarmReceiver;
@@ -24,12 +27,14 @@ public interface ApplicationComponent {
 
     void inject(AlarmReceiver alarmReceiver);
 
+    void inject(BootReceiver bootReceiver);
+
+    @ApplicationContext
+    Context context();
     Repository repository();
     ResDatasource resDatasource();
     PrefsDatasource prefsDatasource();
     SimpleDateFormat simpleDateFormat();
     AlarmManager alarmManager();
     DateUtils dateUtils();
-
-    void inject(BootReceiver bootReceiver);
 }

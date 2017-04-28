@@ -1,8 +1,9 @@
 package com.alavpa.spendify.di.base;
 
 import android.app.Activity;
+import android.content.Context;
 
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.qualifiers.ActivityContext;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,16 +14,20 @@ import dagger.Provides;
 @Module
 public class BaseModule {
 
-    private
-    final Activity activity;
+    private final Activity context;
 
-    public BaseModule(Activity activity){
-        this.activity = activity;
+    public BaseModule(Activity context) {
+        this.context = context;
     }
 
     @Provides
-    @PerActivity
+    @ActivityContext
+    public Context providesContext() {
+        return this.context;
+    }
+
+    @Provides
     public Activity providesActivity(){
-        return this.activity;
+        return context;
     }
 }

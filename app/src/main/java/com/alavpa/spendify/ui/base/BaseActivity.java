@@ -7,13 +7,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.alavpa.spendify.Application;
-import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.di.activity.ActivityComponent;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
 import com.alavpa.spendify.di.application.ApplicationComponent;
 import com.alavpa.spendify.di.base.BaseModule;
 import com.alavpa.spendify.di.base.DaggerBaseComponent;
+import com.alavpa.spendify.di.scopes.PerActivity;
+import com.alavpa.spendify.ui.custom.dialogs.LoaderDialog;
 
 /**
  * Created by alavpa on 10/02/17.
@@ -22,11 +23,14 @@ import com.alavpa.spendify.di.base.DaggerBaseComponent;
 @PerActivity
 public class BaseActivity extends AppCompatActivity implements BaseView{
 
-    BasePresenter basePresenter;
+
+    private LoaderDialog loaderDialog;
+    private BasePresenter basePresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loaderDialog = LoaderDialog.getInstance();
         DaggerBaseComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .baseModule(new BaseModule(this))
@@ -44,6 +48,7 @@ public class BaseActivity extends AppCompatActivity implements BaseView{
     @Override
     protected void onPause() {
         super.onPause();
+        dismissLoader();
         basePresenter.detachView();
     }
 
@@ -59,6 +64,26 @@ public class BaseActivity extends AppCompatActivity implements BaseView{
     public void showError(String message) {
         Log.e(getClass().getSimpleName(),message);
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showLoader() {
+        if (!loaderDialog.isVisible()) {
+            loaderDialog.show(getSupportFragmentManager(), LoaderDialog.class.getName());
+        }
+    }
+
+    @Override
+    public void dismissLoader() {
+        if (loaderDialog.isVisible()) {
+            loaderDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        loaderDialog = null;
     }
 
     protected void setPresenter(BasePresenter basePresenter){

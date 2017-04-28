@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.LinearLayoutManager;
 import com.alavpa.spendify.ui.custom.adapters.MonthAdapter;

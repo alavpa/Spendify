@@ -1,6 +1,6 @@
 package com.alavpa.spendify.ui.init;
 
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.ui.base.BasePresenter;
 
 import javax.inject.Inject;

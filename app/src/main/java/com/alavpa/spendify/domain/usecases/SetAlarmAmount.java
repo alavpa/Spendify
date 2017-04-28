@@ -14,17 +14,20 @@ public class SetAlarmAmount {
     private
     Amount amount;
 
-    public void setAmount(Amount amount) {
-        this.amount = amount;
-    }
-
     @Inject
     public SetAlarmAmount(AlarmManager alarmManager){
         this.alarmManager = alarmManager;
     }
 
+    public void setAmount(Amount amount) {
+        this.amount = amount;
+    }
+
     public void execute(){
         AlarmAmount alarmAmount = new AlarmAmount(amount);
-        alarmAmount.set(alarmManager);
+        alarmManager.setAlarm(AlarmManager.ACTION_ALARM_AMOUNT,
+                alarmAmount.getRequest(),
+                alarmAmount.getDate(),
+                alarmAmount);
     }
 }

@@ -1,7 +1,7 @@
 package com.alavpa.spendify.ui.dashboard.sectors;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.model.Sector;
 import com.alavpa.spendify.domain.usecases.GetSectorsBy;
@@ -28,18 +28,13 @@ class DashboardSectorsPresenter extends BasePresenter<DashboardSectorsView> {
 
     @Inject
     public DecimalFormat decimalFormat;
-
-    private GetSumBy getSumBy;
-
-    private GetSectorsBy getSectorsBy;
-
-    private GetSumBy getSumByAmount;
-
-    private
-    boolean income;
-
     Calendar from = Calendar.getInstance();
     Calendar to = Calendar.getInstance();
+    private GetSumBy getSumBy;
+    private GetSectorsBy getSectorsBy;
+    private GetSumBy getSumByAmount;
+    private
+    boolean income;
 
 
     @Inject

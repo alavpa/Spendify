@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.support.v4.content.ContextCompat;
 
 import com.alavpa.spendify.R;
+import com.alavpa.spendify.di.qualifiers.ApplicationContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +23,7 @@ public class ResDatasource {
     Context context;
 
     @Inject
-    public ResDatasource(Context context){
+    public ResDatasource(@ApplicationContext Context context) {
         this.context = context;
     }
 

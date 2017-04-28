@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.di.activity.ActivityModule;
 import com.alavpa.spendify.di.activity.DaggerActivityComponent;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.nomenu.BaseNoMenuActivity;
 import com.alavpa.spendify.ui.custom.widgets.AmountBar;

@@ -1,7 +1,7 @@
 package com.alavpa.spendify.ui.details;
 
 
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
@@ -26,15 +26,12 @@ import static android.app.Activity.RESULT_OK;
 @PerActivity
 public class DetailsPresenter extends BasePresenter<DetailsView> {
 
-    private
-    Amount amount;
-
     @Inject
     public DecimalFormat decimalFormat;
-
     @Inject
     public SimpleDateFormat simpleDateFormat;
-
+    private
+    Amount amount;
     private
     GetCategories getCategories;
 

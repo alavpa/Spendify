@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.alavpa.spendify.di.qualifiers.ApplicationContext;
 import com.alavpa.spendify.domain.model.Period;
 
 import java.util.Calendar;
@@ -27,7 +28,7 @@ public class PrefsDatasource {
     private SharedPreferences sharedPreferences;
 
     @Inject
-    public PrefsDatasource(Context context){
+    public PrefsDatasource(@ApplicationContext Context context) {
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 

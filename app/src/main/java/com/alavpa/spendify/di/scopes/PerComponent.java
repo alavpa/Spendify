@@ -1,4 +1,4 @@
-package com.alavpa.spendify.di;
+package com.alavpa.spendify.di.scopes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

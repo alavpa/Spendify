@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 
 import com.alavpa.spendify.di.HasComponent;
-import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.di.activity.ActivityComponent;
+import com.alavpa.spendify.di.scopes.PerActivity;
 
 /**
  * Created by alavpa on 14/02/17.
@@ -36,6 +36,16 @@ public class BaseFragment extends Fragment implements BaseView {
     @Override
     public void setResult(int result) {
         parent.setResult(result);
+    }
+
+    @Override
+    public void showLoader() {
+        parent.showLoader();
+    }
+
+    @Override
+    public void dismissLoader() {
+        parent.showLoader();
     }
 
     public ActivityComponent getComponent(){

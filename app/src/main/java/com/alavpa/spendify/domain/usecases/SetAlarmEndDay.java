@@ -12,13 +12,13 @@ public class SetAlarmEndDay{
 
     private long time;
 
-    public void setTime(long time) {
-        this.time = time;
-    }
-
     @Inject
     public SetAlarmEndDay(AlarmManager alarmManager){
         this.alarmManager = alarmManager;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public void execute(){
@@ -27,7 +27,11 @@ public class SetAlarmEndDay{
     }
 
     public void execute(AlarmEndDay alarmEndDay){
-        alarmEndDay.set(alarmManager);
+
+        alarmManager.setAlarm(AlarmManager.ACTION_ALARM_ENDDAY,
+                AlarmManager.REQUEST_ALARM_ENDDAY,
+                alarmEndDay.getDate(),
+                alarmEndDay);
     }
 
 }

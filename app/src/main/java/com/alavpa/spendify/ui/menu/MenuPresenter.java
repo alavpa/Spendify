@@ -1,7 +1,7 @@
 package com.alavpa.spendify.ui.menu;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.ui.base.BasePresenter;
 

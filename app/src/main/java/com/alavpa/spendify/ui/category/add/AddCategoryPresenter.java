@@ -1,6 +1,6 @@
 package com.alavpa.spendify.ui.category.add;
 
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.usecases.DeleteCategory;
 import com.alavpa.spendify.domain.usecases.InsertOrUpdateCategory;

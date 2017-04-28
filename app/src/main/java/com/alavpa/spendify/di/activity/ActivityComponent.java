@@ -1,8 +1,8 @@
 package com.alavpa.spendify.di.activity;
 
-import com.alavpa.spendify.di.PerActivity;
 import com.alavpa.spendify.di.application.ApplicationComponent;
 import com.alavpa.spendify.di.base.BaseModule;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.ui.category.add.AddCategoryActivity;
 import com.alavpa.spendify.ui.dashboard.DashboardActivity;
 import com.alavpa.spendify.ui.dashboard.amounts.DashboardAmountsActivity;

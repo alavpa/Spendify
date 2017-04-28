@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.alavpa.spendify.di.qualifiers.ApplicationContext;
 import com.alavpa.spendify.domain.model.AlarmEndDay;
 import com.alavpa.spendify.domain.model.AlarmEndMonth;
 import com.alavpa.spendify.ui.dashboard.DashboardActivity;
@@ -16,7 +17,7 @@ public class IntentUtils {
     private Context context;
 
     @Inject
-    public IntentUtils(Context context) {
+    public IntentUtils(@ApplicationContext Context context) {
         this.context = context;
     }
 

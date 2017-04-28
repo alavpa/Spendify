@@ -8,4 +8,8 @@ public interface BaseView {
     void showError(String message);
     void finish();
     void setResult(int result);
+
+    void showLoader();
+
+    void dismissLoader();
 }

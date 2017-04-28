@@ -4,25 +4,27 @@ package com.alavpa.spendify.domain.model.base;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.alavpa.spendify.data.alarm.AlarmManager;
-
 public class Alarm implements Parcelable {
 
+    public static final Creator<Alarm> CREATOR = new Creator<Alarm>() {
+        @Override
+        public Alarm createFromParcel(Parcel in) {
+            return new Alarm(in);
+        }
+
+        @Override
+        public Alarm[] newArray(int size) {
+            return new Alarm[size];
+        }
+    };
     protected long date;
 
     public Alarm(){
 
     }
-    public Alarm(long date){
-        this.date = date;
-    }
 
-    public void setAlarm(AlarmManager alarmManager, String action, int request){
-        alarmManager.setAlarm(action,request,date,this);
-    }
-
-    public void cancelAlarm(AlarmManager alarmManager, String action, int request){
-        alarmManager.cancelAlarm(action,request);
+    protected Alarm(Parcel in) {
+        this.date = in.readLong();
     }
 
     public long getDate() {
@@ -42,20 +44,4 @@ public class Alarm implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.date);
     }
-
-    protected Alarm(Parcel in) {
-        this.date = in.readLong();
-    }
-
-    public static final Creator<Alarm> CREATOR = new Creator<Alarm>() {
-        @Override
-        public Alarm createFromParcel(Parcel source) {
-            return new Alarm(source);
-        }
-
-        @Override
-        public Alarm[] newArray(int size) {
-            return new Alarm[size];
-        }
-    };
 }

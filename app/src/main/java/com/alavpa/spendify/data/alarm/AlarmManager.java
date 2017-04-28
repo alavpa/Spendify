@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
+import com.alavpa.spendify.di.qualifiers.ApplicationContext;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -26,13 +28,13 @@ public class AlarmManager {
     android.app.AlarmManager alarmManager;
 
     @Inject
-    public AlarmManager(Context context) {
+    public AlarmManager(@ApplicationContext Context context) {
         this.context = context;
         alarmManager = (android.app.AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void setAlarm(String action, int request, long time, Parcelable parcelable) {
-        PendingIntent pendingIntent = getPendingIntent(action, request, time, parcelable);
+    public void setAlarm(String action, int request, long time, Parcelable alarm) {
+        PendingIntent pendingIntent = getPendingIntent(action, request, time, alarm);
         setAlarm(pendingIntent, time);
     }
 

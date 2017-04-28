@@ -3,7 +3,7 @@ package com.alavpa.spendify.ui.base;
 import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.data.resources.ResDatasource;
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
 import com.alavpa.spendify.ui.Navigator;
 

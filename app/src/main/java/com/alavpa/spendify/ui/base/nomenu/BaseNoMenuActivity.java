@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.ui.base.BaseActivity;
 
 /**

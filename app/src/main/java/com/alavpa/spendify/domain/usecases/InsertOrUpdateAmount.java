@@ -4,9 +4,8 @@ import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.Repository;
-import com.alavpa.spendify.domain.model.AlarmAmount;
-import com.alavpa.spendify.domain.model.AlarmOfflimit;
 import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
 
@@ -72,23 +71,40 @@ public class InsertOrUpdateAmount extends UseCase<Amount>{
             @Override
             public Amount apply(Amount amount, Double sum) throws Exception {
 
-                AlarmAmount alarmAmount = new AlarmAmount(amount);
+
                 if(amount.getPeriod().getPeriod()== Period.NO_PERIOD ||
                         amount.isDeleted()){
-                    alarmAmount.cancel(alarmManager);
+                    cancelAlarmAmount(amount);
                 }else{
-                    alarmAmount.set(alarmManager);
+                    setAlarmAmount(amount);
                 }
 
-                AlarmOfflimit alarmOfflimit = new AlarmOfflimit(amount.getCategory());
                 if(prefsDatasource.notifyOfflimit()){
                     if(amount.getCategory().isOverLimit(sum)){
-                        alarmOfflimit.set(alarmManager);
+                        setAlarmOfflimit(amount.getCategory());
                     }
                 }
 
                 return amount;
             }
         };
+    }
+
+    private void setAlarmOfflimit(Category category) {
+        SetAlarmOfflimit setAlarmOfflimit = new SetAlarmOfflimit(alarmManager);
+        setAlarmOfflimit.setCategory(category);
+        setAlarmOfflimit.execute();
+    }
+
+    private void setAlarmAmount(Amount amount) {
+        SetAlarmAmount setAlarmAmount = new SetAlarmAmount(alarmManager);
+        setAlarmAmount.setAmount(amount);
+        setAlarmAmount.execute();
+    }
+
+    private void cancelAlarmAmount(Amount amount) {
+        CancelAlarmAmount cancelAlarmAmount = new CancelAlarmAmount(alarmManager);
+        cancelAlarmAmount.setAmount(amount);
+        cancelAlarmAmount.execute();
     }
 }

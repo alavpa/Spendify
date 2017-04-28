@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alavpa.spendify.R;
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.base.BaseFragment;
 import com.alavpa.spendify.ui.base.menu.BaseMenuView;
@@ -26,16 +26,13 @@ import butterknife.ButterKnife;
 @PerActivity
 public class MenuFragment extends BaseFragment implements MenuView{
 
-    @Inject
-    Navigator navigator;
-
     @BindView(R.id.rv_menu)
     public
     RecyclerView rvMenu;
-
     @Inject
     public MenuPresenter menuPresenter;
-
+    @Inject
+    Navigator navigator;
     private MenuAdapter adapter;
 
     public static MenuFragment getInstance(){

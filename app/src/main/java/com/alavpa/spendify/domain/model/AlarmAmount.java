@@ -1,14 +1,26 @@
 package com.alavpa.spendify.domain.model;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.domain.model.base.AlarmRepeat;
 
 import java.util.Calendar;
 
-public class AlarmAmount extends AlarmRepeat{
+public class AlarmAmount extends AlarmRepeat implements Parcelable {
 
+    public static final Creator<AlarmAmount> CREATOR = new Creator<AlarmAmount>() {
+        @Override
+        public AlarmAmount createFromParcel(Parcel source) {
+            return new AlarmAmount(source);
+        }
+
+        @Override
+        public AlarmAmount[] newArray(int size) {
+            return new AlarmAmount[size];
+        }
+    };
     private Amount amount;
 
     public AlarmAmount(){}
@@ -17,6 +29,11 @@ public class AlarmAmount extends AlarmRepeat{
         this.amount = amount;
         date = calculateDate(Calendar.getInstance().getTimeInMillis(), amount.getPeriod().getDate());
         period = new Period(date,amount.getPeriod().getPeriod(),amount.getPeriod().getTimes());
+    }
+
+    protected AlarmAmount(Parcel in) {
+        super(in);
+        this.amount = in.readParcelable(Amount.class.getClassLoader());
     }
 
     public long calculateDate(long current, long time){
@@ -45,14 +62,13 @@ public class AlarmAmount extends AlarmRepeat{
     public int getRequest(){
         return AlarmManager.REQUEST_ALARM_AMOUNT + (int)amount.getId();
     }
-    public void set(AlarmManager alarmManager){
-        setAlarm(alarmManager,AlarmManager.ACTION_ALARM_AMOUNT, getRequest());
-    }
 
-    public void cancel(AlarmManager alarmManager){
-        cancelAlarm(alarmManager,AlarmManager.ACTION_ALARM_AMOUNT,getRequest());
+    public AlarmAmount getNextAlarm() {
+        AlarmAmount alarmAmount = new AlarmAmount(amount);
+        alarmAmount.setDate(period.getNextDateInMillis());
+        alarmAmount.setPeriod(new Period(date, period.getPeriod(), period.getTimes()));
+        return alarmAmount;
     }
-
 
     @Override
     public int describeContents() {
@@ -63,29 +79,5 @@ public class AlarmAmount extends AlarmRepeat{
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeParcelable(this.amount, flags);
-    }
-
-    protected AlarmAmount(Parcel in) {
-        super(in);
-        this.amount = in.readParcelable(Amount.class.getClassLoader());
-    }
-
-    public static final Creator<AlarmAmount> CREATOR = new Creator<AlarmAmount>() {
-        @Override
-        public AlarmAmount createFromParcel(Parcel source) {
-            return new AlarmAmount(source);
-        }
-
-        @Override
-        public AlarmAmount[] newArray(int size) {
-            return new AlarmAmount[size];
-        }
-    };
-
-    public AlarmAmount getNextAlarm() {
-        AlarmAmount alarmAmount = new AlarmAmount(amount);
-        alarmAmount.setDate(period.getNextDateInMillis());
-        alarmAmount.setPeriod(new Period(date,period.getPeriod(),period.getTimes()));
-        return alarmAmount;
     }
 }

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
+import com.alavpa.spendify.di.qualifiers.ApplicationContext;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -21,7 +22,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
 
     @Inject
-    public DbOpenHelper(Context context) {
+    public DbOpenHelper(@ApplicationContext Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 

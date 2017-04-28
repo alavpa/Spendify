@@ -1,6 +1,6 @@
 package com.alavpa.spendify.ui.main;
 
-import com.alavpa.spendify.di.PerActivity;
+import com.alavpa.spendify.di.scopes.PerActivity;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.ui.base.BasePresenter;
 

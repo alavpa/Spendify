@@ -1,9 +1,6 @@
 package com.alavpa.spendify.domain.usecases;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
-import com.alavpa.spendify.domain.model.AlarmEndDay;
-
-import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -18,7 +15,7 @@ public class CancelAlarmEndDay{
     }
 
     public void execute(){
-        AlarmEndDay alarmEndDay = new AlarmEndDay(Calendar.getInstance().getTimeInMillis());
-        alarmEndDay.cancel(alarmManager);
+        alarmManager.cancelAlarm(AlarmManager.ACTION_ALARM_ENDDAY,
+                AlarmManager.REQUEST_ALARM_ENDDAY);
     }
 }
