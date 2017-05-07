@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.alavpa.spendify.data.Datasource;
+import com.alavpa.spendify.data.db.model.AlarmDb;
 import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
 import com.alavpa.spendify.data.db.model.SectorDb;
@@ -76,6 +77,44 @@ public class DbDatasource implements Datasource {
             categories.put(categoryDb.getId(), categoryDb);
         }
         return categories;
+    }
+
+    public synchronized AlarmDb insertAlarm(AlarmDb alarmDb) {
+        ContentValues contentValues = new AlarmDb.Builder()
+                .id(alarmDb.getId())
+                .times(alarmDb.getTimes())
+                .period(alarmDb.getPeriod())
+                .date(alarmDb.getDate())
+                .amountId(alarmDb.getAmountDb().getId())
+                .categoryId(alarmDb.getCategoryDb().getId())
+                .build();
+
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        long id = db.insert(AlarmDb.TABLE_NAME, null, contentValues);
+        db.close();
+        alarmDb.setId(id);
+
+        return alarmDb;
+    }
+
+    public synchronized AlarmDb updateAlarm(AlarmDb alarmDb) {
+        ContentValues contentValues = new AlarmDb.Builder()
+                .id(alarmDb.getId())
+                .times(alarmDb.getTimes())
+                .period(alarmDb.getPeriod())
+                .date(alarmDb.getDate())
+                .amountId(alarmDb.getAmountDb().getId())
+                .categoryId(alarmDb.getCategoryDb().getId())
+                .build();
+
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        db.update(AlarmDb.TABLE_NAME,
+                contentValues,
+                AlarmDb.COL_ID + "=?",
+                new String[]{String.valueOf(alarmDb.getId())});
+        db.close();
+
+        return alarmDb;
     }
 
     @Override

@@ -13,24 +13,29 @@ import com.alavpa.spendify.data.db.model.CategoryDb;
 
 public class Amount implements Parcelable {
 
+    public static final Parcelable.Creator<Amount> CREATOR = new Parcelable.Creator<Amount>() {
+        @Override
+        public Amount createFromParcel(Parcel source) {
+            return new Amount(source);
+        }
+
+        @Override
+        public Amount[] newArray(int size) {
+            return new Amount[size];
+        }
+    };
     private
     long id;
-
     private
     boolean income;
-
     private
     double amount;
-
     private
     String description;
-
     private
     Category category;
-
     private
     Period period;
-
     private
     boolean deleted;
 
@@ -126,23 +131,6 @@ public class Amount implements Parcelable {
         dest.writeByte(this.deleted?(byte)1:(byte)0);
     }
 
-    public static final Parcelable.Creator<Amount> CREATOR = new Parcelable.Creator<Amount>() {
-        @Override
-        public Amount createFromParcel(Parcel source) {
-            return new Amount(source);
-        }
-
-        @Override
-        public Amount[] newArray(int size) {
-            return new Amount[size];
-        }
-    };
-
-    public Amount insert(Datasource datasource){
-        AmountDb amountDb = datasource.insertAmount(toAmountDb());
-        return fromAmountDb(amountDb);
-    }
-
     public AmountDb toAmountDb(){
         AmountDb amountDb = new AmountDb();
 
@@ -179,6 +167,11 @@ public class Amount implements Parcelable {
         }
 
         return this;
+    }
+
+    public Amount insert(Datasource datasource) {
+        AmountDb amountDb = datasource.insertAmount(toAmountDb());
+        return fromAmountDb(amountDb);
     }
 
     public Amount update(Datasource datasource) {
