@@ -15,7 +15,6 @@ public class AlarmDb {
 
     public static final String COL_ID = "_id";
     public static final String COL_AMOUNTID = "amountId";
-    public static final String COL_CATID = "categoryId";
     public static final String COL_PERIOD = "period";
     public static final String COL_TIMES = "period_times";
     public static final String COL_DATE = "alarm_date";
@@ -24,7 +23,6 @@ public class AlarmDb {
             + "CREATE TABLE " + TABLE_NAME + "("
             + COL_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
             + COL_AMOUNTID + " INTEGER NOT NULL DEFAULT 0,"
-            + COL_CATID + " INTEGER NOT NULL,"
             + COL_PERIOD + " INTEGER NOT NULL DEFAULT -1,"
             + COL_TIMES + " INTEGER NOT NULL DEFAULT 0,"
             + COL_DATE + " INTEGER NOT NULL"
@@ -32,10 +30,10 @@ public class AlarmDb {
 
     private long id;
     private AmountDb amountDb;
-    private CategoryDb categoryDb;
     private int period;
     private int times;
     private long date;
+    private boolean active;
 
     public long getId() {
         return id;
@@ -60,14 +58,6 @@ public class AlarmDb {
 
     public void setAmountDb(AmountDb amountDb) {
         this.amountDb = amountDb;
-    }
-
-    public CategoryDb getCategoryDb() {
-        return categoryDb;
-    }
-
-    public void setCategoryDb(CategoryDb categoryDb) {
-        this.categoryDb = categoryDb;
     }
 
     public int getPeriod() {
@@ -104,11 +94,6 @@ public class AlarmDb {
 
         public Builder amountId(long amountId) {
             contentValues.put(COL_AMOUNTID, amountId);
-            return this;
-        }
-
-        public Builder categoryId(long categoryId) {
-            contentValues.put(COL_CATID, categoryId);
             return this;
         }
 

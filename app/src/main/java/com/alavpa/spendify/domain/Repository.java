@@ -1,6 +1,7 @@
 package com.alavpa.spendify.domain;
 
 
+import com.alavpa.spendify.domain.model.Alarm;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Sector;
@@ -42,4 +43,6 @@ public interface Repository {
     Single<Sector> getSector(Category category, long from, long to);
 
     Single<List<Amount>> getRepeatAmounts();
+
+    Single<List<Alarm>> getAlarms();
 }

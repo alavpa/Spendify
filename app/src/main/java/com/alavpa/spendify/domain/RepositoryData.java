@@ -1,9 +1,11 @@
 package com.alavpa.spendify.domain;
 
 import com.alavpa.spendify.data.Datasource;
+import com.alavpa.spendify.data.db.model.AlarmDb;
 import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
 import com.alavpa.spendify.data.db.model.SectorDb;
+import com.alavpa.spendify.domain.model.Alarm;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Sector;
@@ -233,6 +235,29 @@ public class RepositoryData implements Repository {
                                     @Override
                                     public Amount apply(AmountDb amountDb) throws Exception {
                                         return new Amount().fromAmountDb(amountDb);
+                                    }
+                                })
+                                .toList();
+                    }
+                });
+    }
+
+    @Override
+    public Single<List<Alarm>> getAlarms() {
+        return Single.fromCallable(new Callable<List<AlarmDb>>() {
+            @Override
+            public List<AlarmDb> call() throws Exception {
+                return datasource.getAlarms();
+            }
+        })
+                .flatMap(new Function<List<AlarmDb>, SingleSource<? extends List<Alarm>>>() {
+                    @Override
+                    public SingleSource<? extends List<Alarm>> apply(List<AlarmDb> alarmDbs) throws Exception {
+                        return Observable.fromIterable(alarmDbs)
+                                .map(new Function<AlarmDb, Alarm>() {
+                                    @Override
+                                    public Alarm apply(AlarmDb alarmDb) throws Exception {
+                                        return new Alarm().fromAlarmDb(alarmDb);
                                     }
                                 })
                                 .toList();

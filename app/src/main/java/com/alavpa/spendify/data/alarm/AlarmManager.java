@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Parcelable;
 
 import com.alavpa.spendify.di.qualifiers.ApplicationContext;
+import com.alavpa.spendify.domain.model.Alarm;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -62,5 +63,9 @@ public class AlarmManager {
                 .FLAG_CANCEL_CURRENT);
         alarmManager.cancel(pendingIntent);
         pendingIntent.cancel();
+    }
+
+    public void setAlarm(String action, Alarm alarm) {
+
     }
 }

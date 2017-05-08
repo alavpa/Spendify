@@ -1,5 +1,6 @@
 package com.alavpa.spendify.data;
 
+import com.alavpa.spendify.data.db.model.AlarmDb;
 import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
 import com.alavpa.spendify.data.db.model.SectorDb;
@@ -38,4 +39,6 @@ public interface Datasource {
     SectorDb getSector(long catId, long from, long to);
 
     List<AmountDb> getRepeatAmounts();
+
+    List<AlarmDb> getAlarms();
 }

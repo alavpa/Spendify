@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.alavpa.spendify.data.db.model.AlarmDb;
 import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
 import com.alavpa.spendify.di.qualifiers.ApplicationContext;
@@ -19,7 +20,7 @@ import javax.inject.Singleton;
 public class DbOpenHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "spendify.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     @Inject
     public DbOpenHelper(@ApplicationContext Context context) {
@@ -36,7 +37,9 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion == 1 && newVersion == 2) {
+            db.execSQL(AlarmDb.CREATE_TABLE);
+        }
     }
 
     @Override

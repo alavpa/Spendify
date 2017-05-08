@@ -86,7 +86,6 @@ public class DbDatasource implements Datasource {
                 .period(alarmDb.getPeriod())
                 .date(alarmDb.getDate())
                 .amountId(alarmDb.getAmountDb().getId())
-                .categoryId(alarmDb.getCategoryDb().getId())
                 .build();
 
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -104,7 +103,6 @@ public class DbDatasource implements Datasource {
                 .period(alarmDb.getPeriod())
                 .date(alarmDb.getDate())
                 .amountId(alarmDb.getAmountDb().getId())
-                .categoryId(alarmDb.getCategoryDb().getId())
                 .build();
 
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -382,6 +380,21 @@ public class DbDatasource implements Datasource {
 
         db.close();
         return amounts;
+    }
+
+    @Override
+    public List<AlarmDb> getAlarms() {
+        List<AlarmDb> alarmDbs = new ArrayList<>();
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = db.query(AlarmDb.TABLE_NAME, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            AlarmDb alarmDb = new AlarmDb().fromCursor(cursor);
+            alarmDbs.add(alarmDb);
+        }
+        cursor.close();
+        db.close();
+
+        return alarmDbs;
     }
 
     @Override
