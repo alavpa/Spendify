@@ -14,22 +14,27 @@ public class AlarmDb {
     public static final String TABLE_NAME = "alarm";
 
     public static final String COL_ID = "_id";
-    public static final String COL_AMOUNTID = "amountId";
+    public static final String COL_ACTION = "action";
+    public static final String COL_REFID = "refId";
     public static final String COL_PERIOD = "period";
     public static final String COL_TIMES = "period_times";
     public static final String COL_DATE = "alarm_date";
+    public static final String COL_ACTIVE = "active";
 
     public static final String CREATE_TABLE = ""
             + "CREATE TABLE " + TABLE_NAME + "("
             + COL_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-            + COL_AMOUNTID + " INTEGER NOT NULL DEFAULT 0,"
+            + COL_ACTION + " TEXT,"
+            + COL_REFID + " INTEGER NOT NULL DEFAULT 0,"
             + COL_PERIOD + " INTEGER NOT NULL DEFAULT -1,"
             + COL_TIMES + " INTEGER NOT NULL DEFAULT 0,"
+            + COL_ACTIVE + " INTEGER NOT NULL DEFAULT 1,"
             + COL_DATE + " INTEGER NOT NULL"
             + ")";
 
     private long id;
-    private AmountDb amountDb;
+    private long refId;
+    private String action;
     private int period;
     private int times;
     private long date;
@@ -46,18 +51,21 @@ public class AlarmDb {
 
     public AlarmDb fromCursor(Cursor cursor) {
         this.setId(DbUtils.getLong(cursor, COL_ID));
+        this.setRefId(DbUtils.getLong(cursor,COL_REFID));
+        this.setAction(DbUtils.getString(cursor,COL_ACTION));
         this.setPeriod(DbUtils.getInt(cursor, COL_PERIOD));
         this.setTimes(DbUtils.getInt(cursor, COL_TIMES));
+        this.setActive(DbUtils.getBoolean(cursor,COL_ACTIVE));
         this.setDate(DbUtils.getLong(cursor, COL_DATE));
         return this;
     }
 
-    public AmountDb getAmountDb() {
-        return amountDb;
+    public long getRefId() {
+        return refId;
     }
 
-    public void setAmountDb(AmountDb amountDb) {
-        this.amountDb = amountDb;
+    public void setRefId(long refId) {
+        this.refId = refId;
     }
 
     public int getPeriod() {
@@ -84,6 +92,22 @@ public class AlarmDb {
         this.date = date;
     }
 
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public static final class Builder {
         private final ContentValues contentValues = new ContentValues();
 
@@ -92,8 +116,13 @@ public class AlarmDb {
             return this;
         }
 
-        public Builder amountId(long amountId) {
-            contentValues.put(COL_AMOUNTID, amountId);
+        public Builder action(String action){
+            contentValues.put(COL_ACTION,action);
+            return this;
+        }
+
+        public Builder refId(long refId) {
+            contentValues.put(COL_REFID, refId);
             return this;
         }
 
@@ -109,6 +138,11 @@ public class AlarmDb {
 
         public Builder date(long date) {
             contentValues.put(COL_DATE, date);
+            return this;
+        }
+
+        public Builder active(boolean active){
+            contentValues.put(COL_ACTIVE,active);
             return this;
         }
 

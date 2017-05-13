@@ -1,11 +1,15 @@
 package com.alavpa.spendify.ui.init.reminder;
 
+import android.text.TextUtils;
+
 import com.alavpa.spendify.di.scopes.PerActivity;
-import com.alavpa.spendify.domain.usecases.CancelAlarmEndDay;
-import com.alavpa.spendify.domain.usecases.CancelAlarmEndMonth;
-import com.alavpa.spendify.domain.usecases.SetAlarmEndDay;
-import com.alavpa.spendify.domain.usecases.SetAlarmEndMonth;
+import com.alavpa.spendify.domain.model.Alarm;
+import com.alavpa.spendify.domain.model.AlarmEndDay;
+import com.alavpa.spendify.domain.model.AlarmEndMonth;
+import com.alavpa.spendify.domain.usecases.CancelAlarm;
+import com.alavpa.spendify.domain.usecases.SetAlarm;
 import com.alavpa.spendify.ui.base.BasePresenter;
+import com.alavpa.spendify.ui.utils.AlarmUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,17 +23,16 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
 
 
     @Inject
+    public AlarmUtils alarmUtils;
+
+    @Inject
     public SimpleDateFormat simpleDateFormat;
 
-    private
-    SetAlarmEndDay setAlarmEndDay;
-    private
-    CancelAlarmEndDay cancelAlarmEndDay;
+    private SetAlarm setAlarmEndDay;
+    private CancelAlarm cancelAlarmEndDay;
 
-    private
-    SetAlarmEndMonth setAlarmEndMonth;
-    private
-    CancelAlarmEndMonth cancelAlarmEndMonth;
+    private SetAlarm setAlarmEndMonth;
+    private CancelAlarm cancelAlarmEndMonth;
 
     private
     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm");
@@ -37,10 +40,10 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
     Calendar calendar = Calendar.getInstance();
 
     @Inject
-    public ReminderPresenter(SetAlarmEndDay setAlarmEndDay,
-                             CancelAlarmEndDay cancelAlarmEndDay,
-                             SetAlarmEndMonth setAlarmEndMonth,
-                             CancelAlarmEndMonth cancelAlarmEndMonth) {
+    public ReminderPresenter(SetAlarm setAlarmEndDay,
+                             CancelAlarm cancelAlarmEndDay,
+                             SetAlarm setAlarmEndMonth,
+                             CancelAlarm cancelAlarmEndMonth) {
 
         this.setAlarmEndDay = setAlarmEndDay;
         this.cancelAlarmEndDay = cancelAlarmEndDay;
@@ -80,15 +83,13 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
 
         try {
 
-            if (notifyEndDay) {
+            if (notifyEndDay && !TextUtils.isEmpty(time)) {
 
-                if (time != null) {
-                    Date timeEndDay = simpleTimeFormat.parse(time);
-                    calendar.setTime(timeEndDay);
-                    preferences.setEndOfDayTime(calendar);
-                }
-
-                setAlarmEndDay.setTime(calendar.getTimeInMillis());
+                Date timeEndDay = simpleTimeFormat.parse(time);
+                calendar.setTime(timeEndDay);
+                long timeInMillis = alarmUtils.calculateNextEndDay(calendar.getTimeInMillis());
+                Alarm alarm = new AlarmEndDay(timeInMillis);
+                setAlarmEndDay.setAlarm(alarm);
                 setAlarmEndDay.execute();
 
             } else {
@@ -107,9 +108,10 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
     private void configureEndMonth(boolean notifyEndMonth) {
         preferences.setNotifyEndOfMonth(notifyEndMonth);
 
-        setAlarmEndMonth.setDay(preferences.getMonthDay());
-
         if(notifyEndMonth){
+            long time = alarmUtils.calculateEndMonth(preferences.getMonthDay());
+            Alarm alarmEndMonth = new AlarmEndMonth(time);
+            setAlarmEndMonth.setAlarm(alarmEndMonth);
             setAlarmEndMonth.execute();
         }else{
             cancelAlarmEndMonth.execute();

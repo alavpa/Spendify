@@ -4,15 +4,30 @@ import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.domain.DateUtils;
 import com.alavpa.spendify.domain.Repository;
+import com.alavpa.spendify.domain.model.Alarm;
+import com.alavpa.spendify.domain.model.AlarmAmount;
+import com.alavpa.spendify.domain.model.AlarmOfflimit;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.model.Period;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
 
+import java.io.Serializable;
+
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
+import io.reactivex.MaybeSource;
+import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleSource;
 import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.internal.operators.observable.ObservableSingleMaybe;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 /**
  * Created by alavpa on 19/02/17.
@@ -20,21 +35,30 @@ import io.reactivex.functions.BiFunction;
 
 public class InsertOrUpdateAmount extends UseCase<Amount>{
 
-    AlarmManager alarmManager;
-    PrefsDatasource prefsDatasource;
-    DateUtils dateUtils;
-    Repository repository;
+    private PrefsDatasource prefsDatasource;
+    private DateUtils dateUtils;
+    private Repository repository;
     private Amount amount;
+    private SetAlarm setAlarmAmount;
+    private SetAlarm setAlarmOfflimit;
+    private CancelAlarm cancelAlarmAmount;
 
     @Inject
-    public InsertOrUpdateAmount(Repository repository,
-                                AlarmManager alarmManager,
-                                PrefsDatasource prefsDatasource,
-                                DateUtils dateUtils){
-        this.repository = repository;
-        this.alarmManager = alarmManager;
+    public InsertOrUpdateAmount(PrefsDatasource prefsDatasource,
+                                DateUtils dateUtils,
+                                Repository repository,
+                                Amount amount,
+                                SetAlarm setAlarmAmount,
+                                SetAlarm setAlarmOfflimit,
+                                CancelAlarm cancelAlarmAmount) {
+
         this.prefsDatasource = prefsDatasource;
         this.dateUtils = dateUtils;
+        this.repository = repository;
+        this.amount = amount;
+        this.setAlarmAmount = setAlarmAmount;
+        this.setAlarmOfflimit = setAlarmOfflimit;
+        this.cancelAlarmAmount = cancelAlarmAmount;
     }
 
     public void setAmount(Amount amount) {
@@ -55,56 +79,85 @@ public class InsertOrUpdateAmount extends UseCase<Amount>{
 
     }
 
-    private Single<Amount> insert(long from, long to){
-        return Single.zip(repository.insertAmount(amount),
-                repository.getSumByCategory(amount.getCategory(), from, to),biFunction());
-    }
-
-    private Single<Amount> update(long from, long to){
-        return Single.zip(repository.updateAmount(amount),
-                repository.getSumByCategory(amount.getCategory(), from, to),biFunction());
-
-    }
-
-    private BiFunction<Amount,Double,Amount> biFunction(){
-        return new BiFunction<Amount, Double, Amount>() {
-            @Override
-            public Amount apply(Amount amount, Double sum) throws Exception {
-
-
-                if(amount.getPeriod().getPeriod()== Period.NO_PERIOD ||
-                        amount.isDeleted()){
-                    cancelAlarmAmount(amount);
-                }else{
-                    setAlarmAmount(amount);
-                }
-
-                if(prefsDatasource.notifyOfflimit()){
-                    if(amount.getCategory().isOverLimit(sum)){
-                        setAlarmOfflimit(amount.getCategory());
+    private Single<Amount> insert(final long from, final long to){
+        return repository.insertAmount(amount)
+                .flatMap(new Function<Amount, SingleSource<Amount>>() {
+                    @Override
+                    public SingleSource<Amount> apply(Amount amount) throws Exception {
+                        return setAlarms(amount, from, to);
                     }
-                }
-
-                return amount;
-            }
-        };
+                });
     }
 
-    private void setAlarmOfflimit(Category category) {
-        SetAlarmOfflimit setAlarmOfflimit = new SetAlarmOfflimit(alarmManager);
-        setAlarmOfflimit.setCategory(category);
-        setAlarmOfflimit.execute();
+    private Single<Amount> update(final long from, final long to){
+        return repository.updateAmount(amount)
+                .flatMap(new Function<Amount, SingleSource<Amount>>() {
+                    @Override
+                    public SingleSource<Amount> apply(Amount amount) throws Exception {
+                        return setAlarms(amount, from, to);
+                    }
+                });
+
     }
 
-    private void setAlarmAmount(Amount amount) {
-        SetAlarmAmount setAlarmAmount = new SetAlarmAmount(alarmManager);
-        setAlarmAmount.setAmount(amount);
-        setAlarmAmount.execute();
+    private Single<Amount> setAlarms(final Amount amount, long from, long to){
+        InsertOrUpdateAmount.this.amount = amount;
+
+        return Single.concat(
+                setAmountAlarm(),
+                setOfflimitAlarm(from, to))
+                .last(new Alarm())
+                .map(new Function<Alarm, Amount>() {
+                    @Override
+                    public Amount apply(Alarm alarm) throws Exception {
+                        return amount;
+                    }
+                });
     }
 
-    private void cancelAlarmAmount(Amount amount) {
-        CancelAlarmAmount cancelAlarmAmount = new CancelAlarmAmount(alarmManager);
-        cancelAlarmAmount.setAmount(amount);
-        cancelAlarmAmount.execute();
+    private Single<Alarm> setOfflimitAlarm(long from, long to){
+
+        return repository.getSumByCategory(amount.getCategory(),from,to)
+                .filter(new Predicate<Double>() {
+                    @Override
+                    public boolean test(Double sum) throws Exception {
+                        return prefsDatasource.notifyOfflimit() && amount.getCategory().isOverLimit(sum);
+                    }
+                })
+                .flatMap(new Function<Double, MaybeSource<Alarm>>() {
+                    @Override
+                    public MaybeSource<Alarm> apply(Double aDouble) throws Exception {
+                        return setAlarmOfflimit(amount.getCategory());
+                    }
+                })
+                .toSingle();
+    }
+
+    private Single<Alarm> setAmountAlarm(){
+        if(amount.getPeriod().getPeriod()== Period.NO_PERIOD ||
+                amount.isDeleted()){
+            return cancelAlarmAmount(amount);
+        }else{
+            return setAlarmAmount(amount);
+        }
+    }
+
+    private Maybe<Alarm> setAlarmOfflimit(Category category) {
+        Alarm alarmOfflimit = new AlarmOfflimit(category);
+        setAlarmOfflimit.setAlarm(alarmOfflimit);
+        return setAlarmOfflimit.build()
+                .toMaybe();
+    }
+
+    private Single<Alarm> setAlarmAmount(Amount amount) {
+        AlarmAmount alarmAmount = new AlarmAmount(amount);
+        setAlarmAmount.setAlarm(alarmAmount);
+        return setAlarmAmount.build();
+    }
+
+    private Single<Alarm> cancelAlarmAmount(Amount amount) {
+        AlarmAmount alarmAmount = new AlarmAmount(amount);
+        cancelAlarmAmount.setAlarm(alarmAmount);
+        return cancelAlarmAmount.build();
     }
 }

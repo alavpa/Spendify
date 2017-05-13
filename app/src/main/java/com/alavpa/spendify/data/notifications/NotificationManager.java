@@ -13,7 +13,7 @@ import com.alavpa.spendify.R;
 import com.alavpa.spendify.di.qualifiers.ApplicationContext;
 import com.alavpa.spendify.domain.model.AlarmEndDay;
 import com.alavpa.spendify.domain.model.AlarmEndMonth;
-import com.alavpa.spendify.ui.IntentUtils;
+import com.alavpa.spendify.ui.utils.IntentUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

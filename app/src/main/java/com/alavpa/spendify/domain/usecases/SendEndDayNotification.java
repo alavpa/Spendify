@@ -3,7 +3,7 @@ package com.alavpa.spendify.domain.usecases;
 import com.alavpa.spendify.R;
 import com.alavpa.spendify.data.notifications.NotificationManager;
 import com.alavpa.spendify.data.resources.ResDatasource;
-import com.alavpa.spendify.ui.IntentUtils;
+import com.alavpa.spendify.ui.utils.IntentUtils;
 
 import javax.inject.Inject;
 

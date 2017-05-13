@@ -98,6 +98,22 @@ public class RepositoryData implements Repository {
     }
 
     @Override
+    public Single<Amount> getAmount(final long id) {
+        return Single.fromCallable(new Callable<AmountDb>() {
+                    @Override
+                    public AmountDb call() throws Exception {
+                        return datasource.getAmountDb(id);
+                    }
+                })
+                .map(new Function<AmountDb, Amount>() {
+                    @Override
+                    public Amount apply(AmountDb amountDb) throws Exception {
+                        return new Amount().fromAmountDb(amountDb);
+                    }
+                });
+    }
+
+    @Override
     public Single<Double> getSumBy(final boolean income, final long from, final long to) {
         return Single.fromCallable(new Callable<Double>() {
             @Override
@@ -213,7 +229,7 @@ public class RepositoryData implements Repository {
         return Single.fromCallable(new Callable<Sector>() {
             @Override
             public Sector call() throws Exception {
-                SectorDb sectorDb = datasource.getSector(category.getId(), from, to);
+                SectorDb sectorDb = datasource.getSectorDb(category.getId(), from, to);
                 return new Sector().fromSectorDb(sectorDb);
             }
         });
@@ -224,7 +240,7 @@ public class RepositoryData implements Repository {
         return Single.fromCallable(new Callable<List<AmountDb>>() {
             @Override
             public List<AmountDb> call() throws Exception {
-                return datasource.getRepeatAmounts();
+                return datasource.getRepeatAmountDbs();
             }
         })
                 .flatMap(new Function<List<AmountDb>, SingleSource<? extends List<Amount>>>() {
@@ -247,7 +263,7 @@ public class RepositoryData implements Repository {
         return Single.fromCallable(new Callable<List<AlarmDb>>() {
             @Override
             public List<AlarmDb> call() throws Exception {
-                return datasource.getAlarms();
+                return datasource.getAlarmDbs();
             }
         })
                 .flatMap(new Function<List<AlarmDb>, SingleSource<? extends List<Alarm>>>() {
@@ -257,10 +273,63 @@ public class RepositoryData implements Repository {
                                 .map(new Function<AlarmDb, Alarm>() {
                                     @Override
                                     public Alarm apply(AlarmDb alarmDb) throws Exception {
-                                        return new Alarm().fromAlarmDb(alarmDb);
+                                        return new Alarm(alarmDb.getAction()).fromAlarmDb(alarmDb);
                                     }
                                 })
                                 .toList();
+                    }
+                });
+    }
+
+    @Override
+    public Single<Alarm> insertAlarm(final Alarm alarm) {
+        return Single.fromCallable(new Callable<Alarm>() {
+            @Override
+            public Alarm call() throws Exception {
+                return alarm.insertAlarm(datasource);
+            }
+        });
+    }
+
+    @Override
+    public Single<Alarm> updateAlarm(final Alarm alarm) {
+
+        return Single.fromCallable(new Callable<Alarm>() {
+            @Override
+            public Alarm call() throws Exception {
+                return alarm.updateAlarm(datasource);
+            }
+        });
+    }
+
+    @Override
+    public Single<Alarm> getAlam(final String action) {
+        return Single.fromCallable(new Callable<AlarmDb>() {
+            @Override
+            public AlarmDb call() throws Exception {
+                return datasource.getAlam(action);
+            }
+        })
+                .map(new Function<AlarmDb, Alarm>() {
+                    @Override
+                    public Alarm apply(AlarmDb alarmDb) throws Exception {
+                        return new Alarm().fromAlarmDb(alarmDb);
+                    }
+                });
+    }
+
+    @Override
+    public Single<Alarm> getAlam(final String action, final long refId) {
+        return Single.fromCallable(new Callable<AlarmDb>() {
+            @Override
+            public AlarmDb call() throws Exception {
+                return datasource.getAlam(action, refId);
+            }
+        })
+                .map(new Function<AlarmDb, Alarm>() {
+                    @Override
+                    public Alarm apply(AlarmDb alarmDb) throws Exception {
+                        return new Alarm().fromAlarmDb(alarmDb);
                     }
                 });
     }

@@ -1,6 +1,7 @@
 package com.alavpa.spendify.domain;
 
 
+import com.alavpa.spendify.data.db.model.AlarmDb;
 import com.alavpa.spendify.domain.model.Alarm;
 import com.alavpa.spendify.domain.model.Amount;
 import com.alavpa.spendify.domain.model.Category;
@@ -26,6 +27,8 @@ public interface Repository {
 
     Single<Amount> updateAmount(Amount amount);
 
+    Single<Amount> getAmount(long id);
+
     Single<Double> getSumBy(boolean income, long from, long to);
 
     Single<List<Amount>> getAmountBy(boolean income, long from, long to);
@@ -45,4 +48,12 @@ public interface Repository {
     Single<List<Amount>> getRepeatAmounts();
 
     Single<List<Alarm>> getAlarms();
+
+    Single<Alarm> insertAlarm(Alarm alarm);
+
+    Single<Alarm> updateAlarm(Alarm alarm);
+
+    Single<Alarm> getAlam(String action);
+
+    Single<Alarm> getAlam(String action, long refId);
 }

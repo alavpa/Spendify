@@ -1,4 +1,4 @@
-package com.alavpa.spendify.ui;
+package com.alavpa.spendify.ui.utils;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.content.Intent;
 import com.alavpa.spendify.di.qualifiers.ApplicationContext;
 import com.alavpa.spendify.domain.model.AlarmEndDay;
 import com.alavpa.spendify.domain.model.AlarmEndMonth;
+import com.alavpa.spendify.ui.Navigator;
 import com.alavpa.spendify.ui.dashboard.DashboardActivity;
 import com.alavpa.spendify.ui.main.MainActivity;
 
