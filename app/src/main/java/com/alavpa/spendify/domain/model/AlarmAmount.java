@@ -8,7 +8,7 @@ import com.alavpa.spendify.domain.model.base.AlarmRepeat;
 
 import java.util.Calendar;
 
-public class AlarmAmount extends AlarmRepeat implements Parcelable {
+public class AlarmAmount extends Alarm implements Parcelable {
 
     public static final Creator<AlarmAmount> CREATOR = new Creator<AlarmAmount>() {
         @Override
@@ -21,53 +21,40 @@ public class AlarmAmount extends AlarmRepeat implements Parcelable {
             return new AlarmAmount[size];
         }
     };
-    private Amount amount;
 
-    public AlarmAmount(){}
+    public AlarmAmount(){
+        super(AlarmManager.ACTION_ALARM_AMOUNT);
+    }
 
     public AlarmAmount(Amount amount){
-        this.amount = amount;
-        date = calculateDate(Calendar.getInstance().getTimeInMillis(), amount.getPeriod().getDate());
-        period = new Period(date,amount.getPeriod().getPeriod(),amount.getPeriod().getTimes());
+        this();
+        long date = calculateDate(Calendar.getInstance().getTimeInMillis(), amount.getPeriod());
+        setPeriod(new Period(date,amount.getPeriod().getPeriod(),amount.getPeriod().getTimes()));
+        setRefId(amount.getId());
     }
 
     protected AlarmAmount(Parcel in) {
         super(in);
-        this.amount = in.readParcelable(Amount.class.getClassLoader());
     }
 
-    public long calculateDate(long current, long time){
+    public long calculateDate(long current, Period period){
         Calendar alarmCalendar = Calendar.getInstance();
-        alarmCalendar.setTimeInMillis(time);
+        alarmCalendar.setTimeInMillis(period.getDate());
 
         long date = alarmCalendar.getTimeInMillis();
 
-        if(amount.getPeriod().getPeriod() != Period.NO_PERIOD) {
+        if(period.getPeriod() != Period.NO_PERIOD) {
             while (date < current) {
-                date = amount.getPeriod().getNextDateInMillis();
+                date = period.getNextDateInMillis();
             }
         }
 
         return date;
     }
 
-    public Amount getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Amount amount) {
-        this.amount = amount;
-    }
-
-    public int getRequest(){
-        return AlarmManager.REQUEST_ALARM_AMOUNT + (int)amount.getId();
-    }
-
     public AlarmAmount getNextAlarm() {
-        AlarmAmount alarmAmount = new AlarmAmount(amount);
-        alarmAmount.setDate(period.getNextDateInMillis());
-        alarmAmount.setPeriod(new Period(date, period.getPeriod(), period.getTimes()));
-        return alarmAmount;
+        setPeriod(getPeriod().getNextPeriod());
+        return this;
     }
 
     @Override
@@ -78,6 +65,5 @@ public class AlarmAmount extends AlarmRepeat implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeParcelable(this.amount, flags);
     }
 }

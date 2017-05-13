@@ -7,16 +7,19 @@ import com.alavpa.spendify.domain.model.AlarmEndDay;
 import com.alavpa.spendify.domain.model.AlarmEndMonth;
 import com.alavpa.spendify.domain.model.AlarmOfflimit;
 import com.alavpa.spendify.domain.model.Amount;
+import com.alavpa.spendify.domain.usecases.GetAmount;
 import com.alavpa.spendify.domain.usecases.InsertOrUpdateAmount;
+import com.alavpa.spendify.domain.usecases.InsertOrUpdateNextAmount;
 import com.alavpa.spendify.domain.usecases.SendEndDayNotification;
 import com.alavpa.spendify.domain.usecases.SendEndMonthNotification;
 import com.alavpa.spendify.domain.usecases.SendOfflimitNotification;
-import com.alavpa.spendify.domain.usecases.SetAlarmEndDay;
-import com.alavpa.spendify.domain.usecases.SetAlarmEndMonth;
+import com.alavpa.spendify.domain.usecases.SetAlarm;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.SingleSource;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 
 @Singleton
@@ -34,43 +37,43 @@ public class AlarmPresenter {
 
     private SendOfflimitNotification sendOfflimitNotification;
 
-    private SetAlarmEndDay setAlarmEndDay;
+    private SetAlarm setAlarm;
 
-    private SetAlarmEndMonth setAlarmEndMonth;
-
-    private InsertOrUpdateAmount insertOrUpdateAmount;
+    private InsertOrUpdateNextAmount insertOrUpdateNextAmount;
 
     @Inject
     public AlarmPresenter(SendEndDayNotification sendEndDayNotification,
                           SendEndMonthNotification sendEndMonthNotification,
                           SendOfflimitNotification sendOfflimitNotification,
-                          SetAlarmEndDay setAlarmEndDay,
-                          SetAlarmEndMonth setAlarmEndMonth,
-                          InsertOrUpdateAmount insertOrUpdateAmount){
+                          SetAlarm setAlarm,
+                          InsertOrUpdateNextAmount insertOrUpdateNextAmount){
         this.sendEndDayNotification = sendEndDayNotification;
         this.sendEndMonthNotification = sendEndMonthNotification;
         this.sendOfflimitNotification = sendOfflimitNotification;
-        this.setAlarmEndDay = setAlarmEndDay;
-        this.setAlarmEndMonth = setAlarmEndMonth;
-        this.insertOrUpdateAmount = insertOrUpdateAmount;
+        this.setAlarm = setAlarm;
+        this.insertOrUpdateNextAmount = insertOrUpdateNextAmount;
     }
 
     public void onReceiveAlarmEndDay(AlarmEndDay alarmEndDay) {
         if(preferences.notifyEndOfDay()) {
 
             sendEndDayNotification.execute();
-            setAlarmEndDay.execute(alarmEndDay.getNextAlarm());
+            setAlarm.setAlarm(alarmEndDay.getNextAlarm());
+            setAlarm.execute();
         }
     }
 
     public void onReceiveAlarmEndMonth(AlarmEndMonth alarmEndMonth) {
         if(preferences.notifyEndOfMonth()) {
 
-            long from = dateUtils.calculateFrom(alarmEndMonth.getDate(), preferences.getMonthDay()).getTimeInMillis();
+            long from = dateUtils.calculateFrom(alarmEndMonth.getPeriod().getDate(),
+                    preferences.getMonthDay()).getTimeInMillis();
+
             sendEndMonthNotification.setFrom(from);
             sendEndMonthNotification.execute();
 
-            setAlarmEndMonth.execute(alarmEndMonth.getNextAlarm());
+            setAlarm.setAlarm(alarmEndMonth.getNextAlarm());
+            setAlarm.execute();
         }
     }
 
@@ -85,17 +88,18 @@ public class AlarmPresenter {
     }
 
     public void onReceiveAlarmAmount(AlarmAmount alarmAmount) {
-        Amount amount = alarmAmount.getAmount().getNextAmount();
-        insertOrUpdateAmount.setAmount(amount);
-        insertOrUpdateAmount.execute(new DisposableSingleObserver<Amount>() {
+
+        insertOrUpdateNextAmount.setId(alarmAmount.getRefId());
+
+        insertOrUpdateNextAmount.execute(new DisposableSingleObserver<Amount>() {
             @Override
             public void onSuccess(Amount amount) {
-                insertOrUpdateAmount.dispose();
+                insertOrUpdateNextAmount.dispose();
             }
 
             @Override
             public void onError(Throwable e) {
-                insertOrUpdateAmount.dispose();
+                insertOrUpdateNextAmount.dispose();
             }
         });
     }

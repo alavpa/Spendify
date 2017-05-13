@@ -29,7 +29,10 @@ public abstract class UseCase<T> {
     }
 
     public void execute(){
-        Disposable disposable = build().subscribe();
+        Disposable disposable = build()
+                .subscribeOn(Schedulers.io())
+                .subscribe();
+
         addDisposable(disposable);
     }
 

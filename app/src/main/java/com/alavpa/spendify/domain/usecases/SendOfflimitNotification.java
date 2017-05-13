@@ -4,7 +4,7 @@ import com.alavpa.spendify.R;
 import com.alavpa.spendify.data.notifications.NotificationManager;
 import com.alavpa.spendify.data.resources.ResDatasource;
 import com.alavpa.spendify.domain.model.AlarmOfflimit;
-import com.alavpa.spendify.ui.IntentUtils;
+import com.alavpa.spendify.ui.utils.IntentUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -34,7 +34,7 @@ public class SendOfflimitNotification {
 
     public void execute(){
 
-        int notificationId = alarmOfflimit.getRequest();
+        int notificationId = (int)alarmOfflimit.getId();
         notificationManager.publishOfflimit(notificationId,
                 resources.getString(R.string.notification_title_offlimit,alarmOfflimit.getCategory().getName()),
                 resources.getString(R.string.notification_content_offlimit,alarmOfflimit.getCategory().getLimit(),

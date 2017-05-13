@@ -20,8 +20,5 @@ public class BootReceiver extends BaseReceiver{
         getApplicationComponent(context).inject(this);
 
         //TODO: Reschedule alarms
-        presenter.configureEndDayAlarm();
-        presenter.configureEndMonthAlarm();
-        presenter.configureAmountAlarm();
     }
 }

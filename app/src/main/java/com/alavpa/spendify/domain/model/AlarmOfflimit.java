@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
-import com.alavpa.spendify.domain.model.base.Alarm;
 
 import java.util.Calendar;
 
@@ -24,13 +23,15 @@ public class AlarmOfflimit extends Alarm implements Parcelable {
     private Category category;
 
     public AlarmOfflimit(){
-
+        super(AlarmManager.ACTION_ALARM_OFFLIMIT);
     }
 
 
     public AlarmOfflimit(Category category){
+        this();
         this.category = category;
-        date = calculateDate(Calendar.getInstance().getTimeInMillis());
+        long date = calculateDate(Calendar.getInstance().getTimeInMillis());
+        setPeriod(new Period(date,Period.NO_PERIOD,0));
     }
 
     protected AlarmOfflimit(Parcel in) {
@@ -52,10 +53,6 @@ public class AlarmOfflimit extends Alarm implements Parcelable {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public int getRequest(){
-        return AlarmManager.REQUEST_ALARM_OFFLIMIT + (int)category.getId();
     }
 
     @Override

@@ -9,6 +9,8 @@ import com.alavpa.spendify.data.db.model.AlarmDb;
 import com.alavpa.spendify.data.db.model.AmountDb;
 import com.alavpa.spendify.data.db.model.CategoryDb;
 import com.alavpa.spendify.data.db.model.SectorDb;
+import com.alavpa.spendify.domain.model.Alarm;
+import com.alavpa.spendify.domain.model.Amount;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,13 +81,15 @@ public class DbDatasource implements Datasource {
         return categories;
     }
 
-    public synchronized AlarmDb insertAlarm(AlarmDb alarmDb) {
+    @Override
+    public synchronized AlarmDb insertAlarmDb(AlarmDb alarmDb) {
         ContentValues contentValues = new AlarmDb.Builder()
-                .id(alarmDb.getId())
                 .times(alarmDb.getTimes())
                 .period(alarmDb.getPeriod())
                 .date(alarmDb.getDate())
-                .amountId(alarmDb.getAmountDb().getId())
+                .refId(alarmDb.getRefId())
+                .action(alarmDb.getAction())
+                .active(alarmDb.isActive())
                 .build();
 
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -96,13 +100,16 @@ public class DbDatasource implements Datasource {
         return alarmDb;
     }
 
-    public synchronized AlarmDb updateAlarm(AlarmDb alarmDb) {
+    @Override
+    public synchronized AlarmDb updateAlarmDb(AlarmDb alarmDb) {
         ContentValues contentValues = new AlarmDb.Builder()
                 .id(alarmDb.getId())
                 .times(alarmDb.getTimes())
                 .period(alarmDb.getPeriod())
                 .date(alarmDb.getDate())
-                .amountId(alarmDb.getAmountDb().getId())
+                .refId(alarmDb.getRefId())
+                .action(alarmDb.getAction())
+                .active(alarmDb.isActive())
                 .build();
 
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -113,6 +120,51 @@ public class DbDatasource implements Datasource {
         db.close();
 
         return alarmDb;
+    }
+
+    @Override
+    public synchronized AmountDb getAmountDb(long id) {
+        AmountDb amountDb = new AmountDb();
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = db.query(AmountDb.TABLE_NAME,null,AmountDb.COL_ID + "=?",new String[]{String.valueOf(id)},null,null,null);
+        if(cursor.moveToFirst()){
+            amountDb.fromCursor(cursor);
+        }
+        cursor.close();
+        db.close();
+        return amountDb;
+    }
+
+    @Override
+    public synchronized AlarmDb getAlam(String action) {
+        AlarmDb alarm = new AlarmDb();
+
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = db.query(AlarmDb.TABLE_NAME,null,AlarmDb.COL_ACTION + "=?",new String[]{action},null,null,null);
+        if(cursor.moveToFirst()){
+            alarm.fromCursor(cursor);
+        }
+        cursor.close();
+        db.close();
+        return alarm;
+    }
+
+    @Override
+    public synchronized AlarmDb getAlam(String action, long refId) {
+        AlarmDb alarm = new AlarmDb();
+
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = db.query(AlarmDb.TABLE_NAME,null,AlarmDb.COL_ACTION + "=? AND " +
+                AlarmDb.COL_REFID + "=?"
+                ,new String[]{action,String.valueOf(refId)},null,null,null);
+
+        if(cursor.moveToFirst()){
+            alarm.fromCursor(cursor);
+        }
+        cursor.close();
+        db.close();
+
+        return alarm;
     }
 
     @Override
@@ -328,7 +380,7 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
-    public synchronized SectorDb getSector(long catId, long from, long to) {
+    public synchronized SectorDb getSectorDb(long catId, long from, long to) {
 
         SectorDb sectorDb = new SectorDb();
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
@@ -362,7 +414,7 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
-    public synchronized List<AmountDb> getRepeatAmounts() {
+    public synchronized List<AmountDb> getRepeatAmountDbs() {
 
         List<AmountDb> amounts = new ArrayList<>();
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
@@ -383,10 +435,13 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
-    public List<AlarmDb> getAlarms() {
+    public List<AlarmDb> getAlarmDbs() {
         List<AlarmDb> alarmDbs = new ArrayList<>();
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = db.query(AlarmDb.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = db.query(AlarmDb.TABLE_NAME, null,
+                AlarmDb.COL_ACTIVE + "=?",
+                new String[]{String.valueOf(1)},
+                null, null, null);
         while (cursor.moveToNext()) {
             AlarmDb alarmDb = new AlarmDb().fromCursor(cursor);
             alarmDbs.add(alarmDb);

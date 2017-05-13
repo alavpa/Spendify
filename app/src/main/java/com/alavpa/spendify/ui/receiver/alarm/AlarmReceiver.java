@@ -8,7 +8,7 @@ import com.alavpa.spendify.domain.model.AlarmAmount;
 import com.alavpa.spendify.domain.model.AlarmEndDay;
 import com.alavpa.spendify.domain.model.AlarmEndMonth;
 import com.alavpa.spendify.domain.model.AlarmOfflimit;
-import com.alavpa.spendify.ui.IntentUtils;
+import com.alavpa.spendify.ui.utils.IntentUtils;
 import com.alavpa.spendify.ui.receiver.BaseReceiver;
 
 import javax.inject.Inject;

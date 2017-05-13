@@ -30,6 +30,7 @@ android {
 
         debug{
             multiDexEnabled true
+            applicationIdSuffix ".debug"
         }
         release {
             minifyEnabled false

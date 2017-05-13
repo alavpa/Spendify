@@ -101,11 +101,11 @@
 
         <receiver android:name=".ui.receiver.alarm.AlarmReceiver">
             <intent-filter>
-                <action android:name="com.alavpa.spendify.data.alarm.ACTION_ALARM_ENDDAY" />
-                <action android:name="com.alavpa.spendify.data.alarm.ACTION_ALARM_ENDMONTH" />
-                <action android:name="com.alavpa.spendify.data.alarm.ACTION_AMOUNT" />
-                <action android:name="com.alavpa.spendify.data.alarm.ACTION_OFFLIMIT" />
-                <action android:name="com.alavpa.spendify.data.alarm.ACTION_PROMISES" />
+                <action android:name="${applicationId}.data.alarm.ACTION_ALARM_ENDDAY" />
+                <action android:name="${applicationId}.data.alarm.ACTION_ALARM_ENDMONTH" />
+                <action android:name="${applicationId}.data.alarm.ACTION_AMOUNT" />
+                <action android:name="${applicationId}.data.alarm.ACTION_OFFLIMIT" />
+                <action android:name="${applicationId}.data.alarm.ACTION_PROMISES" />
             </intent-filter>
         </receiver>
 
