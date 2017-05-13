@@ -39,31 +39,19 @@ public class AlarmAmountTest {
         Amount amount = new Amount();
         amount.setPeriod(period);
 
-        AlarmAmount alarmAmount = new AlarmAmount();
-        alarmAmount.setAmount(amount);
+        AlarmAmount alarmAmount = new AlarmAmount(amount);
 
-        long date = alarmAmount.calculateDate(current.getTimeInMillis(),amount.getPeriod().getDate());
+        long date = alarmAmount.calculateDate(current.getTimeInMillis(),amount.getPeriod());
 
         Assert.assertEquals(expected.getTimeInMillis(),date);
 
         current.set(Calendar.DATE,21);
         expected.set(Calendar.MONTH,6);
 
-        date = alarmAmount.calculateDate(current.getTimeInMillis(),amount.getPeriod().getDate());
+        date = alarmAmount.calculateDate(current.getTimeInMillis(),amount.getPeriod());
 
         Assert.assertEquals(expected.getTimeInMillis(),date);
 
-    }
-
-    @Test
-    public void getRequest() throws Exception {
-        Amount amount = new Amount();
-        amount.setId(5);
-
-        int expected = AlarmManager.REQUEST_ALARM_AMOUNT + (int)amount.getId();
-
-        AlarmAmount alarmAmount = new AlarmAmount(amount);
-        Assert.assertEquals(expected, alarmAmount.getRequest());
     }
 
     @Test
@@ -99,16 +87,15 @@ public class AlarmAmountTest {
         Amount amount = new Amount();
         amount.setPeriod(period);
 
-        AlarmAmount alarmAmount = new AlarmAmount();
-        alarmAmount.setAmount(amount);
+        AlarmAmount alarmAmount = new AlarmAmount(amount);
 
-        long date = alarmAmount.calculateDate(current.getTimeInMillis(),amount.getPeriod().getDate());
+        long date = alarmAmount.calculateDate(current.getTimeInMillis(),amount.getPeriod());
         Period periodAlarm = new Period(date,amount.getPeriod().getPeriod(),amount.getPeriod().getTimes());
 
-        alarmAmount.setDate(date);
+        alarmAmount.getPeriod().setDate(date);
         alarmAmount.setPeriod(periodAlarm);
 
-        Assert.assertEquals(expected.getTimeInMillis(), alarmAmount.getNextAlarm().getDate());
+        Assert.assertEquals(expected.getTimeInMillis(), alarmAmount.getNextAlarm().getPeriod().getDate());
     }
 
 }

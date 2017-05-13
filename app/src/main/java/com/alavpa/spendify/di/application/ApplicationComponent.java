@@ -2,6 +2,7 @@ package com.alavpa.spendify.di.application;
 
 import android.content.Context;
 
+import com.alavpa.spendify.Application;
 import com.alavpa.spendify.data.alarm.AlarmManager;
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.data.resources.ResDatasource;
@@ -26,8 +27,8 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject(AlarmReceiver alarmReceiver);
-
     void inject(BootReceiver bootReceiver);
+    void inject(Application application);
 
     @ApplicationContext
     Context context();

@@ -25,7 +25,10 @@ public class Application extends BaseApplication {
                 .applicationModule(new ApplicationModule(this))
                 .build();
 
+        applicationComponent.inject(this);
+
         setAlarms.execute();
+
     }
 
 

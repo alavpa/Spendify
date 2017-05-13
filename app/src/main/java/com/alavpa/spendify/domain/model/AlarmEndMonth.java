@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
-import com.alavpa.spendify.domain.model.base.AlarmRepeat;
 
 import java.util.Calendar;
 

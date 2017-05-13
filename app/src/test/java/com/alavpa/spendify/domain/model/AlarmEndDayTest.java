@@ -1,5 +1,7 @@
 package com.alavpa.spendify.domain.model;
 
+import com.alavpa.spendify.ui.utils.AlarmUtils;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -35,14 +37,14 @@ public class AlarmEndDayTest {
         time.set(Calendar.MINUTE,0);
         time.set(Calendar.SECOND,0);
 
-        long date = alarmEndDay.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
+        long date = new AlarmUtils().calculateNextEndDay(time.getTimeInMillis());
 
         Assert.assertEquals(expected.getTimeInMillis(),date);
 
         calendar.set(Calendar.HOUR_OF_DAY,18);
         expected.set(Calendar.DATE,5);
 
-        date = alarmEndDay.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
+        date = new AlarmUtils().calculateNextEndDay(time.getTimeInMillis());
         Assert.assertEquals(expected.getTimeInMillis(),date);
 
     }
@@ -78,11 +80,12 @@ public class AlarmEndDayTest {
         time.set(Calendar.SECOND,0);
         calendar.set(Calendar.MILLISECOND,0);
 
-        long date = alarmEndDay.calculateDate(calendar.getTimeInMillis(),time.getTimeInMillis());
-        alarmEndDay.setDate(date);
+        long date = new AlarmUtils().calculateNextEndDay(time.getTimeInMillis());
+        alarmEndDay.getPeriod().setDate(date);
         alarmEndDay.setPeriod(new Period(date,Period.PER_DAY,1));
 
-        Assert.assertEquals(expected.getTimeInMillis(), alarmEndDay.getNextAlarm().getDate());
+        Assert.assertEquals(expected.getTimeInMillis(),
+                alarmEndDay.getNextAlarm().getPeriod().getDate());
 
     }
 

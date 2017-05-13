@@ -7,6 +7,8 @@ import com.alavpa.spendify.domain.usecases.base.UseCase;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -23,6 +25,7 @@ public class SetAlarms extends UseCase<List<Alarm>>{
     SetAlarm setAlarm;
     GetAlarms getAlarms;
 
+    @Inject
     public SetAlarms(Repository repository, GetAlarms getAlarms,SetAlarm setAlarm) {
         this.repository = repository;
         this.setAlarm = setAlarm;

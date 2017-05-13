@@ -21,6 +21,7 @@ public class Alarm implements Parcelable{
 
     public Alarm(String action){
         this.action = action;
+        this.active = true;
     }
 
     public Alarm fromAlarmDb(AlarmDb alarmDb) {

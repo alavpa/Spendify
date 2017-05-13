@@ -1,5 +1,7 @@
 package com.alavpa.spendify.domain.model;
 
+import com.alavpa.spendify.ui.utils.AlarmUtils;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,8 +31,8 @@ public class AlarmEndMonthTest {
         expectedCalendarPre.set(Calendar.MONTH,3);
         expectedCalendarPre.set(Calendar.YEAR,2017);
 
-        long calculatedPost = alarmEndMonth.calculateDate(calendar.getTimeInMillis(),15);
-        long calculatedPre = alarmEndMonth.calculateDate(calendar.getTimeInMillis(),10);
+        long calculatedPost = new AlarmUtils().calculateEndMonth(15);
+        long calculatedPre = new AlarmUtils().calculateEndMonth(10);
 
         Assert.assertEquals("Post", expectedCalendarPost.getTimeInMillis(),calculatedPost);
         Assert.assertEquals("Pre",expectedCalendarPre.getTimeInMillis(),calculatedPre);
@@ -53,11 +55,11 @@ public class AlarmEndMonthTest {
         nextCalendar.set(Calendar.MONTH,4);
         nextCalendar.set(Calendar.YEAR,2017);
 
-        long date = alarmEndMonth.calculateDate(calendar.getTimeInMillis(),5);
-        alarmEndMonth.setDate(date);
+        long date = new AlarmUtils().calculateEndMonth(5);
+        alarmEndMonth.getPeriod().setDate(date);
         alarmEndMonth.setPeriod(new Period(date,Period.PER_MONTH,1));
 
-        long next = alarmEndMonth.getNextAlarm().getDate();
+        long next = alarmEndMonth.getNextAlarm().getPeriod().getDate();
 
         Assert.assertEquals(nextCalendar.getTimeInMillis(),next);
 

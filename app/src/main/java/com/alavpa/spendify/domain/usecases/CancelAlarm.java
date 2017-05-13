@@ -20,14 +20,17 @@ public class CancelAlarm extends UseCase<Alarm>{
 
     private Repository repository;
     private AlarmManager alarmManager;
+    private SetAlarm setAlarm;
 
     private Alarm alarm;
 
     @Inject
     public CancelAlarm(Repository repository,
-                       AlarmManager alarmManager) {
+                       AlarmManager alarmManager,
+                       SetAlarm setAlarm) {
         this.alarmManager = alarmManager;
         this.repository = repository;
+        this.setAlarm = setAlarm;
     }
 
     public void setAlarm(Alarm alarm) {
@@ -38,10 +41,23 @@ public class CancelAlarm extends UseCase<Alarm>{
     public Single<Alarm> build(){
 
         return repository.getAlam(alarm.getAction(),alarm.getRefId())
+                .flatMap(new Function<Alarm, SingleSource<Alarm>>() {
+                    @Override
+                    public SingleSource<Alarm> apply(Alarm alarm) throws Exception {
+                        if(alarm.getId()!=0 && alarm.isActive()){
+                            alarm.setActive(false);
+                            setAlarm.setAlarm(alarm);
+                            return setAlarm.build();
+                        }
+                        return Single.just(new Alarm());
+                    }
+                })
                 .doOnSuccess(new Consumer<Alarm>() {
                     @Override
                     public void accept(Alarm alarm) throws Exception {
-                        alarmManager.cancelAlarm(alarm.getAction(), alarm.getId());
+                        if(alarm.getId()!=0) {
+                            alarmManager.cancelAlarm(alarm.getAction(), alarm.getId());
+                        }
                     }
                 });
     }

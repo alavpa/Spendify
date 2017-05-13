@@ -20,15 +20,4 @@ public class AlarmOfflimitTest {
         Assert.assertEquals(calendar.getTimeInMillis(),calculated);
 
     }
-
-    @Test
-    public void checkRequest(){
-        Category category = new Category();
-        category.setId(1);
-        AlarmOfflimit alarmOfflimit = new AlarmOfflimit(category);
-
-        int expected = AlarmManager.REQUEST_ALARM_OFFLIMIT + 1;
-        int actual = alarmOfflimit.getRequest();
-        Assert.assertEquals(expected,actual);
-    }
 }

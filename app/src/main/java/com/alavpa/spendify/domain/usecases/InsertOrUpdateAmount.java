@@ -47,7 +47,6 @@ public class InsertOrUpdateAmount extends UseCase<Amount>{
     public InsertOrUpdateAmount(PrefsDatasource prefsDatasource,
                                 DateUtils dateUtils,
                                 Repository repository,
-                                Amount amount,
                                 SetAlarm setAlarmAmount,
                                 SetAlarm setAlarmOfflimit,
                                 CancelAlarm cancelAlarmAmount) {
@@ -55,7 +54,6 @@ public class InsertOrUpdateAmount extends UseCase<Amount>{
         this.prefsDatasource = prefsDatasource;
         this.dateUtils = dateUtils;
         this.repository = repository;
-        this.amount = amount;
         this.setAlarmAmount = setAlarmAmount;
         this.setAlarmOfflimit = setAlarmOfflimit;
         this.cancelAlarmAmount = cancelAlarmAmount;
@@ -118,19 +116,16 @@ public class InsertOrUpdateAmount extends UseCase<Amount>{
     private Single<Alarm> setOfflimitAlarm(long from, long to){
 
         return repository.getSumByCategory(amount.getCategory(),from,to)
-                .filter(new Predicate<Double>() {
+                .flatMap(new Function<Double, Single<Alarm>>() {
                     @Override
-                    public boolean test(Double sum) throws Exception {
-                        return prefsDatasource.notifyOfflimit() && amount.getCategory().isOverLimit(sum);
+                    public Single<Alarm> apply(Double sum) throws Exception {
+                        if(prefsDatasource.notifyOfflimit() && amount.getCategory().isOverLimit(sum)) {
+                            return setAlarmOfflimit(amount.getCategory());
+                        }
+
+                        return Single.just(new Alarm());
                     }
-                })
-                .flatMap(new Function<Double, MaybeSource<Alarm>>() {
-                    @Override
-                    public MaybeSource<Alarm> apply(Double aDouble) throws Exception {
-                        return setAlarmOfflimit(amount.getCategory());
-                    }
-                })
-                .toSingle();
+                });
     }
 
     private Single<Alarm> setAmountAlarm(){
@@ -142,11 +137,10 @@ public class InsertOrUpdateAmount extends UseCase<Amount>{
         }
     }
 
-    private Maybe<Alarm> setAlarmOfflimit(Category category) {
+    private Single<Alarm> setAlarmOfflimit(Category category) {
         Alarm alarmOfflimit = new AlarmOfflimit(category);
         setAlarmOfflimit.setAlarm(alarmOfflimit);
-        return setAlarmOfflimit.build()
-                .toMaybe();
+        return setAlarmOfflimit.build();
     }
 
     private Single<Alarm> setAlarmAmount(Amount amount) {
