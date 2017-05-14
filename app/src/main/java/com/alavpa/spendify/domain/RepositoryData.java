@@ -334,5 +334,21 @@ public class RepositoryData implements Repository {
                 });
     }
 
+    @Override
+    public Single<Category> getCategory(final long id) {
+        return Single.fromCallable(new Callable<CategoryDb>() {
+            @Override
+            public CategoryDb call() throws Exception {
+                return datasource.getCategoryDb(id);
+            }
+        })
+                .map(new Function<CategoryDb, Category>() {
+                    @Override
+                    public Category apply(CategoryDb categoryDb) throws Exception {
+                        return new Category().fromCategoryDb(categoryDb);
+                    }
+                });
+    }
+
 
 }

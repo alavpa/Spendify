@@ -31,8 +31,10 @@ public class AlarmEndMonthTest {
         expectedCalendarPre.set(Calendar.MONTH,3);
         expectedCalendarPre.set(Calendar.YEAR,2017);
 
-        long calculatedPost = new AlarmUtils().calculateEndMonth(15);
-        long calculatedPre = new AlarmUtils().calculateEndMonth(10);
+        long calculatedPost = new AlarmUtils().calculateEndMonth(15
+                ,expectedCalendarPre.getTimeInMillis());
+        long calculatedPre = new AlarmUtils().calculateEndMonth(10
+                ,expectedCalendarPre.getTimeInMillis());
 
         Assert.assertEquals("Post", expectedCalendarPost.getTimeInMillis(),calculatedPost);
         Assert.assertEquals("Pre",expectedCalendarPre.getTimeInMillis(),calculatedPre);
@@ -55,7 +57,7 @@ public class AlarmEndMonthTest {
         nextCalendar.set(Calendar.MONTH,4);
         nextCalendar.set(Calendar.YEAR,2017);
 
-        long date = new AlarmUtils().calculateEndMonth(5);
+        long date = new AlarmUtils().calculateEndMonth(5, calendar.getTimeInMillis());
         alarmEndMonth.getPeriod().setDate(date);
         alarmEndMonth.setPeriod(new Period(date,Period.PER_MONTH,1));
 

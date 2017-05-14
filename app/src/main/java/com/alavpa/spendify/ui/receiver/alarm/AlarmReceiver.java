@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.alavpa.spendify.data.alarm.AlarmManager;
+import com.alavpa.spendify.domain.model.Alarm;
 import com.alavpa.spendify.domain.model.AlarmAmount;
 import com.alavpa.spendify.domain.model.AlarmEndDay;
 import com.alavpa.spendify.domain.model.AlarmEndMonth;
@@ -29,28 +30,28 @@ public class AlarmReceiver extends BaseReceiver {
         getApplicationComponent(context).inject(this);
         if (intent.getAction().equals(AlarmManager.ACTION_ALARM_ENDDAY)) {
 
-            AlarmEndDay alarmEndDay = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
+            Alarm alarmEndDay = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
             presenter.onReceiveAlarmEndDay(alarmEndDay);
 
         }
 
         if (intent.getAction().equals(AlarmManager.ACTION_ALARM_ENDMONTH)) {
 
-            AlarmEndMonth alarmEndMonth = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
+            Alarm alarmEndMonth = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
             presenter.onReceiveAlarmEndMonth(alarmEndMonth);
 
         }
 
         if (intent.getAction().equals(AlarmManager.ACTION_ALARM_AMOUNT)) {
 
-            AlarmAmount alarmAmount = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
+            Alarm alarmAmount = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
             presenter.onReceiveAlarmAmount(alarmAmount);
 
         }
 
         if (intent.getAction().equals(AlarmManager.ACTION_ALARM_OFFLIMIT)) {
 
-            AlarmOfflimit alarmOfflimit = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
+            Alarm alarmOfflimit = intent.getParcelableExtra(AlarmManager.EXTRA_ALARM_PARCELABLE);
             presenter.onReceiveAlarmOfflimit(alarmOfflimit);
         }
     }

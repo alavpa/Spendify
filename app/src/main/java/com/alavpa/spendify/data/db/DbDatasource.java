@@ -168,6 +168,23 @@ public class DbDatasource implements Datasource {
     }
 
     @Override
+    public CategoryDb getCategoryDb(long id) {
+        CategoryDb categoryDb = new CategoryDb();
+
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = db.query(AlarmDb.TABLE_NAME,null,AlarmDb.COL_ID + "=?",
+                new String[]{String.valueOf(id)},null,null,null);
+
+        if(cursor.moveToFirst()){
+            categoryDb.fromCursor(cursor);
+        }
+        cursor.close();
+        db.close();
+
+        return categoryDb;
+    }
+
+    @Override
     public synchronized AmountDb insertAmount(AmountDb amountDb) {
 
         ContentValues contentValues = new AmountDb.Builder()

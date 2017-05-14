@@ -56,4 +56,6 @@ public interface Repository {
     Single<Alarm> getAlam(String action);
 
     Single<Alarm> getAlam(String action, long refId);
+
+    Single<Category> getCategory(long id);
 }

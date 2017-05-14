@@ -29,11 +29,17 @@ public abstract class UseCase<T> {
     }
 
     public void execute(){
-        Disposable disposable = build()
-                .subscribeOn(Schedulers.io())
-                .subscribe();
+        execute(new DisposableSingleObserver<T>() {
+            @Override
+            public void onSuccess(T t) {
+                dispose();
+            }
 
-        addDisposable(disposable);
+            @Override
+            public void onError(Throwable e) {
+                dispose();
+            }
+        });
     }
 
     protected void addDisposable(Disposable disposable){

@@ -9,16 +9,13 @@ import com.alavpa.spendify.ui.receiver.BaseReceiver;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import timber.log.Timber;
+
 @Singleton
 public class BootReceiver extends BaseReceiver{
 
-    @Inject
-    BootPresenter presenter;
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        getApplicationComponent(context).inject(this);
-
-        //TODO: Reschedule alarms
+        Timber.d("BootReceiver");
     }
 }

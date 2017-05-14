@@ -27,7 +27,6 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject(AlarmReceiver alarmReceiver);
-    void inject(BootReceiver bootReceiver);
     void inject(Application application);
 
     @ApplicationContext

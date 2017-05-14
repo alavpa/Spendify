@@ -93,6 +93,7 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
                 setAlarmEndDay.execute();
 
             } else {
+                cancelAlarmEndDay.setAlarm(new AlarmEndDay());
                 cancelAlarmEndDay.execute();
             }
 
@@ -109,11 +110,13 @@ public class ReminderPresenter extends BasePresenter<ReminderView> {
         preferences.setNotifyEndOfMonth(notifyEndMonth);
 
         if(notifyEndMonth){
-            long time = alarmUtils.calculateEndMonth(preferences.getMonthDay());
+            long time = alarmUtils.calculateEndMonth(preferences.getMonthDay(),
+                    preferences.getEndOfDayTime().getTimeInMillis());
             Alarm alarmEndMonth = new AlarmEndMonth(time);
             setAlarmEndMonth.setAlarm(alarmEndMonth);
             setAlarmEndMonth.execute();
         }else{
+            cancelAlarmEndMonth.setAlarm(new AlarmEndMonth());
             cancelAlarmEndMonth.execute();
         }
     }

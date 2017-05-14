@@ -53,4 +53,6 @@ public interface Datasource {
     AlarmDb getAlam(String action);
 
     AlarmDb getAlam(String action, long refId);
+
+    CategoryDb getCategoryDb(long id);
 }

@@ -2,6 +2,7 @@ package com.alavpa.spendify.ui.receiver.alarm;
 
 import com.alavpa.spendify.data.preferences.PrefsDatasource;
 import com.alavpa.spendify.domain.DateUtils;
+import com.alavpa.spendify.domain.model.Alarm;
 import com.alavpa.spendify.domain.model.AlarmAmount;
 import com.alavpa.spendify.domain.model.AlarmEndDay;
 import com.alavpa.spendify.domain.model.AlarmEndMonth;
@@ -54,7 +55,7 @@ public class AlarmPresenter {
         this.insertOrUpdateNextAmount = insertOrUpdateNextAmount;
     }
 
-    public void onReceiveAlarmEndDay(AlarmEndDay alarmEndDay) {
+    public void onReceiveAlarmEndDay(Alarm alarmEndDay) {
         if(preferences.notifyEndOfDay()) {
 
             sendEndDayNotification.execute();
@@ -63,7 +64,7 @@ public class AlarmPresenter {
         }
     }
 
-    public void onReceiveAlarmEndMonth(AlarmEndMonth alarmEndMonth) {
+    public void onReceiveAlarmEndMonth(Alarm alarmEndMonth) {
         if(preferences.notifyEndOfMonth()) {
 
             long from = dateUtils.calculateFrom(alarmEndMonth.getPeriod().getDate(),
@@ -77,7 +78,7 @@ public class AlarmPresenter {
         }
     }
 
-    public void onReceiveAlarmOfflimit(AlarmOfflimit alarmOfflimit) {
+    public void onReceiveAlarmOfflimit(Alarm alarmOfflimit) {
 
         if(preferences.notifyOfflimit()){
 
@@ -87,20 +88,9 @@ public class AlarmPresenter {
 
     }
 
-    public void onReceiveAlarmAmount(AlarmAmount alarmAmount) {
+    public void onReceiveAlarmAmount(Alarm alarmAmount) {
 
         insertOrUpdateNextAmount.setId(alarmAmount.getRefId());
-
-        insertOrUpdateNextAmount.execute(new DisposableSingleObserver<Amount>() {
-            @Override
-            public void onSuccess(Amount amount) {
-                insertOrUpdateNextAmount.dispose();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                insertOrUpdateNextAmount.dispose();
-            }
-        });
+        insertOrUpdateNextAmount.execute();
     }
 }

@@ -7,12 +7,15 @@ import com.alavpa.spendify.domain.model.AlarmEndDay;
 import com.alavpa.spendify.domain.model.Category;
 import com.alavpa.spendify.domain.usecases.base.UseCase;
 
+import java.util.Calendar;
+
 import javax.inject.Inject;
 
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import timber.log.Timber;
 
 public class SetAlarm extends UseCase<Alarm> {
 
@@ -49,6 +52,12 @@ public class SetAlarm extends UseCase<Alarm> {
                 .doOnSuccess(new Consumer<Alarm>() {
                     @Override
                     public void accept(Alarm alarm) throws Exception {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(alarm.getPeriod().getDate());
+                        Timber.d("SetAlarm %s %d %s", alarm.getAction(),
+                                alarm.getRefId(),
+                                calendar.getTime().toString());
+
                         alarmManager.setAlarm(alarm.getAction(),
                                 alarm.getId(),
                                 alarm.getPeriod().getDate(),
